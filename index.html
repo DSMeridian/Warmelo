@@ -1,0 +1,2183 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kasteel Warmelo — Eeuwenoud Landgoed in Diepenheim</title>
+  <meta name="description" content="Kasteel Warmelo in Diepenheim — eeuwenoud landgoed met historische tuinen, zandsculpturen, terras en vakantiewoning in de Oranjerie." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500;1,600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ══ TOKENS ══════════════════════════════════════════════════════ */
+    :root {
+      --ink:         #060C08;
+      --green-abyss: #090F0B;
+      --green-deep:  #0C1912;
+      --green:       #152A1E;
+      --green-soft:  #1E3829;
+      --emerald:     #2A5440;
+      --gold:        #BF8C2A;
+      --gold-bright: #E0B84D;
+      --gold-pale:   #EDD89A;
+      --gold-glow:   rgba(191,140,42,.18);
+      --cream:       #FAF7F2;
+      --ivory:       #F5F0E8;
+      --ivory-dark:  #EDE6D8;
+      --stone:       #CFC5B2;
+      --muted:       #7A7060;
+      --charcoal:    #111109;
+      --white:       #FEFCF8;
+
+      --ff-display: 'Cormorant Garamond', 'Times New Roman', serif;
+      --ff-body:    'Inter', system-ui, sans-serif;
+
+      --max-w:  1340px;
+      --pad-x:  clamp(20px, 5vw, 80px);
+      --nav-h:  80px;
+
+      --spring: cubic-bezier(.16,1,.3,1);
+      --ease:   180ms ease-out;
+    }
+
+    /* ── Reset ─────────────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html  { scroll-behavior: smooth; }
+    body  {
+      font-family: var(--ff-body);
+      font-size: 16px; line-height: 1.7;
+      color: var(--charcoal);
+      background: var(--cream);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+    img   { display: block; max-width: 100%; }
+    a     { color: inherit; text-decoration: none; }
+    ul    { list-style: none; }
+    address { font-style: normal; }
+
+    ::selection { background: var(--gold); color: var(--white); }
+    ::-webkit-scrollbar { width: 2px; }
+    ::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 2px; }
+
+
+    /* ══ LOADER ══════════════════════════════════════════════════════ */
+    #loader {
+      position: fixed; inset: 0;
+      z-index: 9999;
+      background: var(--ink);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      transition: opacity .9s ease, visibility .9s;
+      perspective: 1100px;
+    }
+    #loader.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+
+    #particleCanvas {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
+      pointer-events: none;
+    }
+
+    .loader__content {
+      position: relative; z-index: 2;
+      display: flex; flex-direction: column;
+      align-items: center; gap: 32px;
+      text-align: center; padding: 28px;
+      transform-style: preserve-3d;
+      will-change: transform;
+      transition: transform .08s ease-out;
+    }
+
+    /* Crest wrapper with 3D rings */
+    .loader__crest-wrap {
+      position: relative;
+      display: flex; align-items: center; justify-content: center;
+      width: 80px; height: 80px;
+      transform-style: preserve-3d;
+    }
+    .loader__ring {
+      position: absolute; border-radius: 50%;
+      border: 1px solid rgba(191,140,42,.55);
+      animation: ringPulse 3s ease-in-out infinite;
+    }
+    .loader__ring.r1 { inset:-18px; animation-delay:0s; }
+    .loader__ring.r2 { inset:-36px; border-color:rgba(191,140,42,.25); animation-delay:.55s; }
+    .loader__ring.r3 { inset:-58px; border-color:rgba(191,140,42,.10); animation-delay:1.1s; }
+    @keyframes ringPulse {
+      0%,100% { transform:scale(1);   opacity:1; }
+      50%      { transform:scale(1.1); opacity:.3; }
+    }
+
+    .loader__crest {
+      width: 80px; height: auto;
+      mix-blend-mode: screen;
+      opacity: 0;
+      position: relative; z-index: 1;
+      animation: crestSpin 1.4s .2s var(--spring) forwards;
+    }
+    @keyframes crestSpin {
+      from { opacity: 0; transform: perspective(700px) rotateY(-270deg) scale(.35); }
+      to   { opacity: 1; transform: perspective(700px) rotateY(0deg)    scale(1); }
+    }
+    .loader__crest.idle {
+      animation: crestIdle 9s ease-in-out infinite !important;
+      opacity: 1 !important;
+    }
+    @keyframes crestIdle {
+      0%,100% { transform: perspective(700px) rotateY(0deg)   rotateX(0deg); }
+      25%      { transform: perspective(700px) rotateY(18deg)  rotateX(-6deg); }
+      50%      { transform: perspective(700px) rotateY(0deg)   rotateX(10deg); }
+      75%      { transform: perspective(700px) rotateY(-14deg) rotateX(-4deg); }
+    }
+
+    .loader__name {
+      font-family: var(--ff-display);
+      font-size: clamp(1.6rem, 4vw, 2.8rem);
+      letter-spacing: .32em; text-transform: uppercase;
+      color: var(--white);
+      display: flex; flex-wrap: wrap; justify-content: center; gap: .06em;
+      transform: translateZ(20px);
+    }
+    .loader__name .l-char {
+      display: inline-block;
+      opacity: 0; transform: translateY(110%);
+      animation: charUp .55s var(--spring) forwards;
+    }
+    @keyframes charUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .loader__sub {
+      font-family: var(--ff-body);
+      font-size: 9px; letter-spacing: .38em; text-transform: uppercase;
+      color: rgba(255,255,255,.28);
+      opacity: 0;
+      animation: fadeUp .7s 1.9s var(--spring) forwards;
+      transform: translateZ(10px);
+    }
+
+    .loader__bar-wrap {
+      width: 220px; height: 1px;
+      background: rgba(255,255,255,.08);
+      position: relative; overflow: hidden;
+      transform: translateZ(5px);
+    }
+    .loader__bar-fill {
+      position: absolute; top: 0; left: 0; bottom: 0;
+      width: 0;
+      background: linear-gradient(90deg, var(--gold), var(--gold-bright));
+      transition: width .08s linear;
+      box-shadow: 0 0 8px var(--gold);
+    }
+
+
+    /* ══ TYPOGRAPHY ══════════════════════════════════════════════════ */
+    h1, h2, h3, h4 {
+      font-family: var(--ff-display);
+      font-weight: 400; line-height: 1.1;
+      letter-spacing: -.01em;
+    }
+
+    .label {
+      display: block;
+      font-family: var(--ff-body);
+      font-size: 9px; font-weight: 500;
+      letter-spacing: .38em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 18px;
+    }
+    .label--light { color: var(--gold-bright); }
+
+    .h-display {
+      font-family: var(--ff-display);
+      font-size: clamp(2.4rem, 4vw, 3.6rem);
+      font-weight: 400; line-height: 1.12;
+      color: var(--green);
+    }
+    .h-display em { font-style: italic; }
+    .h-display--white { color: var(--white); }
+
+    .body-copy {
+      font-size: 14.5px; line-height: 1.92;
+      color: var(--muted); font-weight: 300;
+    }
+    .body-copy--white { color: rgba(255,255,255,.68); }
+
+    .rule {
+      width: 0; height: 1px;
+      background: linear-gradient(90deg, var(--gold), transparent);
+      margin-bottom: 28px;
+      transition: width 1.1s var(--spring);
+    }
+    .rule.in { width: 56px; }
+    .rule--center { margin-inline: auto; }
+    .rule--light { background: linear-gradient(90deg, var(--gold-bright), transparent); }
+
+
+    /* ══ LAYOUT ═══════════════════════════════════════════════════════ */
+    .wrap {
+      width: 100%; max-width: var(--max-w);
+      margin-inline: auto; padding-inline: var(--pad-x);
+    }
+    .section { padding-block: clamp(80px, 11vw, 140px); }
+
+
+    /* ══ GRAIN OVERLAY ════════════════════════════════════════════════ */
+    .grain::after {
+      content: '';
+      position: absolute; inset: 0;
+      pointer-events: none; z-index: 4;
+      opacity: .028;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-size: 180px;
+    }
+
+
+    /* ══ BUTTONS ══════════════════════════════════════════════════════ */
+    .btn {
+      display: inline-flex; align-items: center; gap: 12px;
+      font-family: var(--ff-body); font-size: 9px; font-weight: 500;
+      letter-spacing: .26em; text-transform: uppercase;
+      padding: 16px 32px;
+      border: 1px solid transparent;
+      cursor: pointer; position: relative; overflow: hidden;
+      transition: transform .25s var(--spring), box-shadow .25s;
+    }
+    .btn:hover { transform: translateY(-1px); }
+    .btn span { position: relative; z-index: 1; }
+    .btn::before {
+      content: ''; position: absolute; inset: 0;
+      transform: scaleX(0); transform-origin: left;
+      transition: transform var(--ease);
+    }
+    .btn:hover::before { transform: scaleX(1); }
+
+    .btn-gold {
+      background: var(--gold); border-color: var(--gold); color: var(--white);
+      box-shadow: 0 4px 24px rgba(191,140,42,.3);
+    }
+    .btn-gold::before { background: var(--gold-bright); }
+    .btn-gold:hover { box-shadow: 0 8px 32px rgba(191,140,42,.45); }
+
+    .btn-outline-w { border-color: rgba(255,255,255,.3); color: var(--white); }
+    .btn-outline-w::before { background: rgba(255,255,255,.08); }
+
+    .btn-outline-g { border-color: var(--green); color: var(--green); }
+    .btn-outline-g::before { background: var(--green); }
+    .btn-outline-g:hover { color: var(--white); }
+
+
+    /* ══ REVEAL SYSTEM (3D fall-in) ═══════════════════════════════════ */
+    .reveal {
+      opacity: 0;
+      transform: perspective(700px) rotateX(14deg) translateY(48px);
+      transition:
+        opacity .95s var(--spring),
+        transform .95s var(--spring);
+    }
+    .reveal.in {
+      opacity: 1;
+      transform: perspective(700px) rotateX(0) translateY(0);
+    }
+    .d1 { transition-delay: .1s; }
+    .d2 { transition-delay: .2s; }
+    .d3 { transition-delay: .3s; }
+    .d4 { transition-delay: .4s; }
+    .d5 { transition-delay: .5s; }
+
+
+    /* ══ IMAGE ZOOM ═══════════════════════════════════════════════════ */
+    .zoom { overflow: hidden; }
+    .zoom img {
+      width: 100%; object-fit: cover;
+      transition: transform .8s var(--spring), filter .8s;
+      filter: saturate(.88) brightness(.96);
+    }
+    .zoom:hover img { transform: scale(1.06); filter: saturate(1) brightness(1); }
+
+
+    /* ══ NAV ══════════════════════════════════════════════════════════ */
+    .nav {
+      position: fixed; inset: 0 0 auto;
+      z-index: 500; height: var(--nav-h);
+      display: flex; align-items: center;
+      transition: background var(--ease), box-shadow var(--ease), backdrop-filter var(--ease);
+    }
+    .nav.scrolled {
+      background: rgba(9,15,11,.88);
+      backdrop-filter: blur(20px) saturate(180%);
+      box-shadow: 0 1px 0 rgba(255,255,255,.05);
+    }
+    .nav__inner {
+      display: flex; align-items: center;
+      justify-content: space-between; width: 100%;
+    }
+    .nav__logo { display: flex; align-items: center; gap: 14px; }
+    .nav__crest {
+      height: 44px;
+      width: auto;
+      mix-blend-mode: screen;
+      transition: opacity .4s;
+    }
+    .nav__name {
+      font-family: var(--ff-display);
+      font-size: 19px; letter-spacing: .06em;
+      color: var(--white);
+    }
+    .nav__links {
+      display: flex; align-items: center; gap: 36px;
+    }
+    .nav__links a {
+      font-size: 9px; font-weight: 500;
+      letter-spacing: .22em; text-transform: uppercase;
+      color: rgba(255,255,255,.65);
+      transition: color var(--ease); position: relative;
+    }
+    .nav__links a::after {
+      content: ''; position: absolute; bottom: -5px; left: 0; right: 0;
+      height: 1px; background: var(--gold-bright);
+      transform: scaleX(0); transform-origin: left;
+      transition: transform var(--ease);
+    }
+    .nav__links a:hover { color: var(--white); }
+    .nav__links a:hover::after { transform: scaleX(1); }
+
+    .nav__cta {
+      font-size: 9px; font-weight: 500;
+      letter-spacing: .22em; text-transform: uppercase;
+      padding: 10px 24px;
+      border: 1px solid rgba(255,255,255,.28);
+      color: var(--white);
+      transition: background var(--ease), border-color var(--ease), box-shadow .25s;
+    }
+    .nav__cta:hover {
+      background: var(--gold); border-color: var(--gold);
+      box-shadow: 0 4px 20px rgba(191,140,42,.35);
+    }
+
+    .nav__ham {
+      display: none; flex-direction: column; gap: 5px;
+      cursor: pointer; padding: 4px; background: none; border: none;
+    }
+    .nav__ham span { display: block; width: 26px; height: 1px; background: var(--white); }
+
+    .nav__overlay {
+      display: none; position: fixed; inset: 0;
+      background: var(--green-abyss); z-index: 499;
+      flex-direction: column; align-items: center;
+      justify-content: center; gap: 44px;
+    }
+    .nav__overlay.open { display: flex; }
+    .nav__overlay a {
+      font-family: var(--ff-display);
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-style: italic; color: rgba(255,255,255,.78);
+      transition: color var(--ease);
+    }
+    .nav__overlay a:hover { color: var(--gold-bright); }
+    .nav__close {
+      position: absolute; top: 28px; right: 32px;
+      font-family: var(--ff-display); font-size: 28px;
+      color: rgba(255,255,255,.4); cursor: pointer;
+      background: none; border: none; transition: color var(--ease);
+    }
+    .nav__close:hover { color: var(--white); }
+
+    /* ── Language Switcher ──────────────────────────────────────────── */
+    .lang-switch {
+      display: flex; align-items: center; gap: 2px;
+      border: 1px solid rgba(255,255,255,.18);
+      border-radius: 2px; overflow: hidden;
+    }
+    .lang-switch button {
+      font-family: var(--ff-body); font-size: 8px; font-weight: 500;
+      letter-spacing: .18em; text-transform: uppercase;
+      color: rgba(255,255,255,.45);
+      background: none; border: none;
+      padding: 5px 9px; cursor: pointer;
+      transition: background var(--ease), color var(--ease);
+    }
+    .lang-switch button.active,
+    .lang-switch button:hover {
+      background: var(--gold); color: var(--white);
+    }
+
+
+    /* ══ HERO ═════════════════════════════════════════════════════════ */
+    .hero {
+      position: relative;
+      height: 100dvh; min-height: 680px;
+      overflow: hidden;
+      display: flex; flex-direction: column;
+    }
+
+    .hero__media {
+      position: absolute; inset: 0;
+      will-change: transform;
+    }
+    .hero__video {
+      width: 100%; height: 100%;
+      object-fit: cover; object-position: center 30%;
+    }
+    @keyframes kenburns {
+      0%   { transform: scale(1)    translate(0, 0); }
+      50%  { transform: scale(1.08) translate(-1.5%, -1%); }
+      100% { transform: scale(1.14) translate(1.2%, -2%); }
+    }
+    .hero__bg-img {
+      width: 100%; height: 100%;
+      object-fit: cover; object-position: center 30%;
+      animation: kenburns 22s ease-in-out infinite alternate;
+      transform-origin: center center;
+      will-change: transform;
+    }
+
+    /* Decorative hero emblem */
+    .hero__emblem {
+      position: absolute;
+      right: clamp(40px, 8vw, 140px);
+      top: 50%; transform: translateY(-50%);
+      width: clamp(110px, 14vw, 200px);
+      pointer-events: none; z-index: 3;
+      animation: emblemFloat 9s ease-in-out infinite;
+    }
+    .hero__emblem img {
+      width: 100%;
+      filter: brightness(0) invert(1) sepia(1) saturate(2.5) hue-rotate(5deg) brightness(1.2);
+      opacity: .18;
+    }
+    .hero__emblem-ring {
+      position: absolute; inset: -22px;
+      border-radius: 50%;
+      border: 1px solid rgba(191,140,42,.22);
+      animation: emblemRing 4s ease-in-out infinite;
+    }
+    .hero__emblem-ring2 {
+      position: absolute; inset: -44px;
+      border-radius: 50%;
+      border: 1px solid rgba(191,140,42,.09);
+      animation: emblemRing 4s 1s ease-in-out infinite;
+    }
+    @keyframes emblemFloat {
+      0%, 100% { transform: translateY(-50%) rotate(0deg); }
+      35% { transform: translateY(calc(-50% - 10px)) rotate(1.5deg); }
+      70% { transform: translateY(calc(-50% + 6px)) rotate(-1deg); }
+    }
+    @keyframes emblemRing {
+      0%, 100% { transform: scale(1); opacity: .7; }
+      50% { transform: scale(1.12); opacity: .25; }
+    }
+
+    /* Rich multi-layer atmospheric gradient */
+    .hero__atmo {
+      position: absolute; inset: 0;
+      background:
+        linear-gradient(170deg, rgba(6,12,8,.1) 0%, transparent 40%),
+        linear-gradient(to top,
+          rgba(6,12,8,.97) 0%,
+          rgba(6,12,8,.72) 30%,
+          rgba(6,12,8,.28) 55%,
+          rgba(6,12,8,.04) 80%,
+          transparent 100%);
+      z-index: 1;
+    }
+
+    /* Amber depth glow */
+    .hero__glow {
+      position: absolute; inset: 0; z-index: 1;
+      background: radial-gradient(
+        ellipse 60% 50% at 20% 95%,
+        rgba(191,140,42,.22) 0%, transparent 65%
+      );
+    }
+
+    .hero__content {
+      position: relative; z-index: 2;
+      flex: 1; display: flex; align-items: flex-end;
+      padding-bottom: clamp(60px, 9vw, 108px);
+    }
+
+    .hero__text { max-width: 720px; }
+
+    .hero__eyebrow {
+      display: flex; align-items: center; gap: 18px;
+      margin-bottom: 24px;
+      animation: fadeUp 1s .15s both;
+    }
+    .hero__eyebrow-line { width: 36px; height: 1px; background: var(--gold-bright); flex-shrink: 0; }
+    .hero__eyebrow span {
+      font-size: 9px; font-weight: 500; letter-spacing: .36em; text-transform: uppercase;
+      color: var(--gold-bright);
+    }
+
+    .hero__title {
+      font-family: var(--ff-display);
+      font-size: clamp(4.5rem, 10.5vw, 9rem);
+      font-weight: 400; line-height: .94;
+      letter-spacing: -.025em;
+      color: var(--white);
+      animation: fadeUp 1.2s .3s both;
+    }
+    .hero__title em {
+      font-style: italic;
+      color: var(--gold-bright);
+      display: block;
+    }
+
+    .hero__sep {
+      width: 64px; height: 1px;
+      background: linear-gradient(90deg, var(--gold-bright), transparent);
+      margin: 30px 0;
+      animation: fadeUp 1s .5s both;
+    }
+
+    .hero__sub {
+      font-size: 15px; font-weight: 300;
+      color: rgba(255,255,255,.72); line-height: 1.84;
+      max-width: 380px;
+      animation: fadeUp 1s .62s both;
+      text-shadow: 0 1px 4px rgba(0,0,0,.3);
+    }
+
+    .hero__actions {
+      display: flex; gap: 14px; flex-wrap: wrap;
+      margin-top: 38px;
+      animation: fadeUp 1s .78s both;
+    }
+
+    /* Floating 3D stats — right side */
+    .hero__aside {
+      position: absolute; right: var(--pad-x);
+      bottom: clamp(60px, 9vw, 108px);
+      z-index: 2; display: flex; flex-direction: column;
+      align-items: flex-end; gap: 24px;
+      animation: fadeUp 1s 1s both;
+    }
+    .hero__stat {
+      text-align: right;
+      padding-right: 18px;
+      border-right: 1px solid rgba(255,255,255,.18);
+      transition: transform .4s var(--spring);
+    }
+    .hero__stat:hover { transform: perspective(400px) translateZ(12px); }
+    .hero__stat-num {
+      font-family: var(--ff-display);
+      font-size: 2.2rem; font-weight: 400;
+      color: var(--white); line-height: 1;
+    }
+    .hero__stat-lbl {
+      font-size: 8px; font-weight: 500; letter-spacing: .24em;
+      text-transform: uppercase; color: rgba(255,255,255,.4);
+      margin-top: 4px;
+    }
+
+    /* Scroll cue */
+    .hero__cue {
+      position: absolute; bottom: 38px; left: 50%;
+      transform: translateX(-50%);
+      display: flex; flex-direction: column; align-items: center; gap: 9px;
+      z-index: 2;
+      animation: fadeUp 1s 1.2s both;
+    }
+    .hero__cue-line {
+      width: 1px; height: 52px;
+      background: linear-gradient(to bottom, rgba(255,255,255,.38), transparent);
+      animation: drip 2.4s ease-in-out infinite;
+    }
+    .hero__cue span {
+      font-size: 8px; letter-spacing: .36em; text-transform: uppercase;
+      color: rgba(255,255,255,.28);
+    }
+
+    @keyframes drip { 50% { opacity: .25; transform: scaleY(.55); } }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(28px); }
+      to   { opacity: 1; transform: none; }
+    }
+
+
+    /* ══ SEASON BANNER ════════════════════════════════════════════════ */
+    .banner {
+      background: var(--green);
+      padding: 15px 24px;
+      text-align: center;
+      font-size: 9px; font-weight: 500; letter-spacing: .26em; text-transform: uppercase;
+      color: rgba(255,255,255,.55);
+    }
+    .banner strong {
+      font-family: var(--ff-display); font-size: 14px;
+      font-weight: 400; font-style: italic;
+      text-transform: none; letter-spacing: .03em;
+      margin-inline: 10px; color: var(--gold-bright);
+    }
+
+
+    /* ══ INTRO ════════════════════════════════════════════════════════ */
+    .intro { background: var(--white); padding-block: clamp(88px, 12vw, 148px); }
+    .intro__grid {
+      display: grid; grid-template-columns: 5fr 6fr;
+      gap: clamp(48px, 7vw, 100px); align-items: center;
+    }
+    .intro__visual {
+      position: relative; overflow: hidden;
+    }
+    .intro__visual img {
+      width: 100%; height: 520px; object-fit: cover;
+      display: block;
+      transition: transform .8s var(--spring);
+    }
+    .intro__visual:hover img { transform: scale(1.04); }
+    .intro__visual-badge {
+      position: absolute; bottom: 28px; left: 28px;
+      background: var(--green); color: var(--white);
+      padding: 16px 24px;
+    }
+    .intro__visual-badge-num {
+      font-family: var(--ff-display);
+      font-size: 2.4rem; font-weight: 400; line-height: 1;
+      color: var(--gold-bright);
+    }
+    .intro__visual-badge-lbl {
+      font-size: 8px; letter-spacing: .26em; text-transform: uppercase;
+      color: rgba(255,255,255,.5); margin-top: 4px;
+    }
+
+    .intro__copy {}
+    .intro__aside-num {
+      font-family: var(--ff-display);
+      font-size: 8rem; font-weight: 300;
+      color: var(--stone); line-height: 1;
+      letter-spacing: -.04em; margin-bottom: 8px;
+    }
+    .intro__title {
+      font-family: var(--ff-display);
+      font-size: clamp(2.4rem, 5vw, 4.2rem);
+      font-weight: 400; line-height: 1.1;
+      color: var(--green);
+    }
+    .intro__title em { font-style: italic; }
+    .intro__body {
+      margin-top: 28px; font-size: 15px; line-height: 1.94;
+      color: var(--muted); font-weight: 300; max-width: 540px;
+    }
+    .intro__divider {
+      display: flex; align-items: center; gap: 18px; margin-top: 48px;
+    }
+    .intro__divider-line {
+      flex: 1; height: 1px;
+      background: linear-gradient(90deg, var(--stone), transparent);
+    }
+    .intro__divider-mark {
+      font-family: var(--ff-display); font-size: 12px;
+      color: var(--gold); opacity: .5; letter-spacing: .3em;
+    }
+
+
+    /* ══ FACTS BAR ════════════════════════════════════════════════════ */
+    .facts {
+      border-top: 1px solid var(--stone);
+      border-bottom: 1px solid var(--stone);
+      background: var(--white);
+    }
+    .facts__row { display: grid; grid-template-columns: repeat(3,1fr); }
+    .facts__cell {
+      padding: 40px clamp(20px,4.5vw,56px);
+      border-right: 1px solid var(--stone);
+      display: flex; flex-direction: column; gap: 6px;
+      transition: background .3s;
+    }
+    .facts__cell:last-child { border-right: none; }
+    .facts__cell:hover { background: var(--ivory); }
+    .facts__lbl { font-size: 8px; font-weight: 500; letter-spacing: .3em; text-transform: uppercase; color: var(--gold); }
+    .facts__val { font-family: var(--ff-display); font-size: 1.5rem; color: var(--green); }
+    .facts__sub { font-size: 12.5px; color: var(--muted); font-weight: 300; }
+
+
+    /* ══ FEATURE GRID — 3D FLIP CARDS ════════════════════════════════ */
+    .feat-grid {
+      display: grid;
+      grid-template-columns: 1.35fr .95fr .95fr 1.35fr;
+      background: var(--ink);
+      gap: 2px;
+    }
+
+    .flip-card {
+      perspective: 1200px;
+      height: 580px;
+    }
+    .flip-inner {
+      position: relative; width: 100%; height: 100%;
+      transform-style: preserve-3d;
+      transition: transform .9s var(--spring);
+    }
+    .flip-card:hover .flip-inner { transform: rotateY(180deg); }
+
+    .flip-front, .flip-back {
+      position: absolute; inset: 0;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+    }
+
+    .flip-front { overflow: hidden; }
+    .flip-front img {
+      width: 100%; height: 100%; object-fit: cover;
+      transition: transform .7s var(--spring), filter .7s;
+      filter: saturate(.85) brightness(.88);
+    }
+    .flip-card:hover .flip-front img { filter: saturate(.85) brightness(.55); }
+
+    .flip-front__overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(6,12,8,.88) 0%, rgba(6,12,8,.2) 50%, transparent 100%);
+      display: flex; flex-direction: column; justify-content: flex-end;
+      padding: 32px 28px;
+    }
+    .flip-front__num {
+      font-family: var(--ff-display); font-style: italic;
+      font-size: 1.5rem; color: var(--gold-bright); opacity: .6;
+      margin-bottom: 6px;
+    }
+    .flip-front__title {
+      font-family: var(--ff-display); font-size: 1.55rem;
+      color: var(--white); line-height: 1.2;
+    }
+    .flip-front__hint {
+      font-size: 8px; letter-spacing: .28em; text-transform: uppercase;
+      color: rgba(255,255,255,.35); margin-top: 10px;
+    }
+
+    .flip-back {
+      transform: rotateY(180deg);
+      background: var(--green);
+      display: flex; flex-direction: column; justify-content: center;
+      padding: 48px 40px;
+    }
+    .flip-back .label { color: var(--gold-bright); margin-bottom: 12px; }
+    .flip-back h3 {
+      font-family: var(--ff-display); font-size: 2rem;
+      color: var(--white); margin-bottom: 20px; line-height: 1.15;
+    }
+    .flip-back p {
+      font-size: 14.5px; color: rgba(255,255,255,.68);
+      line-height: 1.88; font-weight: 300; margin-bottom: 32px;
+    }
+    .flip-back a {
+      display: inline-flex; align-items: center; gap: 10px;
+      font-size: 9px; font-weight: 500; letter-spacing: .24em;
+      text-transform: uppercase; color: var(--gold-bright);
+    }
+    .flip-back a::after { content: '→'; transition: transform var(--ease); }
+    .flip-back a:hover::after { transform: translateX(6px); }
+
+
+    /* ══ ZANDSCULPTUREN ═══════════════════════════════════════════════ */
+    .sculpt {
+      background: var(--green-abyss);
+      position: relative; overflow: hidden;
+    }
+    .sculpt__decor {
+      position: absolute; top: -200px; right: -200px;
+      width: 600px; height: 600px; border-radius: 50%;
+      border: 1px solid rgba(191,140,42,.06);
+      pointer-events: none;
+    }
+    .sculpt__decor2 {
+      position: absolute; bottom: -150px; left: -150px;
+      width: 400px; height: 400px; border-radius: 50%;
+      border: 1px solid rgba(191,140,42,.04);
+      pointer-events: none;
+    }
+
+    .sculpt__header {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 64px; align-items: end; margin-bottom: 60px;
+    }
+    .sculpt .label { color: var(--gold-bright); }
+    .sculpt .h-display { color: var(--white); }
+    .sculpt .body-copy { color: rgba(255,255,255,.62); }
+    .sculpt .rule { background: linear-gradient(90deg, var(--gold-bright), transparent); }
+
+    .sculpt__stats {
+      display: flex; gap: 36px; align-items: flex-end;
+    }
+    .sculpt__stat-num {
+      font-family: var(--ff-display);
+      font-size: 3.6rem; font-weight: 300;
+      color: var(--white); line-height: 1; letter-spacing: -.02em;
+    }
+    .sculpt__stat-lbl {
+      font-size: 9px; font-weight: 500; letter-spacing: .2em;
+      text-transform: uppercase; color: rgba(255,255,255,.38); margin-top: 6px;
+    }
+
+    /* 3D perspective gallery */
+    .sculpt__scene {
+      perspective: 1800px;
+    }
+    .sculpt__grid {
+      display: grid;
+      grid-template-columns: 1.55fr 1fr 1fr;
+      grid-template-rows: 340px 256px;
+      gap: 8px;
+      transform-style: preserve-3d;
+    }
+    .sculpt__grid .zoom { overflow: hidden; }
+    .sculpt__grid .zoom img { width: 100%; height: 100%; object-fit: cover; }
+    .sculpt__grid .zoom:nth-child(1) { grid-column: 1; grid-row: 1 / 3; }
+    .sculpt__grid .zoom:nth-child(2) { grid-column: 2; grid-row: 1; }
+    .sculpt__grid .zoom:nth-child(3) { grid-column: 3; grid-row: 1; }
+    .sculpt__grid .zoom:nth-child(4) { grid-column: 2; grid-row: 2; }
+    .sculpt__grid .zoom:nth-child(5) { grid-column: 3; grid-row: 2; }
+
+
+    /* ══ GARDENS ══════════════════════════════════════════════════════ */
+    .gardens {
+      display: grid; grid-template-columns: 11fr 9fr;
+    }
+    .gardens__visual { position: relative; min-height: 680px; overflow: hidden; }
+    .gardens__visual img {
+      width: 100%; height: 100%; object-fit: cover; display: block;
+      transition: transform 1.2s var(--spring);
+    }
+    .gardens:hover .gardens__visual img { transform: scale(1.03); }
+    .gardens__badge {
+      position: absolute; top: 44px; right: 0;
+      background: var(--green); color: var(--white);
+      padding: 24px 32px; text-align: center;
+      box-shadow: -6px 6px 32px rgba(0,0,0,.2);
+    }
+    .gardens__badge-num {
+      display: block; font-family: var(--ff-display);
+      font-size: 2.2rem; font-weight: 400; color: var(--gold-bright);
+    }
+    .gardens__badge-lbl {
+      display: block; font-size: 8px; letter-spacing: .24em;
+      text-transform: uppercase; color: rgba(255,255,255,.45); margin-top: 5px;
+    }
+    .gardens__copy {
+      padding: clamp(56px,8vw,108px) clamp(44px,6vw,80px);
+      display: flex; flex-direction: column; justify-content: center;
+      background: var(--ivory-dark);
+    }
+
+    .timeline { display: flex; flex-direction: column; gap: 22px; margin-top: 36px; }
+    .tl-row { display: grid; grid-template-columns: 100px 1fr; gap: 22px; align-items: start; }
+    .tl-year {
+      font-family: var(--ff-display); font-size: .95rem; font-style: italic;
+      color: var(--gold); text-align: right;
+      padding: 1px 20px 0 0; border-right: 1px solid var(--stone);
+    }
+    .tl-text { font-size: 13.5px; color: var(--muted); font-weight: 300; line-height: 1.72; }
+
+
+    /* ══ TERRAS — Dark immersive ═══════════════════════════════════════ */
+    .terras {
+      background: var(--green);
+      position: relative; overflow: hidden;
+    }
+    .terras__bg-img {
+      position: absolute; inset: 0;
+      will-change: transform;
+    }
+    .terras__bg-img img {
+      width: 100%; height: 100%; object-fit: cover;
+      opacity: .12; display: block;
+      filter: saturate(.6);
+    }
+    .terras__glow {
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse 65% 55% at 8% 50%, rgba(30,60,42,.7) 0%, transparent 70%);
+    }
+    .terras__inner {
+      position: relative; z-index: 2;
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 88px; align-items: center;
+    }
+    .terras .label { color: var(--gold-bright); }
+    .terras .h-display { color: var(--white); }
+    .terras .body-copy { color: rgba(255,255,255,.66); }
+    .terras .rule { background: linear-gradient(90deg, var(--gold-bright), transparent); }
+
+    .feat-item { display: flex; gap: 22px; margin-top: 30px; align-items: flex-start; }
+    .feat-item__bar {
+      width: 2px; height: 34px;
+      background: linear-gradient(to bottom, var(--gold-bright), transparent);
+      flex-shrink: 0; margin-top: 3px;
+    }
+    .feat-item__name {
+      font-family: var(--ff-display); font-size: 1.1rem;
+      color: rgba(255,255,255,.92); margin-bottom: 4px;
+    }
+    .feat-item__desc { font-size: 13px; color: rgba(255,255,255,.52); font-weight: 300; line-height: 1.68; }
+
+    .pullquote {
+      border-left: 1px solid rgba(191,140,42,.4);
+      padding: 40px 44px;
+      background: rgba(255,255,255,.04);
+      backdrop-filter: blur(8px);
+      position: relative;
+    }
+    .pullquote::before {
+      content: '\201C';
+      font-family: var(--ff-display); font-size: 6rem; line-height: 1;
+      color: var(--gold); opacity: .18;
+      position: absolute; top: 12px; left: 26px;
+    }
+    .pullquote blockquote {
+      font-family: var(--ff-display); font-size: 1.55rem;
+      font-style: italic; font-weight: 400;
+      color: rgba(255,255,255,.9); line-height: 1.52; position: relative;
+    }
+    .pullquote cite {
+      display: block; margin-top: 22px; font-size: 9px; font-style: normal;
+      letter-spacing: .26em; text-transform: uppercase;
+      color: var(--gold-bright); position: relative;
+    }
+
+
+    /* ══ VERHUUR ══════════════════════════════════════════════════════ */
+    .verhuur {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 72px; align-items: start;
+    }
+    .verhuur__gallery {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 6px;
+    }
+    .verhuur__gallery .zoom:first-child { grid-column: 1 / 3; }
+    .verhuur__gallery .zoom:first-child img { aspect-ratio: 16/7; }
+    .verhuur__gallery .zoom img { width: 100%; aspect-ratio: 3/2; object-fit: cover; }
+
+    .verhuur__subtitle {
+      font-family: var(--ff-display); font-size: 1.95rem; font-weight: 400;
+      line-height: 1.18; color: var(--green); margin-bottom: 18px;
+    }
+    .verhuur__subtitle em { font-style: italic; }
+
+    .amenities {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 30px;
+    }
+    .amenity {
+      display: flex; align-items: center; gap: 12px;
+      font-size: 13px; color: var(--muted); font-weight: 300;
+    }
+    .amenity::before {
+      content: ''; flex-shrink: 0;
+      width: 5px; height: 5px; border-radius: 50%; background: var(--gold);
+    }
+
+    .note {
+      margin-top: 32px; padding: 24px 28px;
+      background: var(--ivory-dark); border-left: 2px solid var(--gold);
+    }
+    .note__lbl { font-size: 8px; font-weight: 500; letter-spacing: .28em; text-transform: uppercase; color: var(--gold); margin-bottom: 8px; }
+    .note p { font-size: 13px; color: var(--muted); font-weight: 300; line-height: 1.72; }
+
+    .verhuur__ctas { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 30px; }
+
+
+    /* ══ EVENTS ═══════════════════════════════════════════════════════ */
+    .events-grid {
+      display: grid; grid-template-columns: repeat(3,1fr);
+      gap: 1px; background: var(--stone); margin-top: 56px;
+    }
+    .ev {
+      background: var(--white);
+      padding: 38px 34px; display: flex; flex-direction: column; gap: 10px;
+      transition: background .3s, transform .4s var(--spring), box-shadow .4s;
+      transform-origin: center bottom;
+    }
+    .ev:hover {
+      background: var(--ivory);
+      transform: perspective(600px) translateZ(6px);
+      box-shadow: 0 12px 40px rgba(0,0,0,.08);
+      z-index: 1;
+    }
+    .ev__day { font-family: var(--ff-display); font-size: 2.4rem; color: var(--green); line-height: 1; }
+    .ev__month { font-size: 8px; font-weight: 500; letter-spacing: .26em; text-transform: uppercase; color: var(--gold); }
+    .ev__name { font-family: var(--ff-display); font-size: 1.25rem; color: var(--green); margin-top: 4px; }
+    .ev__desc { font-size: 13.5px; color: var(--muted); font-weight: 300; line-height: 1.68; }
+
+
+    /* ══ VENUE CTA ════════════════════════════════════════════════════ */
+    .venue {
+      display: grid; grid-template-columns: 1fr 1fr;
+      min-height: 520px;
+    }
+    .venue__img {
+      position: relative; overflow: hidden;
+    }
+    .venue__img img {
+      width: 100%; height: 100%; object-fit: cover; display: block;
+      transition: transform 1s var(--spring);
+    }
+    .venue:hover .venue__img img { transform: scale(1.04); }
+    .venue__img::after {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(to right, transparent 50%, rgba(21,42,30,.4));
+    }
+    .venue__copy {
+      background: var(--green); padding: clamp(52px,7vw,96px);
+      display: flex; flex-direction: column; justify-content: center;
+      position: relative; overflow: hidden;
+    }
+    .venue__copy::after {
+      content: ''; position: absolute; bottom: -70px; right: -70px;
+      width: 360px; height: 360px; border-radius: 50%;
+      border: 1px solid rgba(255,255,255,.04);
+    }
+    .venue__copy > * { position: relative; }
+    .venue__copy .label { color: var(--gold-bright); }
+    .venue__copy .h-display { color: var(--white); }
+    .venue__copy .body-copy { color: rgba(255,255,255,.66); margin-bottom: 32px; }
+    .venue__copy .rule { background: linear-gradient(90deg, var(--gold-bright), transparent); }
+
+
+    /* ══ PRAKTISCH ════════════════════════════════════════════════════ */
+    .practical { background: var(--ivory-dark); }
+    .practical__grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 52px; }
+    .pblock__title {
+      font-family: var(--ff-display); font-size: 1.3rem; color: var(--green);
+      margin-bottom: 16px; padding-bottom: 16px; border-bottom: 1px solid var(--stone);
+    }
+    .pblock__body { font-size: 14px; color: var(--muted); font-weight: 300; line-height: 1.88; }
+    .pblock__body strong { font-weight: 500; color: var(--charcoal); }
+    .practical__map { grid-column: 1 / 4; margin-top: 32px; overflow: hidden; height: 320px; }
+    .practical__map img { width: 100%; height: 100%; object-fit: cover; }
+
+
+    /* ══ CONTACT ══════════════════════════════════════════════════════ */
+    .contact-grid { display: grid; grid-template-columns: 1fr 1.3fr; gap: 88px; align-items: start; }
+    .cinfo { display: flex; flex-direction: column; gap: 28px; margin-top: 12px; }
+    .cinfo__lbl { font-size: 8px; font-weight: 500; letter-spacing: .3em; text-transform: uppercase; color: var(--gold); margin-bottom: 4px; }
+    .cinfo__val { font-family: var(--ff-display); font-size: 1.1rem; color: var(--green); }
+
+    .form { display: flex; flex-direction: column; gap: 24px; }
+    .form__row { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+    .field { display: flex; flex-direction: column; gap: 7px; }
+    .field label { font-size: 8.5px; font-weight: 500; letter-spacing: .24em; text-transform: uppercase; color: var(--muted); }
+    .field input, .field textarea, .field select {
+      font-family: var(--ff-body); font-size: 14px; font-weight: 300;
+      color: var(--charcoal); background: transparent;
+      border: none; border-bottom: 1px solid var(--stone);
+      padding: 11px 0; outline: none; width: 100%;
+      -webkit-appearance: none; transition: border-color var(--ease);
+    }
+    .field input:focus, .field textarea:focus, .field select:focus {
+      border-bottom-color: var(--green);
+    }
+    .field textarea { resize: none; min-height: 110px; }
+
+
+    /* ══ FOOTER ═══════════════════════════════════════════════════════ */
+    .footer { background: var(--green-abyss); padding-block: 68px 36px; }
+    .footer__grid {
+      display: grid; grid-template-columns: 2.2fr 1fr 1fr 1fr;
+      gap: 48px; padding-bottom: 48px;
+      border-bottom: 1px solid rgba(255,255,255,.06);
+    }
+    .footer__logo { display: flex; align-items: center; gap: 14px; margin-bottom: 18px; }
+    .footer__crest { height: 38px; filter: brightness(0) invert(1) opacity(.75); }
+    .footer__brand { font-family: var(--ff-display); font-size: 18px; color: rgba(255,255,255,.8); letter-spacing: .04em; }
+    .footer__about { font-size: 13px; font-weight: 300; line-height: 1.84; color: rgba(255,255,255,.38); max-width: 280px; }
+    .footer__social { display: flex; gap: 10px; margin-top: 24px; }
+    .footer__social a {
+      display: flex; align-items: center; justify-content: center;
+      width: 34px; height: 34px;
+      border: 1px solid rgba(255,255,255,.08);
+      color: rgba(255,255,255,.38); font-size: 10px;
+      transition: all var(--ease);
+    }
+    .footer__social a:hover { background: var(--gold); border-color: var(--gold); color: var(--white); }
+    .footer__col-title { font-size: 8px; font-weight: 500; letter-spacing: .3em; text-transform: uppercase; color: var(--gold); margin-bottom: 20px; }
+    .footer__links { display: flex; flex-direction: column; gap: 12px; }
+    .footer__links a { font-size: 13px; font-weight: 300; color: rgba(255,255,255,.42); transition: color var(--ease); }
+    .footer__links a:hover { color: rgba(255,255,255,.86); }
+    .footer__bottom {
+      display: flex; justify-content: space-between; align-items: center;
+      padding-top: 28px; font-size: 11px; font-weight: 300; color: rgba(255,255,255,.24);
+    }
+    .footer__legal { display: flex; gap: 24px; }
+    .footer__legal a { color: rgba(255,255,255,.2); transition: color var(--ease); }
+    .footer__legal a:hover { color: rgba(255,255,255,.55); }
+
+
+    /* ══ RESPONSIVE ═══════════════════════════════════════════════════ */
+    @media (max-width: 1100px) {
+      .feat-grid { grid-template-columns: repeat(2,1fr); }
+      .flip-card { height: 520px; }
+      .sculpt__header { grid-template-columns: 1fr; gap: 36px; }
+      .sculpt__grid {
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: 240px 240px 240px;
+      }
+      .sculpt__grid .zoom:nth-child(1) { grid-column: 1/3; grid-row: 1; }
+      .sculpt__grid .zoom:nth-child(2) { grid-column: 1; grid-row: 2; }
+      .sculpt__grid .zoom:nth-child(3) { grid-column: 2; grid-row: 2; }
+      .sculpt__grid .zoom:nth-child(4) { grid-column: 1; grid-row: 3; }
+      .sculpt__grid .zoom:nth-child(5) { grid-column: 2; grid-row: 3; }
+      .gardens { grid-template-columns: 1fr; }
+      .gardens__visual { min-height: 420px; }
+      .terras__inner { grid-template-columns: 1fr; gap: 56px; }
+      .verhuur { grid-template-columns: 1fr; gap: 48px; }
+      .events-grid { grid-template-columns: repeat(2,1fr); }
+      .venue { grid-template-columns: 1fr; }
+      .venue__img { min-height: 360px; }
+      .practical__grid { grid-template-columns: 1fr 1fr; }
+      .practical__map { grid-column: 1/3; }
+      .contact-grid { grid-template-columns: 1fr; gap: 56px; }
+      .footer__grid { grid-template-columns: 1fr 1fr; }
+      .hero__aside { display: none; }
+      .intro__grid { grid-template-columns: 1fr; }
+      .intro__visual { max-height: 380px; }
+      .intro__visual img { height: 380px; }
+    }
+    @media (max-width: 768px) {
+      .nav__links, .nav__cta { display: none; }
+      .nav__ham { display: flex; }
+      .facts__row { grid-template-columns: 1fr; }
+      .facts__cell { border-right: none; border-bottom: 1px solid var(--stone); }
+      .feat-grid { grid-template-columns: 1fr; }
+      .flip-card { height: 480px; }
+      .events-grid { grid-template-columns: 1fr; }
+      .practical__grid { grid-template-columns: 1fr; }
+      .practical__map { grid-column: 1; }
+      .form__row { grid-template-columns: 1fr; }
+      .footer__grid { grid-template-columns: 1fr; }
+      .footer__bottom { flex-direction: column; gap: 14px; text-align: center; }
+      .footer__legal { justify-content: center; }
+      .hero__cue { display: none; }
+      .sculpt__stats { flex-wrap: wrap; gap: 20px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ════════════════════════════════════════════════════════════════
+     LOADING SCREEN
+════════════════════════════════════════════════════════════════ -->
+<div id="loader">
+  <canvas id="particleCanvas"></canvas>
+  <div class="loader__content" id="loaderContent">
+    <div class="loader__crest-wrap">
+      <div class="loader__ring r1"></div>
+      <div class="loader__ring r2"></div>
+      <div class="loader__ring r3"></div>
+      <img
+        class="loader__crest"
+        id="loaderCrest"
+        src="LOGO.png"
+        alt="Wapenschild Kasteel Warmelo"
+      />
+    </div>
+    <div class="loader__name" id="loaderName"></div>
+    <div class="loader__sub">Landgoed &nbsp;·&nbsp; Diepenheim &nbsp;·&nbsp; Twente</div>
+    <div class="loader__bar-wrap">
+      <div class="loader__bar-fill" id="loaderBar"></div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════════════════════════════
+     NAV
+════════════════════════════════════════════════════════════════ -->
+<nav class="nav" id="nav">
+  <div class="wrap">
+    <div class="nav__inner">
+      <a href="#top" class="nav__logo">
+        <img class="nav__crest" src="LOGO.png" alt="Wapenschild Warmelo" />
+        <span class="nav__name">Kasteel Warmelo</span>
+      </a>
+      <ul class="nav__links" role="list">
+        <li><a href="#zandsculpturen">Zandsculpturen</a></li>
+        <li><a href="#tuinen">Tuinen</a></li>
+        <li><a href="#horeca">Terras</a></li>
+        <li><a href="#verhuur">Verhuur</a></li>
+        <li><a href="#evenementen">Evenementen</a></li>
+      </ul>
+      <a href="#contact" class="nav__cta">Contact</a>
+      <div class="lang-switch" role="group" aria-label="Taal kiezen">
+        <button onclick="setLang('nl')" class="active" id="btn-nl">NL</button>
+        <button onclick="setLang('de')" id="btn-de">DE</button>
+        <button onclick="setLang('en')" id="btn-en">EN</button>
+      </div>
+      <button class="nav__ham" id="ham" aria-label="Menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<div class="nav__overlay" id="overlay" role="dialog">
+  <button class="nav__close" id="navClose">&#215;</button>
+  <a href="#zandsculpturen" class="mlink">Zandsculpturen</a>
+  <a href="#tuinen"         class="mlink">Tuinen</a>
+  <a href="#horeca"         class="mlink">Terras</a>
+  <a href="#verhuur"        class="mlink">Verhuur</a>
+  <a href="#evenementen"    class="mlink">Evenementen</a>
+  <a href="#contact"        class="mlink">Contact</a>
+</div>
+
+
+<!-- ════════════════════════════════════════════════════════════════
+     HERO — Drone video background, multi-depth 3D parallax
+════════════════════════════════════════════════════════════════ -->
+<section class="hero grain" id="top">
+
+  <div class="hero__media" id="heroMedia">
+    <video
+      class="hero__video"
+      autoplay muted loop playsinline
+      poster="dji_fly_20230329_200654_129_1680201207190_photo.JPG"
+    >
+      <source src="dji_fly_20231111_172032_215_1699788601167_video.MP4" type="video/mp4" />
+    </video>
+  </div>
+
+  <div class="hero__atmo"></div>
+  <div class="hero__glow"></div>
+
+  <div class="hero__content">
+    <div class="wrap" style="width:100%">
+      <div class="hero__text" id="heroText">
+        <div class="hero__eyebrow">
+          <div class="hero__eyebrow-line"></div>
+          <span>Landgoed &nbsp;&middot;&nbsp; Diepenheim &nbsp;&middot;&nbsp; Twente</span>
+        </div>
+        <h1 class="hero__title">
+          Kasteel<em>Warmelo</em>
+        </h1>
+        <div class="hero__sep"></div>
+        <p class="hero__sub" data-i18n="hero-sub">
+          Eeuwenoud landgoed in het hart van Twente — historische tuinen, indrukwekkende zandsculpturen en een rustgevend verblijf in de Oranjerie.
+        </p>
+        <div class="hero__actions">
+          <a href="#zandsculpturen" class="btn btn-gold"><span data-i18n="hero-btn1">Ontdek het landgoed</span></a>
+          <a href="#verhuur"        class="btn btn-outline-w"><span data-i18n="hero-btn2">Verblijf boeken</span></a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero__aside">
+    <div class="hero__stat">
+      <div class="hero__stat-num">7 ha</div>
+      <div class="hero__stat-lbl">Historische tuin</div>
+    </div>
+    <div class="hero__stat">
+      <div class="hero__stat-num">28</div>
+      <div class="hero__stat-lbl">Zandsculpturen</div>
+    </div>
+    <div class="hero__stat">
+      <div class="hero__stat-num">18e</div>
+      <div class="hero__stat-lbl">Eeuwse aanleg</div>
+    </div>
+  </div>
+
+  <div class="hero__cue" aria-hidden="true">
+    <div class="hero__cue-line"></div>
+    <span>Scroll</span>
+  </div>
+</section>
+
+
+<!-- ════════════════════════════════════════════════════════════════
+     SEASON BANNER
+════════════════════════════════════════════════════════════════ -->
+<div class="banner" data-i18n="banner">
+  Seizoen 2026&ensp;&mdash;&ensp;<strong>Opening 3 mei 2026</strong>&ensp;&mdash;&ensp;Welkom terug op Landgoed Warmelo
+</div>
+
+
+<!-- ════════════════════════════════════════════════════════════════
+     INTRO — Editorial with image
+════════════════════════════════════════════════════════════════ -->
+<section class="intro">
+  <div class="wrap">
+    <div class="intro__grid">
+      <div class="intro__visual reveal">
+        <img src="IMG_1630_conv.jpg" alt="Kasteel Warmelo door de poort" loading="lazy" />
+        <div class="intro__visual-badge">
+          <div class="intro__visual-badge-num">Est.</div>
+          <div class="intro__visual-badge-lbl">Landgoed Warmelo</div>
+        </div>
+      </div>
+      <div class="reveal d1">
+        <div class="intro__aside-num">&#x2767;</div>
+        <span class="label" data-i18n="intro-label">Eeuwenoud erfgoed</span>
+        <div class="rule"></div>
+        <h2 class="intro__title" data-i18n="intro-h2">
+          Een landgoed dat<br><em>de eeuwen</em> doorstaan heeft
+        </h2>
+        <p class="intro__body" data-i18n="intro-body">
+          Kasteel Warmelo staat al eeuwenlang in het hart van Diepenheim, omgeven door historische tuinen, rietkragen en stille bossen. Het landgoed combineert erfgoed met beleving: kunst in de buitenlucht, een smaakvolle terras en een knusse vakantiewoning in de voormalige Oranjerie.
+        </p>
+        <div class="intro__divider reveal d2">
+          <div class="intro__divider-line"></div>
+          <span class="intro__divider-mark">&#10022;</span>
+          <div class="intro__divider-line" style="background:linear-gradient(270deg,var(--stone),transparent)"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ════════════════════════════════════════════════════════════════
+     FACTS BAR
+════════════════════════════════════════════════════════════════ -->
+<div class="facts reveal">
+  <div class="wrap">
+    <div class="facts__row">
+      <div class="facts__cell">
+        <span class="facts__lbl">Locatie</span>
+        <span class="facts__val">Diepenheim, Twente</span>
+        <span class="facts__sub">Stedeke 11, 7478 RV</span>
+      </div>
+      <div class="facts__cell">
+        <span class="facts__lbl">Tuinoppervlak</span>
+        <span class="facts__val">7 hectare</span>
+        <span class="facts__sub">Engelse tuin — 18e eeuw</span>
+      </div>
+      <div class="facts__cell">
+        <span class="facts__lbl">Geopend</span>
+        <span class="facts__val">Seizoen 2026</span>
+        <span class="facts__sub">Vanaf 3 mei 2026</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════════════════════════════
+     FEATURE GRID — 3D FLIP CARDS
+     Each card: front = local drone photo, back = section info
+════════════════════════════════════════════════════════════════ -->
+<div class="feat-grid" role="list">
+
+  <!-- Card I — Zandsculpturen -->
+  <div class="flip-card reveal" role="listitem">
+    <div class="flip-inner">
+      <div class="flip-front">
+        <img src="IMG_9212_conv.jpg" alt="Zandsculptuur paard en wagen" />
+        <div class="flip-front__overlay">
+          <span class="flip-front__num">I</span>
+          <div class="flip-front__title">Zandsculpturen</div>
+          <div class="flip-front__hint">Hover om meer te zien</div>
+        </div>
+      </div>
+      <div class="flip-back">
+        <span class="label">Expositie 2026</span>
+        <h3>Zandsculpturen</h3>
+        <p>28 indrukwekkende sculpturen van tien internationale kunstenaars in de historische Engelse tuin. Thema dit jaar: <em>Reis door Nederland</em>.</p>
+        <a href="#zandsculpturen">Bekijk expositie</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Card II — Historische Tuinen -->
+  <div class="flip-card reveal d1" role="listitem">
+    <div class="flip-inner">
+      <div class="flip-front">
+        <img src="IMG_9209_conv.jpg" alt="Gele bloemen kasteelvijver" style="object-position:28% 60%;" />
+        <div class="flip-front__overlay">
+          <span class="flip-front__num">II</span>
+          <div class="flip-front__title">Historische Tuinen</div>
+          <div class="flip-front__hint">Hover om meer te zien</div>
+        </div>
+      </div>
+      <div class="flip-back">
+        <span class="label">Vier eeuwen schoonheid</span>
+        <h3>Historische Tuinen</h3>
+        <p>7 hectare aan eeuwenoude tuin met exotische bomen, schilderachtige waterpartijen en een weelderige Franse tuin.</p>
+        <a href="#tuinen">Verken de tuinen</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Card III — Terras -->
+  <div class="flip-card reveal d2" role="listitem">
+    <div class="flip-inner">
+      <div class="flip-front">
+        <img src="IMG_3320.jpg" alt="Terras Kasteel Warmelo" />
+        <div class="flip-front__overlay">
+          <span class="flip-front__num">III</span>
+          <div class="flip-front__title">Terras &amp; Horeca</div>
+          <div class="flip-front__hint">Hover om meer te zien</div>
+        </div>
+      </div>
+      <div class="flip-back">
+        <span class="label">Verfrissingen</span>
+        <h3>Terras &amp; Horeca</h3>
+        <p>Ruim zonnig terras met uitzicht op het kasteel — in de zon of in de schaduw — met drankjes en versnaperingen.</p>
+        <a href="#horeca">Meer over het terras</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Card IV — Oranjerie -->
+  <div class="flip-card reveal d3" role="listitem">
+    <div class="flip-inner">
+      <div class="flip-front">
+        <img src="dji_fly_20230329_203036_138_1680200922186_photo.JPG" alt="Luchtfoto landgoed Warmelo" />
+        <div class="flip-front__overlay">
+          <span class="flip-front__num">IV</span>
+          <div class="flip-front__title">Verblijf in de Oranjerie</div>
+          <div class="flip-front__hint">Hover om meer te zien</div>
+        </div>
+      </div>
+      <div class="flip-back">
+        <span class="label">Vakantieverhuur</span>
+        <h3>De Oranjerie</h3>
+        <p>Overnacht in de voormalige Oranjerie met houtkachel en privétoegang tot de historische tuinen van het landgoed.</p>
+        <a href="#verhuur">Bekijk verhuur</a>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+
+<!-- ════════════════════════════════════════════════════════════════
+     ZANDSCULPTUREN — Dark section with 3D perspective gallery
+════════════════════════════════════════════════════════════════ -->
+<section class="section sculpt grain" id="zandsculpturen" style="position:relative;">
+  <div class="sculpt__decor"></div>
+  <div class="sculpt__decor2"></div>
+  <div class="wrap" style="position:relative;z-index:2;">
+    <div class="sculpt__header">
+      <div class="reveal">
+        <span class="label">Expositie 2026</span>
+        <div class="rule"></div>
+        <h2 class="h-display h-display--white">
+          Zandsculpturen in de<br><em>Historische Tuin</em>
+        </h2>
+        <p class="body-copy body-copy--white" style="margin-top:20px;max-width:480px;">
+          Wandel door de 18e-eeuwse Engelse tuin en ontdek 28 indrukwekkende sculpturen van kunstenaars uit zes landen. Dit jaar met het thema <em>Reis door Nederland</em>.
+        </p>
+      </div>
+      <div class="reveal d1">
+        <div class="sculpt__stats">
+          <div>
+            <div class="sculpt__stat-num">28</div>
+            <div class="sculpt__stat-lbl">Sculpturen</div>
+          </div>
+          <div>
+            <div class="sculpt__stat-num">10</div>
+            <div class="sculpt__stat-lbl">Kunstenaars</div>
+          </div>
+          <div>
+            <div class="sculpt__stat-num">2000<span style="font-size:1.4rem;font-family:var(--ff-body)">m&sup3;</span></div>
+            <div class="sculpt__stat-lbl">Zand</div>
+          </div>
+        </div>
+        <p class="body-copy body-copy--white" style="margin-top:32px;font-size:14px;">
+          Kinderen kunnen meedoen aan een maandelijkse speurtocht. Wie alle vragen goed beantwoordt, maakt kans op een mooie prijs.
+        </p>
+        <a href="#contact" class="btn btn-outline-w" style="margin-top:28px;"><span>Meer informatie</span></a>
+      </div>
+    </div>
+
+    <div class="sculpt__scene">
+      <div class="sculpt__grid" id="sculptGrid">
+        <div class="zoom reveal">
+          <img src="https://kasteelwarmelo.nl/wp-content/uploads/2023/03/zandsculptuur-02-scaled.jpg" alt="Zandsculptuur" loading="lazy" />
+        </div>
+        <div class="zoom reveal d1">
+          <img src="https://kasteelwarmelo.nl/wp-content/uploads/2023/03/zandsculptuur-01-scaled.jpg" alt="Zandsculptuur" loading="lazy" />
+        </div>
+        <div class="zoom reveal d2">
+          <img src="https://kasteelwarmelo.nl/wp-content/uploads/2023/03/zandsculptuur-03-scaled.jpg" alt="Zandsculptuur" loading="lazy" />
+        </div>
+        <div class="zoom reveal d2">
+          <img src="https://kasteelwarmelo.nl/wp-content/uploads/2023/03/zandsculptuur-04-scaled.jpg" alt="Zandsculptuur" loading="lazy" />
+        </div>
+        <div class="zoom reveal d3">
+          <img src="https://kasteelwarmelo.nl/wp-content/uploads/2023/03/zandsculptuur-07-scaled.jpg" alt="Zandsculptuur" loading="lazy" />
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ════════════════════════════════════════════════════════════════
+     TUINEN — Full-width split
+════════════════════════════════════════════════════════════════ -->
+<div class="gardens reveal" id="tuinen">
+  <div class="gardens__visual">
+    <img src="https://kasteelwarmelo.nl/wp-content/uploads/2023/04/tuinen.jpg" alt="Historische tuin Kasteel Warmelo" loading="lazy" />
+    <div class="gardens__badge">
+      <span class="gardens__badge-num">1992</span>
+      <span class="gardens__badge-lbl">Restauratie</span>
+    </div>
+  </div>
+  <div class="gardens__copy">
+    <span class="label">Vier eeuwen schoonheid</span>
+    <div class="rule"></div>
+    <h2 class="h-display">De <em>Historische</em><br>Tuinen</h2>
+    <p class="body-copy" style="margin-top:22px;">
+      Al in de middeleeuwen waren er tuinen binnen de muren van het kasteel. Vandaag biedt het landgoed 7 hectare — een weelderige combinatie van Franse tuinkunst, een Engelse landschapstuin en een uniek pinetum.
+    </p>
+    <div class="timeline">
+      <div class="tl-row">
+        <div class="tl-year">Middeleeuw.</div>
+        <div class="tl-text">Moestuinen en kruidenplantsoenen binnen de beschermde kasteelmuren.</div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-year">18e eeuw</div>
+        <div class="tl-text">Engelse landschapsstijl: kunstmatige heuvels, vijvers en kronkelende paden.</div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-year">Victoriaans</div>
+        <div class="tl-text">Aanleg van het pinetum — een bijzondere verzameling exotische coniferen.</div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-year">1992–nu</div>
+        <div class="tl-text">Grootschalige restauratie: herstel van lanen, natte beektuinen en grachtenrenovatie.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════════════════════════════
+     TERRAS — Dark, atmospheric, immersive
+════════════════════════════════════════════════════════════════ -->
+<section class="section terras grain" id="horeca" style="position:relative;">
+  <div class="terras__bg-img">
+    <img src="IMG_8795_conv.jpg" alt="" aria-hidden="true" loading="lazy" />
+  </div>
+  <div class="terras__glow"></div>
+  <div class="wrap">
+    <div class="terras__inner">
+      <div class="reveal">
+        <span class="label">Terras &amp; Verfrissingen</span>
+        <div class="rule rule--light"></div>
+        <h2 class="h-display h-display--white">Een <em>betoverend</em><br>uitzicht bij elke slok</h2>
+        <p class="body-copy body-copy--white" style="margin-top:22px;">
+          Ons ruime, zonnige terras biedt zowel schaduwrijke als zonnige plekken. Geniet van verfrissende drankjes terwijl het historische landgoed zich voor u ontvouwt.
+        </p>
+        <div class="feat-item">
+          <div class="feat-item__bar"></div>
+          <div>
+            <div class="feat-item__name">Ruim, zonnig terras</div>
+            <div class="feat-item__desc">In de zon of schaduw — altijd comfortabel, met uitzicht op de kasteelgracht.</div>
+          </div>
+        </div>
+        <div class="feat-item">
+          <div class="feat-item__bar"></div>
+          <div>
+            <div class="feat-item__name">Uitzicht op het landgoed</div>
+            <div class="feat-item__desc">Een betoverend decor van eeuwenoude bomen en waterpartijen.</div>
+          </div>
+        </div>
+        <div class="feat-item">
+          <div class="feat-item__bar"></div>
+          <div>
+            <div class="feat-item__name">Drankjes &amp; versnaperingen</div>
+            <div class="feat-item__desc">Van koude limonade tot warme koffie — er is altijd iets lekkers.</div>
+          </div>
+        </div>
+      </div>
+      <div class="pullquote reveal d2">
+        <blockquote>
+          Geniet — zowel in de schaduw als in de zon — van drankjes en versnaperingen, met het betoverende uitzicht over het landgoed.
+        </blockquote>
+        <cite>Kasteel Warmelo — Terras</cite>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ════════════════════════════════════════════════════════════════
+     VERHUUR — Gallery + copy
+════════════════════════════════════════════════════════════════ -->
+<section class="section" id="verhuur" style="background:var(--white);">
+  <div class="wrap">
+    <div style="text-align:center;margin-bottom:60px;" class="reveal">
+      <span class="label">Vakantieverhuur</span>
+      <div class="rule rule--center"></div>
+      <h2 class="h-display" style="text-align:center;">Verblijf in de <em>Oranjerie</em></h2>
+      <p class="body-copy" style="max-width:480px;margin-inline:auto;margin-top:18px;">
+        Overnacht in de sfeer van vervlogen tijden in de voormalige Oranjerie — met houtkachel, privétuin en toegang tot de historische tuinen.
+      </p>
+    </div>
+    <div class="verhuur">
+      <div class="verhuur__gallery reveal">
+        <div class="zoom"><img src="https://kasteelwarmelo.nl/wp-content/uploads/2023/03/verhuur-01.jpeg" alt="Woonkamer Oranjerie" loading="lazy" /></div>
+        <div class="zoom"><img src="https://kasteelwarmelo.nl/wp-content/uploads/2023/03/verhuur-02.jpeg" alt="Interieur detail" loading="lazy" /></div>
+        <div class="zoom"><img src="https://kasteelwarmelo.nl/wp-content/uploads/2023/03/verhuur-03.jpeg" alt="Exterieur Oranjerie" loading="lazy" /></div>
+        <div class="zoom"><img src="https://kasteelwarmelo.nl/wp-content/uploads/2023/03/verhuur-04.jpeg" alt="Privétuin" loading="lazy" /></div>
+        <div class="zoom"><img src="https://kasteelwarmelo.nl/wp-content/uploads/2023/03/verhuur-05.jpeg" alt="Slaapkamer" loading="lazy" /></div>
+        <div class="zoom"><img src="https://kasteelwarmelo.nl/wp-content/uploads/2023/03/verhuur-06.jpeg" alt="Keuken" loading="lazy" /></div>
+      </div>
+      <div class="reveal d1">
+        <span class="label">Wat is inbegrepen</span>
+        <div class="rule"></div>
+        <h3 class="verhuur__subtitle">Rust in de sfeer van<br><em>vervlogen tijden</em></h3>
+        <p class="body-copy">
+          De zonnige woonkamer heeft een houtkachel en comfortabele zithoek. Aan de eettafel kijkt u uit op de Franse tuin. WiFi beschikbaar in de gehele woning.
+        </p>
+        <div class="amenities">
+          <div class="amenity">Ruime vakantiewoning</div>
+          <div class="amenity">Houtkachel</div>
+          <div class="amenity">Uitzicht op Franse tuin</div>
+          <div class="amenity">Gratis WiFi</div>
+          <div class="amenity">Privétuin met sleutel</div>
+          <div class="amenity">Fietsenstalling</div>
+          <div class="amenity">E-bike oplaadpunt</div>
+          <div class="amenity">Toegang tot 7 ha tuin</div>
+        </div>
+        <div class="note">
+          <div class="note__lbl">Let op</div>
+          <p>Honden zijn niet welkom — ook niet in een tas. Drones mogen niet boven het landgoed vliegen.</p>
+        </div>
+        <div class="verhuur__ctas">
+          <a href="#contact"         class="btn btn-gold"><span>Reservering aanvragen</span></a>
+          <a href="tel:+31547352547" class="btn btn-outline-g"><span>0547 &ndash; 352 547</span></a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ════════════════════════════════════════════════════════════════
+     EVENTS
+════════════════════════════════════════════════════════════════ -->
+<section class="section" id="evenementen" style="background:var(--ivory-dark);">
+  <div class="wrap">
+    <div class="reveal">
+      <span class="label">Agenda 2026</span>
+      <div class="rule"></div>
+      <h2 class="h-display">Evenementen &amp; <em>Activiteiten</em></h2>
+    </div>
+    <div class="events-grid" role="list">
+      <article class="ev reveal" role="listitem">
+        <span class="ev__day">3</span>
+        <span class="ev__month">Mei 2026</span>
+        <h3 class="ev__name">Opening Seizoen 2026</h3>
+        <p class="ev__desc">Het landgoed opent de deuren. Zandsculpturen, tuinen en terras — alles gereed.</p>
+      </article>
+      <article class="ev reveal d1" role="listitem">
+        <span class="ev__day">14</span>
+        <span class="ev__month">Mei 2026</span>
+        <h3 class="ev__name">Hemelvaartsdag — Geopend</h3>
+        <p class="ev__desc">Bezoek de historische tuin op deze feestelijke dag in het seizoen.</p>
+      </article>
+      <article class="ev reveal d2" role="listitem">
+        <span class="ev__day">24–25</span>
+        <span class="ev__month">Mei 2026</span>
+        <h3 class="ev__name">Pinksteren — Geopend</h3>
+        <p class="ev__desc">Beide pinksterdagen open in de historische tuinen van Kasteel Warmelo.</p>
+      </article>
+      <article class="ev reveal" role="listitem">
+        <span class="ev__day">19–21</span>
+        <span class="ev__month">Juni 2026</span>
+        <h3 class="ev__name">Zomer Heerlijckheid</h3>
+        <p class="ev__desc">Drie dagen vol sfeer, muziek en cultuur op het landgoed.</p>
+      </article>
+      <article class="ev reveal d1" role="listitem">
+        <span class="ev__day">Doorlopend</span>
+        <span class="ev__month">Seizoen 2026</span>
+        <h3 class="ev__name">Zandsculpturen Expositie</h3>
+        <p class="ev__desc">&#8220;Reis door Nederland&#8221; — het gehele seizoen te bewonderen.</p>
+      </article>
+      <article class="ev reveal d2" role="listitem">
+        <span class="ev__day">Maandelijks</span>
+        <span class="ev__month">Seizoen 2026</span>
+        <h3 class="ev__name">Speurtocht voor Kinderen</h3>
+        <p class="ev__desc">Maandelijkse speurtocht door de tuin — elke maand een winnaar.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+
+<!-- ════════════════════════════════════════════════════════════════
+     VENUE CTA
+════════════════════════════════════════════════════════════════ -->
+<div class="venue reveal">
+  <div class="venue__img">
+    <img src="dji_fly_20231111_171836_214_1699788547933_photo.JPG" alt="Evenement Kasteel Warmelo bij schemering" loading="lazy" />
+  </div>
+  <div class="venue__copy">
+    <span class="label">Bijzondere locatie</span>
+    <div class="rule rule--light"></div>
+    <h2 class="h-display h-display--white" data-i18n="venue-h2">Uw evenement op een <em>unieke locatie</em></h2>
+    <p class="body-copy body-copy--white" data-i18n="venue-body">
+      Kasteel Warmelo beschikt over jarenlange ervaring met het organiseren van evenementen. Een onnavolgbaar decor voor feesten, bijeenkomsten en bijzondere gelegenheden.
+    </p>
+    <a href="#contact" class="btn btn-gold" style="margin-top:32px;"><span data-i18n="venue-btn">Informeer naar verhuur</span></a>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════════════════════════════
+     PRAKTISCH
+════════════════════════════════════════════════════════════════ -->
+<section class="section practical" id="bezoek">
+  <div class="wrap">
+    <div class="reveal">
+      <span class="label">Bezoekinfo</span>
+      <div class="rule"></div>
+      <h2 class="h-display">Plan uw <em>bezoek</em></h2>
+    </div>
+    <div class="practical__grid" style="margin-top:52px;">
+      <div class="pblock reveal">
+        <h3 class="pblock__title">Openingstijden</h3>
+        <div class="pblock__body">
+          <strong>Seizoen 2026: vanaf 3 mei</strong><br><br>
+          Ma &ndash; Vr: 10:00 &ndash; 17:00<br>
+          Za &ndash; Zo: 10:00 &ndash; 17:30<br><br>
+          <em>Buiten het seizoen gesloten.</em>
+        </div>
+      </div>
+      <div class="pblock reveal d1">
+        <h3 class="pblock__title">Adres &amp; Parkeren</h3>
+        <div class="pblock__body">
+          <strong>Kasteel Warmelo</strong><br>
+          Stedeke 11<br>
+          7478 RV Diepenheim<br><br>
+          Parkeerterrein aanwezig op het terrein.
+        </div>
+      </div>
+      <div class="pblock reveal d2">
+        <h3 class="pblock__title">Huisregels</h3>
+        <div class="pblock__body">
+          <strong>Honden niet welkom</strong><br>
+          Inclusief in tas of op de arm.<br><br>
+          <strong>Geen drones</strong><br>
+          Vliegen boven het landgoed is verboden.
+        </div>
+      </div>
+      <div class="practical__map reveal">
+        <img src="https://kasteelwarmelo.nl/wp-content/uploads/2024/04/plattegrond-warmelo-3D-kleiner-bestand-1024x699.jpg" alt="Plattegrond Landgoed Warmelo" loading="lazy" />
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ════════════════════════════════════════════════════════════════
+     CONTACT
+════════════════════════════════════════════════════════════════ -->
+<section class="section" id="contact" style="background:var(--white);">
+  <div class="wrap">
+    <div class="contact-grid">
+      <div class="reveal">
+        <span class="label">Neem contact op</span>
+        <div class="rule"></div>
+        <h2 class="h-display">Wij horen graag<br>van <em>u</em></h2>
+        <p class="body-copy" style="margin-top:22px;margin-bottom:40px;">
+          Vragen over een bezoek, reservering of evenement? Wij reageren zo snel mogelijk.
+        </p>
+        <div class="cinfo">
+          <div>
+            <div class="cinfo__lbl">Telefoon</div>
+            <a href="tel:+31547352547" class="cinfo__val">0547 &ndash; 352 547</a>
+          </div>
+          <div>
+            <div class="cinfo__lbl">E-mail</div>
+            <a href="mailto:info@kasteelwarmelo.nl" class="cinfo__val">info@kasteelwarmelo.nl</a>
+          </div>
+          <div>
+            <div class="cinfo__lbl">Adres</div>
+            <span class="cinfo__val">Stedeke 11, 7478 RV Diepenheim</span>
+          </div>
+          <div>
+            <div class="cinfo__lbl">Volg ons</div>
+            <div style="display:flex;gap:16px;margin-top:10px;">
+              <a href="https://www.facebook.com/"  style="font-size:9px;font-weight:500;letter-spacing:.22em;text-transform:uppercase;color:var(--green);border-bottom:1px solid var(--gold);padding-bottom:2px;">Facebook</a>
+              <a href="https://www.instagram.com/" style="font-size:9px;font-weight:500;letter-spacing:.22em;text-transform:uppercase;color:var(--green);border-bottom:1px solid var(--gold);padding-bottom:2px;">Instagram</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <form class="form reveal d1" action="mailto:info@kasteelwarmelo.nl" method="POST" enctype="text/plain">
+        <div class="form__row">
+          <div class="field">
+            <label for="fn">Voornaam</label>
+            <input type="text" id="fn" name="voornaam" autocomplete="given-name" required />
+          </div>
+          <div class="field">
+            <label for="ln">Achternaam</label>
+            <input type="text" id="ln" name="achternaam" autocomplete="family-name" required />
+          </div>
+        </div>
+        <div class="field">
+          <label for="em">E-mailadres</label>
+          <input type="email" id="em" name="email" autocomplete="email" required />
+        </div>
+        <div class="field">
+          <label for="sub">Onderwerp</label>
+          <select id="sub" name="onderwerp">
+            <option value="">Selecteer een onderwerp</option>
+            <option>Bezoek &amp; Openingstijden</option>
+            <option>Vakantieverhuur Oranjerie</option>
+            <option>Evenement op het landgoed</option>
+            <option>Zandsculpturen Expositie</option>
+            <option>Overige vraag</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="msg">Uw bericht</label>
+          <textarea id="msg" name="bericht" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-gold" style="align-self:flex-start;"><span>Verstuur bericht</span></button>
+      </form>
+    </div>
+  </div>
+</section>
+
+
+<!-- ════════════════════════════════════════════════════════════════
+     FOOTER
+════════════════════════════════════════════════════════════════ -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer__grid">
+      <div>
+        <div class="footer__logo">
+          <img class="footer__crest" src="https://kasteelwarmelo.nl/wp-content/uploads/2023/03/warmelo-wapenschild.png" alt="Wapenschild" />
+          <span class="footer__brand">Kasteel Warmelo</span>
+        </div>
+        <p class="footer__about">
+          Eeuwenoud landgoed in Diepenheim, Twente. Historische tuinen, bijzondere zandsculpturen en een uniek verblijf in de Oranjerie.
+        </p>
+        <div class="footer__social">
+          <a href="https://www.facebook.com/warmelodiepenheim" aria-label="Facebook" target="_blank" rel="noopener">fb</a>
+          <a href="https://www.instagram.com/kasteelwarmelo?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" aria-label="Instagram" target="_blank" rel="noopener">ig</a>
+        </div>
+      </div>
+      <div>
+        <div class="footer__col-title">Het Landgoed</div>
+        <ul class="footer__links" role="list">
+          <li><a href="#zandsculpturen">Zandsculpturen</a></li>
+          <li><a href="#tuinen">Historische Tuinen</a></li>
+          <li><a href="#horeca">Terras &amp; Horeca</a></li>
+          <li><a href="#verhuur">Vakantieverhuur</a></li>
+          <li><a href="#evenementen">Evenementen</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer__col-title">Bezoek</div>
+        <ul class="footer__links" role="list">
+          <li><a href="#bezoek">Openingstijden</a></li>
+          <li><a href="#bezoek">Route &amp; Parkeren</a></li>
+          <li><a href="#bezoek">Huisregels</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer__col-title">Contact</div>
+        <address>
+          <ul class="footer__links" role="list">
+            <li><a href="tel:+31547352547">0547 &ndash; 352 547</a></li>
+            <li><a href="mailto:info@kasteelwarmelo.nl">info@kasteelwarmelo.nl</a></li>
+          </ul>
+          <p style="margin-top:16px;font-size:12.5px;font-weight:300;color:rgba(255,255,255,.28);line-height:1.72;">
+            Stedeke 11<br>7478 RV Diepenheim
+          </p>
+        </address>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <span>&copy; 2026 Kasteel Warmelo &mdash; Alle rechten voorbehouden</span>
+      <nav class="footer__legal">
+        <a href="#">Privacybeleid</a>
+        <a href="#">Algemene Voorwaarden</a>
+      </nav>
+    </div>
+  </div>
+</footer>
+
+
+<!-- ════════════════════════════════════════════════════════════════
+     SCRIPTS
+════════════════════════════════════════════════════════════════ -->
+<script>
+/* ── LOADING SCREEN ────────────────────────────────────────────── */
+(function () {
+  /* Canvas particle system */
+  const canvas  = document.getElementById('particleCanvas');
+  const ctx     = canvas.getContext('2d');
+  let   W, H, particles;
+
+  function resize() {
+    W = canvas.width  = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+  }
+
+  function mkParticle() {
+    return {
+      x:  Math.random() * W,
+      y:  H + Math.random() * 40,
+      r:  Math.random() * 1.6 + 0.4,
+      vy: -(Math.random() * 0.7 + 0.25),
+      vx: (Math.random() - .5) * 0.35,
+      a:  Math.random() * 0.6 + 0.1,
+      da: (Math.random() * 0.003 + 0.001) * (Math.random() < .5 ? 1 : -1),
+    };
+  }
+
+  function initParticles() {
+    particles = Array.from({ length: 90 }, mkParticle);
+    /* scatter initial y so screen isn't empty at start */
+    particles.forEach(p => { p.y = Math.random() * H; });
+  }
+
+  function drawParticles() {
+    ctx.clearRect(0, 0, W, H);
+    particles.forEach(p => {
+      p.x  += p.vx; p.y  += p.vy;
+      p.a  += p.da;
+      if (p.a < .04 || p.a > .75) p.da *= -1;
+      if (p.y < -10) { Object.assign(p, mkParticle()); p.y = H + 8; }
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(191,140,42,${p.a})`;
+      ctx.fill();
+    });
+    if (!loaderDone) requestAnimationFrame(drawParticles);
+  }
+
+  let loaderDone = false;
+  resize();
+  initParticles();
+  drawParticles();
+  window.addEventListener('resize', resize);
+
+  /* Letter-by-letter title reveal */
+  const nameEl = document.getElementById('loaderName');
+  const text   = 'KASTEEL WARMELO';
+  text.split('').forEach((ch, i) => {
+    const span = document.createElement('span');
+    span.className    = 'l-char';
+    span.textContent  = ch === ' ' ? '\u00A0' : ch;
+    span.style.animationDelay = (0.85 + i * 0.07) + 's';
+    nameEl.appendChild(span);
+  });
+
+  /* Progress bar + hide loader */
+  const bar      = document.getElementById('loaderBar');
+  const loader   = document.getElementById('loader');
+  let   progress = 0;
+  const step     = 100 / 40; /* ~40 ticks to fill */
+
+  const interval = setInterval(() => {
+    progress = Math.min(progress + step + Math.random() * step * .5, 100);
+    bar.style.width = progress + '%';
+    if (progress >= 100) {
+      clearInterval(interval);
+      setTimeout(() => {
+        loaderDone = true;
+        loader.classList.add('hidden');
+      }, 600);
+    }
+  }, 68);
+
+  /* 3D mouse-tracking parallax on loader content */
+  const loaderContent = document.getElementById('loaderContent');
+  const loaderCrest   = document.getElementById('loaderCrest');
+
+  /* Switch crest to idle 3D float after entry animation */
+  loaderCrest.addEventListener('animationend', () => {
+    loaderCrest.classList.add('idle');
+  }, { once: true });
+
+  document.addEventListener('mousemove', function onLoaderMouse(e) {
+    if (loaderDone) { document.removeEventListener('mousemove', onLoaderMouse); return; }
+    const cx = window.innerWidth  / 2;
+    const cy = window.innerHeight / 2;
+    const rx = ((e.clientY - cy) / cy) * -10;
+    const ry = ((e.clientX - cx) / cx) *  14;
+    loaderContent.style.transform =
+      `perspective(1100px) rotateX(${rx}deg) rotateY(${ry}deg)`;
+  });
+})();
+
+
+/* ── NAV ───────────────────────────────────────────────────────── */
+const nav     = document.getElementById('nav');
+const syncNav = () => nav.classList.toggle('scrolled', window.scrollY > 64);
+window.addEventListener('scroll', syncNav, { passive: true });
+syncNav();
+
+
+/* ── MOBILE MENU ───────────────────────────────────────────────── */
+const ham     = document.getElementById('ham');
+const overlay = document.getElementById('overlay');
+const closer  = document.getElementById('navClose');
+const openM   = () => { overlay.classList.add('open'); ham.setAttribute('aria-expanded', 'true'); document.body.style.overflow = 'hidden'; };
+const closeM  = () => { overlay.classList.remove('open'); ham.setAttribute('aria-expanded', 'false'); document.body.style.overflow = ''; };
+ham.addEventListener('click', openM);
+closer.addEventListener('click', closeM);
+overlay.querySelectorAll('.mlink').forEach(l => l.addEventListener('click', closeM));
+
+
+/* ── HERO PARALLAX ─────────────────────────────────────────────── */
+const heroMedia = document.getElementById('heroMedia');
+let raf = false;
+window.addEventListener('scroll', () => {
+  if (!raf) {
+    requestAnimationFrame(() => {
+      const sy = window.scrollY;
+      heroMedia.style.transform = `translateY(${sy * 0.32}px)`;
+      raf = false;
+    });
+    raf = true;
+  }
+}, { passive: true });
+
+
+/* ── HERO TEXT 3D MOUSE TILT ──────────────────────────────────── */
+const heroText = document.getElementById('heroText');
+const heroSection = document.getElementById('top');
+heroSection.addEventListener('mousemove', e => {
+  const r  = heroSection.getBoundingClientRect();
+  const x  = (e.clientX - r.left) / r.width  - .5;
+  const y  = (e.clientY - r.top)  / r.height - .5;
+  heroText.style.transform = `perspective(900px) rotateY(${x * 6}deg) rotateX(${-y * 4}deg)`;
+  heroText.style.transition = 'transform .1s ease-out';
+});
+heroSection.addEventListener('mouseleave', () => {
+  heroText.style.transform = '';
+  heroText.style.transition = 'transform .7s var(--spring, cubic-bezier(.16,1,.3,1))';
+});
+
+
+/* ── 3D TILT ON CARDS ──────────────────────────────────────────── */
+document.querySelectorAll('.flip-card').forEach(card => {
+  card.addEventListener('mousemove', e => {
+    /* Only tilt when not flipped */
+    const inner = card.querySelector('.flip-inner');
+    if (inner.style.transform && inner.style.transform.includes('rotateY(180')) return;
+    const r = card.getBoundingClientRect();
+    const x = (e.clientX - r.left) / r.width  - .5;
+    const y = (e.clientY - r.top)  / r.height - .5;
+    card.style.transform = `perspective(1000px) rotateY(${x * 8}deg) rotateX(${-y * 5}deg) scale(1.01)`;
+    card.style.transition = 'transform .08s ease-out';
+  });
+  card.addEventListener('mouseleave', () => {
+    card.style.transform = '';
+    card.style.transition = 'transform .6s cubic-bezier(.16,1,.3,1)';
+  });
+});
+
+
+/* ── 3D TILT ON EVENT CARDS ────────────────────────────────────── */
+document.querySelectorAll('.ev').forEach(card => {
+  card.addEventListener('mousemove', e => {
+    const r = card.getBoundingClientRect();
+    const x = (e.clientX - r.left) / r.width  - .5;
+    const y = (e.clientY - r.top)  / r.height - .5;
+    card.style.transform = `perspective(600px) rotateY(${x * 5}deg) rotateX(${-y * 3}deg) translateZ(6px)`;
+    card.style.transition = 'transform .08s ease-out, box-shadow .3s';
+  });
+  card.addEventListener('mouseleave', () => {
+    card.style.transform = '';
+    card.style.transition = 'transform .5s cubic-bezier(.16,1,.3,1), box-shadow .3s';
+  });
+});
+
+
+/* ── SCULPT GALLERY 3D MOUSE PARALLAX ─────────────────────────── */
+const sculptGrid = document.getElementById('sculptGrid');
+if (sculptGrid) {
+  const sculptSec = sculptGrid.closest('section');
+  sculptSec.addEventListener('mousemove', e => {
+    const r = sculptSec.getBoundingClientRect();
+    const x = (e.clientX - r.left) / r.width  - .5;
+    const y = (e.clientY - r.top)  / r.height - .5;
+    sculptGrid.style.transform = `perspective(1400px) rotateY(${x * 4}deg) rotateX(${-y * 2.5}deg)`;
+    sculptGrid.style.transition = 'transform .1s ease-out';
+  });
+  sculptSec.addEventListener('mouseleave', () => {
+    sculptGrid.style.transform = '';
+    sculptGrid.style.transition = 'transform .9s cubic-bezier(.16,1,.3,1)';
+  });
+}
+
+
+/* ── SCROLL REVEAL (3D fall-in) ────────────────────────────────── */
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('in');
+      io.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.07 });
+
+document.querySelectorAll('.reveal, .rule').forEach(el => io.observe(el));
+
+
+/* ── LANGUAGE SWITCHER ─────────────────────────────────────────── */
+const TRANS = {
+  nl: {
+    'hero-sub':    'Eeuwenoud landgoed in het hart van Twente — historische tuinen, indrukwekkende zandsculpturen en een rustgevend verblijf in de Oranjerie.',
+    'hero-btn1':   'Ontdek het landgoed',
+    'hero-btn2':   'Verblijf boeken',
+    'banner':      'Seizoen 2026&ensp;&mdash;&ensp;<strong>Opening 3 mei 2026</strong>&ensp;&mdash;&ensp;Welkom terug op Landgoed Warmelo',
+    'intro-label': 'Eeuwenoud erfgoed',
+    'intro-h2':    'Een landgoed dat<br><em>de eeuwen</em> doorstaan heeft',
+    'intro-body':  'Kasteel Warmelo staat al eeuwenlang in het hart van Diepenheim, omgeven door historische tuinen, rietkragen en stille bossen. Het landgoed combineert erfgoed met beleving: kunst in de buitenlucht, een smaakvolle terras en een knusse vakantiewoning in de voormalige Oranjerie.',
+    'venue-h2':    'Uw evenement op een <em>unieke locatie</em>',
+    'venue-body':  'Kasteel Warmelo beschikt over jarenlange ervaring met het organiseren van evenementen. Een onnavolgbaar decor voor feesten, bijeenkomsten en bijzondere gelegenheden.',
+    'venue-btn':   'Informeer naar verhuur',
+  },
+  de: {
+    'hero-sub':    'Jahrhundertealtes Landgut im Herzen von Twente — historische Gärten, beeindruckende Sandskulpturen und ein erholsamer Aufenthalt in der Orangerie.',
+    'hero-btn1':   'Landgut entdecken',
+    'hero-btn2':   'Unterkunft buchen',
+    'banner':      'Saison 2026&ensp;&mdash;&ensp;<strong>Eröffnung 3. Mai 2026</strong>&ensp;&mdash;&ensp;Herzlich willkommen auf Landgoed Warmelo',
+    'intro-label': 'Jahrhundertealtes Erbe',
+    'intro-h2':    'Ein Landgut, das<br><em>die Jahrhunderte</em> überdauert hat',
+    'intro-body':  'Kasteel Warmelo liegt seit Jahrhunderten im Herzen von Diepenheim, umgeben von historischen Gärten, Schilfgürteln und stillen Wäldern. Das Landgut verbindet Erbe mit Erlebnis: Kunst im Freien, eine stilvolle Terrasse und ein gemütliches Ferienhaus in der ehemaligen Orangerie.',
+    'venue-h2':    'Ihre Veranstaltung an einem <em>einzigartigen Ort</em>',
+    'venue-body':  'Kasteel Warmelo verfügt über langjährige Erfahrung in der Ausrichtung von Veranstaltungen. Ein unvergleichliches Ambiente für Feste, Tagungen und besondere Anlässe.',
+    'venue-btn':   'Informationen anfordern',
+  },
+  en: {
+    'hero-sub':    'A centuries-old estate in the heart of Twente — historic gardens, spectacular sand sculptures and a peaceful stay in the Orangery.',
+    'hero-btn1':   'Explore the estate',
+    'hero-btn2':   'Book a stay',
+    'banner':      'Season 2026&ensp;&mdash;&ensp;<strong>Opening 3 May 2026</strong>&ensp;&mdash;&ensp;Welcome back to Landgoed Warmelo',
+    'intro-label': 'Centuries of heritage',
+    'intro-h2':    'An estate that has<br>stood the test of <em>time</em>',
+    'intro-body':  'Kasteel Warmelo has stood for centuries at the heart of Diepenheim, surrounded by historic gardens, reedbeds and quiet forests. The estate blends heritage with experience: open-air art, a stylish terrace and a cosy holiday cottage in the former Orangery.',
+    'venue-h2':    'Your event at a <em>unique location</em>',
+    'venue-body':  'Kasteel Warmelo has years of experience hosting events. An unparalleled backdrop for celebrations, gatherings and special occasions.',
+    'venue-btn':   'Enquire about hire',
+  },
+};
+
+function setLang(lang) {
+  const t = TRANS[lang];
+  if (!t) return;
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.dataset.i18n;
+    if (t[key] !== undefined) el.innerHTML = t[key];
+  });
+  document.documentElement.lang = lang;
+  localStorage.setItem('kw-lang', lang);
+  ['nl','de','en'].forEach(l => {
+    const btn = document.getElementById('btn-' + l);
+    if (btn) btn.classList.toggle('active', l === lang);
+  });
+}
+
+(function() {
+  const saved = localStorage.getItem('kw-lang') || 'nl';
+  if (saved !== 'nl') setLang(saved);
+})();
+
+
+</script>
+</body>
+</html>
