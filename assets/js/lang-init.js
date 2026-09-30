@@ -1,1 +1,3 @@
 (function(){try{var l=localStorage.getItem("warmelo_lang");if(l){window._warmeloLang=l;document.documentElement.lang=l==="de"?"de":l==="en"?"en":"nl";if(l!=="nl"){var s=document.createElement("style");s.id="__lh";s.textContent="body{opacity:0!important;transition:none!important}";document.head.appendChild(s);}}}catch(e){}})();
+/* Non-blocking stylesheets: <link media="print" data-async-css> switches to all once loaded */
+(function(){var l=document.querySelectorAll("link[data-async-css]");for(var i=0;i<l.length;i++){(function(x){function on(){x.media="all"}if(x.sheet){on()}else{x.addEventListener("load",on)}})(l[i])}})();
