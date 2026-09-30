@@ -5,11 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Evenementen — Kasteel Warmelo</title>
   <meta name="description" content="Het landgoed Warmelo heeft veel ervaring met grote evenementen. Bekijk onze agenda voor het seizoen." />
+  <link rel="preload" as="image" href="assets/images/dji_fly_20241108_182220_103_1731087789639_photo.webp" fetchpriority="high" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500;1,600&family=Inter:wght@300;400;500&display=swap" />
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500;1,600&family=Inter:wght@300;400;500&display=swap" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500;1,600&family=Inter:wght@300;400;500&display=swap" media="print" data-async-css />
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" media="print" data-async-css />
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500;1,600&family=Inter:wght@300;400;500&display=swap" /><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" /></noscript>
     <link rel="icon" type="image/x-icon" href="assets/images/favicon/favicon.ico" />
   <link rel="icon" type="image/png" sizes="32x32" href="assets/images/favicon/favicon-32x32.png" />
   <link rel="icon" type="image/png" sizes="16x16" href="assets/images/favicon/favicon-16x16.png" />
@@ -26,7 +29,7 @@
 <nav class="nav">
   <div class="wrap nav__inner">
     <a class='nav__logo' href='./index.html'>
-      <img class="nav__crest" src="assets/images/wapenschild-t.webp" alt="Wapen" />
+      <img class="nav__crest" src="assets/images/wapenschild-t.webp" width="342" height="440" alt="Wapen" />
       <span class="nav__name">Kasteel Warmelo</span>
     </a>
     <div class="nav__links">
@@ -69,7 +72,7 @@
 <header class="page-hero grain">
   <div class="page-hero__bg">
     <video data-cms-vid="evenementen-hero-video" autoplay muted loop playsinline
-           poster="assets/images/dji_fly_20241108_182220_103_1731087789639_photo.JPG"
+           poster="assets/images/dji_fly_20241108_182220_103_1731087789639_photo.webp"
            style="width:100%;height:100%;object-fit:cover;display:block;">
       <source src="assets/videos/dji_fly_20231111_172032_215_1699788601167_video.MP4" type="video/mp4" />
     </video>
@@ -108,7 +111,7 @@
         <a class='btn btn-gold reveal d5' href='./contact.html'><span data-i18n="events.intro.btn">Evenement aanvragen</span></a>
       </div>
       <div class="zoom reveal d2" style="height:480px;">
-        <img loading="lazy" src="assets/images/dji_fly_20231111_172238_219_1699788632888_photo.webp" alt="Evenement op het landgoed" data-cms-img="evenementen-hero" style="height:100%;" />
+        <img fetchpriority="high" src="assets/images/dji_fly_20231111_172238_219_1699788632888_photo.webp" alt="Evenement op het landgoed" data-cms-img="evenementen-hero" style="height:100%;" />
       </div>
     </div>
   </div>
@@ -228,7 +231,7 @@
     <div class="footer__grid">
       <div>
         <div class="footer__logo">
-          <img class="footer__crest" src="assets/images/wapenschild-t.webp" alt="Wapen" />
+          <img class="footer__crest" src="assets/images/wapenschild-t.webp" width="342" height="440" alt="Wapen" />
           <span class="footer__brand">Kasteel Warmelo</span>
         </div>
         <p class="footer__desc" data-i18n="footer.desc">Eeuwenoud landgoed in het hart van Twente. Historische tuinen, meesterlijke zandsculpturen en vakantiewoningen in de Orangerie.</p>
@@ -278,6 +281,5 @@
 
 <script src="assets/js/warmelo.min.js?v=5" defer></script>
 <script src="assets/js/i18n.min.js?v=8" defer></script>
-<script src="assets/js/warmelo-cms.min.js?v=8" defer></script>
 </body>
 </html>

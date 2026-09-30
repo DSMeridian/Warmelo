@@ -8,8 +8,10 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500;1,600&family=Inter:wght@300;400;500&display=swap" />
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500;1,600&family=Inter:wght@300;400;500&display=swap" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500;1,600&family=Inter:wght@300;400;500&display=swap" media="print" data-async-css />
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" media="print" data-async-css />
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500;1,600&family=Inter:wght@300;400;500&display=swap" /><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" /></noscript>
     <link rel="icon" type="image/x-icon" href="assets/images/favicon/favicon.ico" />
   <link rel="icon" type="image/png" sizes="32x32" href="assets/images/favicon/favicon-32x32.png" />
   <link rel="icon" type="image/png" sizes="16x16" href="assets/images/favicon/favicon-16x16.png" />
@@ -25,7 +27,7 @@
 <nav class="nav">
   <div class="wrap nav__inner">
     <a class='nav__logo' href='./index.html'>
-      <img class="nav__crest" src="assets/images/wapenschild-t.webp" alt="Wapen" />
+      <img class="nav__crest" src="assets/images/wapenschild-t.webp" width="342" height="440" alt="Wapen" />
       <span class="nav__name">Kasteel Warmelo</span>
     </a>
     <div class="nav__links">
@@ -66,7 +68,7 @@
 <!-- ══ PAGE HERO ═════════════════════════════════════════════════ -->
 <header class="page-hero grain">
   <div class="page-hero__bg">
-    <img loading="lazy" src="assets/images/img_7546.webp" alt="De Orangerie — slaapkamer met balkenplafond en open haard" data-cms-img="verhuur-hero" style="width:100%;height:100%;object-fit:cover;display:block;" />
+    <img fetchpriority="high" src="assets/images/img_7546.webp" alt="De Orangerie — slaapkamer met balkenplafond en open haard" data-cms-img="verhuur-hero" style="width:100%;height:100%;object-fit:cover;display:block;" />
   </div>
   <div class="page-hero__atmo"></div>
   <div class="wrap page-hero__content">
@@ -318,7 +320,7 @@
 
 <!-- ══ LOCATIE SFEER ══════════════════════════════════════════════ -->
 <section class="parallax-section">
-  <div class="parallax-section__bg" style="background-image:url('assets/images/IMG_9209_conv.jpg');"></div>
+  <div class="parallax-section__bg" style="background-image:url('assets/images/IMG_9209_conv.webp');"></div>
   <div class="parallax-section__overlay"></div>
   <div class="parallax-section__content">
     <div class="wrap" style="text-align:center; padding-block:80px;">
@@ -343,7 +345,7 @@
     <div class="footer__grid">
       <div>
         <div class="footer__logo">
-          <img class="footer__crest" src="assets/images/wapenschild-t.webp" alt="Wapen" />
+          <img class="footer__crest" src="assets/images/wapenschild-t.webp" width="342" height="440" alt="Wapen" />
           <span class="footer__brand">Kasteel Warmelo</span>
         </div>
         <p class="footer__desc" data-i18n="footer.desc">Eeuwenoud landgoed in het hart van Twente. Historische tuinen, meesterlijke zandsculpturen en vakantiewoningen in de Orangerie.</p>
@@ -393,6 +395,5 @@
 
 <script src="assets/js/warmelo.min.js?v=5" defer></script>
 <script src="assets/js/i18n.min.js?v=8" defer></script>
-<script src="assets/js/warmelo-cms.min.js?v=8" defer></script>
 </body>
 </html>
