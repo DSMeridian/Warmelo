@@ -1,0 +1,244 @@
+/* ══ HERO ══════════════════════════════════════════════════ */
+.hero {
+  position: relative;
+  height: 100dvh; min-height: 680px;
+  overflow: hidden;
+  display: flex; flex-direction: column;
+}
+.hero__media { position: absolute; inset: 0; will-change: transform; }
+.hero__video {
+  width: 100%; height: 100%;
+  object-fit: cover; object-position: center 35%;
+  will-change: transform;
+}
+.hero__bg-img {
+  display: none;
+  width: 100%; height: 100%;
+  object-fit: cover; object-position: center 35%;
+  animation: kenburns 24s ease-in-out infinite alternate;
+  transform-origin: center center;
+  will-change: transform;
+}
+.hero__atmo {
+  position: absolute; inset: 0;
+  background:
+    linear-gradient(170deg, rgba(6,12,8,.08) 0%, transparent 42%),
+    linear-gradient(to top,
+      rgba(6,12,8,.97) 0%,
+      rgba(6,12,8,.72) 28%,
+      rgba(6,12,8,.28) 55%,
+      rgba(6,12,8,.04) 80%,
+      transparent 100%);
+  z-index: 1;
+}
+.hero__glow {
+  position: absolute; inset: 0; z-index: 1;
+  background: radial-gradient(ellipse 60% 50% at 20% 95%, rgba(191,140,42,.24) 0%, transparent 65%);
+}
+.hero__emblem {
+  position: absolute;
+  right: clamp(40px, 8vw, 140px);
+  top: 50%; transform: translateY(-50%);
+  width: clamp(110px, 14vw, 200px);
+  pointer-events: none; z-index: 3;
+  animation: emblemFloat 9s ease-in-out infinite;
+}
+.hero__emblem img {
+  width: 100%;
+  filter: brightness(0) invert(1) sepia(1) saturate(2.5) hue-rotate(5deg) brightness(1.2);
+  opacity: .14;
+}
+.hero__emblem-ring  { position:absolute; inset:-22px; border-radius:50%; border:1px solid rgba(191,140,42,.22); animation:emblemRing 4s ease-in-out infinite; }
+.hero__emblem-ring2 { position:absolute; inset:-44px; border-radius:50%; border:1px solid rgba(191,140,42,.09); animation:emblemRing 4s 1s ease-in-out infinite; }
+@keyframes emblemFloat { 0%,100%{transform:translateY(-50%) rotate(0deg);} 35%{transform:translateY(calc(-50% - 10px)) rotate(1.5deg);} 70%{transform:translateY(calc(-50% + 6px)) rotate(-1deg);} }
+@keyframes emblemRing  { 0%,100%{transform:scale(1);opacity:.7;} 50%{transform:scale(1.12);opacity:.25;} }
+
+.hero__content {
+  position: relative; z-index: 2;
+  flex: 1; display: flex; align-items: flex-end;
+  padding-bottom: clamp(60px, 9vw, 108px);
+}
+.hero__text { max-width: 720px; }
+.hero__eyebrow {
+  display: flex; align-items: center; gap: 18px; margin-bottom: 24px;
+  animation: fadeUp 1s .15s both;
+}
+.hero__eyebrow-line { width: 36px; height: 1px; background: var(--gold-bright); flex-shrink: 0; }
+.hero__eyebrow span { font-size: 9px; font-weight: 500; letter-spacing: .36em; text-transform: uppercase; color: var(--gold-bright); }
+.hero__title {
+  font-family: var(--ff-display);
+  font-size: clamp(3.4rem, 10.5vw, 9rem);
+  font-weight: 400; line-height: .94;
+  letter-spacing: -.025em; color: var(--white);
+  animation: fadeUp 1.2s .3s both;
+}
+.hero__title em { font-style: italic; color: var(--gold-bright); display: block; }
+.hero__sep { width: 64px; height: 1px; background: linear-gradient(90deg, var(--gold-bright), transparent); margin: 30px 0; animation: fadeUp 1s .5s both; }
+.hero__sub { font-size: 15px; font-weight: 300; color: rgba(255,255,255,.72); line-height: 1.84; max-width: 380px; animation: fadeUp 1s .62s both; text-shadow: 0 1px 4px rgba(0,0,0,.3); }
+.hero__actions { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 38px; animation: fadeUp 1s .78s both; }
+
+.hero__aside {
+  position: absolute; right: var(--pad-x); bottom: clamp(60px, 9vw, 108px);
+  z-index: 2; display: flex; flex-direction: column;
+  align-items: flex-end; gap: 24px;
+  animation: fadeUp 1s 1s both;
+}
+.hero__stat { text-align: right; padding-right: 18px; border-right: 1px solid rgba(255,255,255,.18); transition: transform .4s var(--spring); }
+.hero__stat:hover { transform: perspective(400px) translateZ(12px); }
+.hero__stat-num { font-family: var(--ff-display); font-size: 2.2rem; color: var(--white); line-height: 1; }
+.hero__stat-lbl { font-size: 8px; font-weight: 500; letter-spacing: .24em; text-transform: uppercase; color: rgba(255,255,255,.4); margin-top: 4px; }
+
+/* ══ ABOUT STRIP ═══════════════════════════════════════════ */
+.about-strip {
+  display: grid;
+  grid-template-columns: 1fr 1.4fr;
+  min-height: 680px;
+}
+.about-strip__image { position: relative; overflow: hidden; min-height: 420px; }
+.about-strip__image img {
+  width: 100%; height: 100%; object-fit: cover;
+  filter: saturate(.82) brightness(.88);
+  transition: transform 12s ease, filter 12s;
+}
+.about-strip__image:hover img { transform: scale(1.04); filter: saturate(1) brightness(.95); }
+.about-strip__image-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(to right, rgba(6,12,8,.4), transparent);
+}
+.about-strip__content {
+  background: var(--green);
+  display: flex; flex-direction: column; justify-content: center;
+  padding: clamp(48px, 7vw, 100px) clamp(36px, 5vw, 80px);
+}
+.about-strip__quote {
+  font-family: var(--ff-display);
+  font-size: clamp(1.4rem, 2.2vw, 1.8rem);
+  font-style: italic;
+  color: var(--gold-pale);
+  line-height: 1.55;
+  margin-bottom: 28px;
+  padding-left: 24px;
+  border-left: 2px solid var(--gold);
+}
+
+/* ══ HIGHLIGHTS GRID ═══════════════════════════════════════ */
+.highlights-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 400px);
+  gap: 3px;
+}
+.highlight-card {
+  position: relative; overflow: hidden;
+  display: flex; align-items: flex-end;
+  cursor: pointer;
+  text-decoration: none;
+}
+.highlight-card__bg {
+  position: absolute; inset: 0;
+}
+.highlight-card__bg img {
+  width: 100%; height: 100%; object-fit: cover;
+  transition: transform .9s var(--spring), filter .9s;
+  filter: saturate(.7) brightness(.6);
+}
+.highlight-card:hover .highlight-card__bg img {
+  transform: scale(1.07);
+  filter: saturate(.9) brightness(.75);
+}
+.highlight-card__atmo {
+  position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(6,12,8,.88) 0%, rgba(6,12,8,.28) 55%, transparent 100%);
+  z-index: 1;
+}
+.highlight-card__content {
+  position: relative; z-index: 2;
+  padding: 36px 40px;
+}
+.highlight-card__tag {
+  font-size: 8px; font-weight: 500;
+  letter-spacing: .32em; text-transform: uppercase;
+  color: var(--gold-bright); margin-bottom: 10px;
+  display: block;
+}
+.highlight-card__title {
+  font-family: var(--ff-display);
+  font-size: clamp(1.8rem, 2.8vw, 2.5rem);
+  font-weight: 400; color: var(--white);
+  line-height: 1.1;
+}
+.highlight-card__arrow {
+  display: inline-flex; align-items: center; gap: 8px;
+  margin-top: 14px;
+  font-size: 9px; font-weight: 500;
+  letter-spacing: .22em; text-transform: uppercase;
+  color: rgba(255,255,255,.5);
+  transition: color .25s, gap .25s var(--spring);
+}
+.highlight-card:hover .highlight-card__arrow { color: var(--gold-bright); gap: 14px; }
+
+/* ══ SEASON TEASER ═════════════════════════════════════════ */
+.season {
+  background: var(--green-deep);
+  position: relative; overflow: hidden;
+}
+.season::before {
+  content: '';
+  position: absolute;
+  right: -80px; top: -80px;
+  width: 500px; height: 500px;
+  border-radius: 50%;
+  border: 1px solid rgba(191,140,42,.08);
+}
+.season::after {
+  content: '';
+  position: absolute;
+  right: -20px; top: -20px;
+  width: 300px; height: 300px;
+  border-radius: 50%;
+  border: 1px solid rgba(191,140,42,.05);
+}
+.season__inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(48px, 6vw, 80px);
+  align-items: start;
+}
+.season__hours-block {
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(255,255,255,.07);
+  padding: 36px;
+}
+
+/* ══ VAKANTIEWONING BANNER ════════════════════════════════ */
+.vw-banner {
+  position: relative; overflow: hidden;
+  min-height: 540px;
+  display: flex; align-items: center;
+}
+.vw-banner__bg {
+  position: absolute; inset: 0;
+}
+.vw-banner__bg img {
+  width: 100%; height: 100%; object-fit: cover;
+  animation: kenburns 20s ease-in-out infinite alternate;
+}
+.vw-banner__overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(90deg, rgba(6,12,8,.88) 40%, rgba(6,12,8,.2) 100%);
+  z-index: 1;
+}
+.vw-banner__content {
+  position: relative; z-index: 2; max-width: 540px;
+}
+
+@media (max-width: 900px) {
+  .highlights-grid { grid-template-columns: 1fr; grid-template-rows: repeat(4, 280px); }
+  .about-strip { grid-template-columns: 1fr; }
+  .about-strip__image { min-height: 300px; }
+  .season__inner { grid-template-columns: 1fr; }
+  .hero__aside { display: none; }
+}
+@media (max-width: 600px) {
+  .highlights-grid { grid-template-rows: repeat(4, 240px); }
+}

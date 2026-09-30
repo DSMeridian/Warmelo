@@ -1,0 +1,62 @@
+.amenity-list {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 14px 32px;
+      margin-top: 28px;
+    }
+    .amenity-item {
+      display: flex; align-items: center; gap: 12px;
+      font-size: 14px; color: rgba(255,255,255,.6);
+    }
+    .amenity-item i { color: var(--gold); width: 16px; text-align: center; }
+
+    .stay-option {
+      background: rgba(255,255,255,.04);
+      border: 1px solid rgba(255,255,255,.08);
+      padding: 28px 32px;
+      transition: border-color .25s, background .25s;
+    }
+    .stay-option:hover { border-color: var(--gold); background: rgba(191,140,42,.06); }
+    .stay-option__nights {
+      font-family: var(--ff-display); font-size: 2rem; color: var(--gold-bright); line-height: 1; margin-bottom: 8px;
+    }
+    .stay-option__label { font-size: 9px; letter-spacing: .26em; text-transform: uppercase; color: rgba(255,255,255,.4); margin-bottom: 14px; }
+    .stay-option__time { font-size: 13px; color: rgba(255,255,255,.55); line-height: 1.8; }
+    .verhuur-photos { display:grid; grid-template-columns:1fr 1fr; gap:3px; }
+    .booking-cards  { display:grid; grid-template-columns:1fr 1fr; gap:24px; margin-bottom:60px; }
+    .booking-info   { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+    /* ── Two-property side-by-side columns ── */
+    .prop-cols { display:grid; grid-template-columns:1fr 1fr; gap:48px; }
+    .prop-col__header { margin-bottom:28px; padding-bottom:22px; border-bottom:1px solid rgba(0,0,0,.1); }
+    .prop-col__label  { font-size:8.5px; letter-spacing:.3em; text-transform:uppercase; color:var(--gold); margin-bottom:10px; }
+    .prop-col__title  { font-family:var(--ff-display); font-size:clamp(1.7rem,2.5vw,2.2rem); font-weight:400; color:var(--charcoal); margin-bottom:10px; }
+    .prop-col__desc   { font-size:13px; color:var(--muted); line-height:1.7; }
+    .prop-col__photos { display:grid; grid-template-columns:1fr 1fr; gap:4px; margin-bottom:24px; }
+    .prop-zoom        { height:200px; overflow:hidden; position:relative; background:var(--ivory-dark); }
+    .prop-zoom img    { width:100%; height:100%; object-fit:cover; transition:transform .7s ease, filter .7s; filter:saturate(.9); }
+    .prop-zoom:hover img { transform:scale(1.06); filter:saturate(1.05); }
+    /* Placeholder box when Rentmeesterwoning photos not yet uploaded */
+    .prop-placeholder { background:var(--ivory-dark); display:flex !important; align-items:center; justify-content:center; }
+    .prop-placeholder::after { content:'Foto volgt'; font-size:11px; color:var(--muted); letter-spacing:.06em; }
+    .prop-placeholder img { display:none !important; }
+    /* Booking link */
+    .prop-col__book { display:flex; align-items:center; gap:14px; background:var(--green); border:1px solid rgba(255,90,71,.4); padding:18px 22px; text-decoration:none; transition:background .25s, border-color .25s; }
+    .prop-col__book svg:first-child { width:22px; height:22px; flex-shrink:0; }
+    .prop-col__book svg:last-child  { width:14px; height:14px; margin-left:auto; flex-shrink:0; }
+    .prop-col__book--hover { background:rgba(255,90,71,.12) !important; border-color:rgba(255,90,71,.7) !important; }
+    .prop-col__book-label { font-size:8.5px; letter-spacing:.2em; text-transform:uppercase; color:rgba(255,90,71,.8); margin-bottom:3px; }
+    .prop-col__book-name  { font-family:var(--ff-display); font-size:1rem; color:var(--white); }
+    @media(max-width:900px) {
+      .prop-cols { grid-template-columns:1fr; gap:52px; }
+    }
+    @media(max-width:700px) {
+      .booking-cards { grid-template-columns:1fr; }
+      .booking-info  { grid-template-columns:1fr; }
+    }
+    @media(max-width:600px) {
+      .verhuur-photos { grid-template-columns: 1fr; }
+      .verhuur-photos .zoom { height: 220px !important; }
+      .prop-zoom { height:160px; }
+    }
+
+/* hover states (moved from inline onmouseenter/onmouseleave handlers) */
+.prop-col__book:hover{background:rgba(255,90,71,.12)!important;border-color:rgba(255,90,71,.7)!important}
+.hover-airbnb:hover{background:rgba(255,90,71,.22)!important;border-color:rgba(255,90,71,.7)!important}

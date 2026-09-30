@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Horeca &amp; Terras — Kasteel Warmelo</title>
+  <meta name="description" content="Geniet van koffie, lunch en drankjes op het sfeervolle terras van Kasteel Warmelo. Midden in de historische tuinen." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500;1,600&family=Inter:wght@300;400;500&display=swap" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500;1,600&family=Inter:wght@300;400;500&display=swap" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    <link rel="icon" type="image/x-icon" href="assets/images/favicon/favicon.ico" />
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/images/favicon/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="assets/images/favicon/favicon-16x16.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/images/favicon/apple-touch-icon.png" />
+  <link rel="stylesheet" href="assets/css/warmelo.min.css?v=8" />
+  <link rel="stylesheet" href="assets/css/horeca.css" />
+<script src="assets/js/lang-init.js"></script>
+</head>
+<body>
+
+
+<!-- ══ NAV ═══════════════════════════════════════════════════════ -->
+<nav class="nav">
+  <div class="wrap nav__inner">
+    <a class='nav__logo' href='./index.html'>
+      <img class="nav__crest" src="assets/images/wapenschild-t.webp" alt="Wapen" />
+      <span class="nav__name">Kasteel Warmelo</span>
+    </a>
+    <div class="nav__links">
+      <a data-i18n='nav.home' href='./index.html'>Home</a>
+      <a data-i18n='nav.sand' href='./zandsculpturen.html'>Zandsculpturen</a>
+      <a data-i18n='nav.gardens' href='./tuinen.html'>Tuinen</a>
+      <a data-i18n='nav.events' href='./evenementen.html'>Evenementen</a>
+      <a class='active' aria-current='page' data-i18n='nav.horeca' href='./horeca.html'>Horeca</a>
+      <a data-i18n='nav.stay' href='./verhuur.html'>Verblijven</a>
+      <a data-i18n='nav.visit' href='./openingstijden.html'>Bezoek</a>
+    </div>
+    <div class="lang-switcher">
+      <button class="lang-btn" data-lang="nl">NL</button>
+      <button class="lang-btn" data-lang="en">EN</button>
+      <button class="lang-btn" data-lang="de">DE</button>
+    </div>
+    <a class='nav__cta' data-i18n='nav.cta' href='./contact.html'>Contact</a>
+    <button class="nav__ham" aria-label="Menu"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+<div class="nav__overlay">
+  <button class="nav__close">✕</button>
+  <a data-i18n='nav.home' href='./index.html'>Home</a>
+  <a data-i18n='nav.sand' href='./zandsculpturen.html'>Zandsculpturen</a>
+  <a data-i18n='nav.gardens' href='./tuinen.html'>Tuinen</a>
+  <a data-i18n='nav.events' href='./evenementen.html'>Evenementen</a>
+  <a class='active' aria-current='page' data-i18n='nav.horeca' href='./horeca.html'>Horeca</a>
+  <a data-i18n='nav.stay' href='./verhuur.html'>Verblijven</a>
+  <a data-i18n='nav.visit' href='./openingstijden.html'>Bezoek</a>
+  <a data-i18n='nav.cta' href='./contact.html'>Contact</a>
+  <div class="lang-switcher" style="margin-top:32px;">
+    <button class="lang-btn" data-lang="nl">NL</button>
+    <button class="lang-btn" data-lang="en">EN</button>
+    <button class="lang-btn" data-lang="de">DE</button>
+  </div>
+</div>
+
+<!-- ══ PAGE HERO ═════════════════════════════════════════════════ -->
+<header class="page-hero grain">
+  <div class="page-hero__bg">
+    <img loading="lazy" src="assets/images/terras.webp" alt="Terras Kasteel Warmelo" data-cms-img="horeca-hero" />
+  </div>
+  <div class="page-hero__atmo"></div>
+  <div class="wrap page-hero__content">
+    <div class="breadcrumb">
+      <a href='./index.html'>Home</a>
+      <span class="breadcrumb__sep">◆</span>
+      <span>Horeca &amp; Terras</span>
+    </div>
+    <div class="page-hero__eyebrow">
+      <span class="page-hero__eyebrow-line"></span>
+      <span data-i18n="horeca.hero.eyebrow">Eten &amp; Drinken · Kasteel Warmelo</span>
+    </div>
+    <h1 class="page-hero__title" data-i18n="horeca.hero.title">Horeca<br><em>&amp; Terras</em></h1>
+  </div>
+  <div class="scroll-cue"><div class="scroll-cue__line"></div><span data-i18n="home.scroll">Ontdek</span></div>
+</header>
+
+
+<!-- ══ INTRO SPLIT ════════════════════════════════════════════════ -->
+<section class="section" style="background:var(--ivory);">
+  <div class="wrap">
+    <div class="split split--wide">
+      <div>
+        <span class="label reveal" data-i18n="horeca.intro.label">Smullen op het landgoed</span>
+        <div class="rule reveal d1"></div>
+        <h2 class="h-display reveal d2" style="margin-bottom:24px;" data-i18n="horeca.intro.title">Genieten in<br><em style="color:var(--gold);">historische sfeer</em></h2>
+        <p class="body-copy reveal d3" style="margin-bottom:20px;" data-i18n="horeca.intro.body1">
+          Na een wandeling door de prachtige tuinen verdient u een moment van rust. Het terras van Kasteel Warmelo biedt de perfecte plek om bij te komen met een kop koffie, een vers broodje of een heerlijke snack.
+        </p>
+
+        <p class="body-copy reveal d5" style="margin-bottom:36px;" data-i18n="horeca.intro.body3">
+          Het terras is open tijdens de reguliere openingstijden van het landgoed — dinsdag t/m zondag van 10.30 tot 16.30 uur gedurende het seizoen.
+        </p>
+        <a class='btn btn-outline-g reveal d6' href='./openingstijden.html'><span data-i18n="horeca.intro.btn">Openingstijden bekijken</span></a>
+      </div>
+      <div style="display:flex; flex-direction:column; gap:3px;" class="reveal d2">
+        <div class="zoom" style="height:300px;"><img loading="lazy" src="assets/images/foto-lunch.webp" alt="Lunch" data-cms-img="horeca-lunch" style="height:100%;" /></div>
+        <div class="zoom" style="height:220px;"><img loading="lazy" src="assets/images/horeca.webp" alt="Horeca sfeer" data-cms-img="horeca-sfeer" style="height:100%;" /></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══ TERRAS SFEER ═══════════════════════════════════════════════ -->
+<section style="background:var(--ink);">
+  <div class="horeca-terras-grid" style="display:grid; grid-template-columns:1fr 1fr; min-height:480px;">
+    <div class="zoom" style="min-height:320px; position:relative; overflow:hidden;">
+      <img loading="lazy" src="assets/images/new-garden-pavilion.webp" data-cms-img="horeca-terras" alt="Tuinpaviljoen Kasteel Warmelo"
+           style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center 50%;" />
+    </div>
+    <div style="background:var(--green-soft); display:flex; flex-direction:column; justify-content:center; padding:clamp(40px,6vw,80px);">
+      <span class="label label--light reveal" data-i18n="horeca.terras.label">Buitenterras</span>
+      <div class="rule rule--light reveal d1"></div>
+      <h2 class="h-display h-display--white reveal d2" style="margin-bottom:20px;" data-i18n="horeca.terras.title">Het terras<br><em>in de tuin</em></h2>
+      <p class="body-copy body-copy--white reveal d3" style="margin-bottom:28px;" data-i18n="horeca.terras.body">
+        Ons sfeervolle terras ligt midden in de historische tuin, omringd door het groen van het landgoed. Een plek om even helemaal tot rust te komen na een wandeling door het park.
+      </p>
+      <ul style="display:flex; flex-direction:column; gap:12px;" class="reveal d4">
+        <li style="display:flex; align-items:center; gap:12px; font-size:14px; color:rgba(255,255,255,.6);"><i class="fas fa-check" style="color:var(--gold);"></i> <span data-i18n="horeca.terras.li1">Koffie &amp; thee</span></li>
+        <li style="display:flex; align-items:center; gap:12px; font-size:14px; color:rgba(255,255,255,.6);"><i class="fas fa-check" style="color:var(--gold);"></i> <span data-i18n="horeca.terras.li2">Dranken (koud, warm &amp; alcoholisch)</span></li>
+        <li style="display:flex; align-items:center; gap:12px; font-size:14px; color:rgba(255,255,255,.6);"><i class="fas fa-check" style="color:var(--gold);"></i> <span data-i18n="horeca.terras.li3">Verse broodjes</span></li>
+        <li style="display:flex; align-items:center; gap:12px; font-size:14px; color:rgba(255,255,255,.6);"><i class="fas fa-check" style="color:var(--gold);"></i> <span data-i18n="horeca.terras.li4">Warme snacks</span></li>
+        <li style="display:flex; align-items:center; gap:12px; font-size:14px; color:rgba(255,255,255,.6);"><i class="fas fa-check" style="color:var(--gold);"></i> <span data-i18n="horeca.terras.li5">Zoet &amp; gebak</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══ MENU KAART ═════════════════════════════════════════════════ -->
+<section class="section" style="background:var(--green-deep);">
+  <div class="wrap">
+    <div style="text-align:center; margin-bottom:48px;">
+      <span class="label label--light reveal" style="display:block; text-align:center;" data-i18n="horeca.menu.label">Wat eten we?</span>
+      <div class="rule rule--light rule--center reveal d1"></div>
+      <h2 class="h-display h-display--white reveal d2" style="margin-bottom:0;" data-i18n="horeca.menu.title">Onze<br><em>menukaart</em></h2>
+    </div>
+    <div class="split">
+      <div>
+        <div class="menu-section reveal d3">
+          <div class="menu-heading">Warme dranken</div>
+          <div class="menu-item"><div><div class="menu-item__name">Koffie</div></div><div class="menu-item__price" data-cms-price="koffie">€ 3,10</div></div>
+          <div class="menu-item"><div><div class="menu-item__name">Espresso</div></div><div class="menu-item__price" data-cms-price="espresso">€ 3,10</div></div>
+          <div class="menu-item"><div><div class="menu-item__name">Cappuccino</div></div><div class="menu-item__price" data-cms-price="cappuccino">€ 3,30</div></div>
+          <div class="menu-item"><div><div class="menu-item__name">Thee</div></div><div class="menu-item__price" data-cms-price="thee">€ 3,00</div></div>
+          <div class="menu-item"><div><div class="menu-item__name">Verse muntthee</div></div><div class="menu-item__price" data-cms-price="muntthee">€ 3,90</div></div>
+          <div class="menu-item"><div><div class="menu-item__name">Kannetje koffie <span style="color:var(--gold-bright);font-size:10px;letter-spacing:.12em;">TIP</span></div></div><div class="menu-item__price" data-cms-price="kannetje">€ 5,80</div></div>
+        </div>
+
+        <div class="menu-section reveal d4">
+          <div class="menu-heading">Frisdranken</div>
+          <div class="menu-item"><div><div class="menu-item__name">Div. soorten frisdrank</div></div><div class="menu-item__price" data-cms-price="frisdrank">€ 3,10</div></div>
+          <div class="menu-item"><div><div class="menu-item__name">Vitaminewater</div></div><div class="menu-item__price" data-cms-price="vitaminewater">€ 3,90</div></div>
+        </div>
+
+        <div class="menu-section reveal d5">
+          <div class="menu-heading">Alcoholische dranken</div>
+          <div class="menu-item"><div><div class="menu-item__name">Witte wijn</div><div class="menu-item__desc">Chardonnay, flesje 250 ml</div></div><div class="menu-item__price" data-cms-price="wittewijn">€ 6,50</div></div>
+          <div class="menu-item"><div><div class="menu-item__name">Rosé</div><div class="menu-item__desc">Flesje 250 ml</div></div><div class="menu-item__price" data-cms-price="rose">€ 6,50</div></div>
+          <div class="menu-item"><div><div class="menu-item__name">Rode wijn</div><div class="menu-item__desc">Merlot, flesje 250 ml</div></div><div class="menu-item__price" data-cms-price="rodewijn">€ 6,50</div></div>
+          <div class="menu-item"><div><div class="menu-item__name">Bier</div></div><div class="menu-item__price" data-cms-price="bier">€ 3,50</div></div>
+          <div class="menu-item"><div><div class="menu-item__name">Witbier</div></div><div class="menu-item__price" data-cms-price="witbier">€ 3,50</div></div>
+          <div class="menu-item"><div><div class="menu-item__name">Radler (2.3%)</div></div><div class="menu-item__price" data-cms-price="radler">€ 3,50</div></div>
+          <div class="menu-item"><div><div class="menu-item__name">Bier 0,0%</div></div><div class="menu-item__price" data-cms-price="bier00">€ 3,50</div></div>
+        </div>
+      </div>
+
+      <div>
+        <div>
+          <div class="menu-section reveal d3">
+            <div class="menu-heading">Verse broodjes</div>
+            <div class="menu-item"><div><div class="menu-item__name">Broodje Gezond</div></div><div class="menu-item__price" data-cms-price="gezond">€ 7,80</div></div>
+            <div class="menu-item"><div><div class="menu-item__name">Broodje Brie</div></div><div class="menu-item__price" data-cms-price="brie">€ 7,80</div></div>
+            <div class="menu-item"><div><div class="menu-item__name">Broodje Eiersalade</div></div><div class="menu-item__price" data-cms-price="eiersalade">€ 7,80</div></div>
+            <div class="menu-item"><div><div class="menu-item__name">Broodje Kipkerrie</div></div><div class="menu-item__price" data-cms-price="kipkerrie">€ 7,80</div></div>
+            <div class="menu-item"><div><div class="menu-item__name">Broodje Ham</div></div><div class="menu-item__price" data-cms-price="ham">€ 7,80</div></div>
+            <div class="menu-item"><div><div class="menu-item__name">Broodje Kaas</div></div><div class="menu-item__price" data-cms-price="kaas">€ 7,80</div></div>
+          </div>
+
+          <div class="menu-section reveal d4">
+            <div class="menu-heading">Warme snacks</div>
+            <div class="menu-item"><div><div class="menu-item__name">Appelflap</div></div><div class="menu-item__price" data-cms-price="appelflap">€ 3,00</div></div>
+            <div class="menu-item"><div><div class="menu-item__name">Saucijzenbroodje</div></div><div class="menu-item__price" data-cms-price="saucijzen">€ 3,00</div></div>
+            <div class="menu-item"><div><div class="menu-item__name">Broodje Kroket</div></div><div class="menu-item__price" data-cms-price="kroket">€ 3,50</div></div>
+            <div class="menu-item"><div><div class="menu-item__name">Tosti's diverse soorten</div></div><div class="menu-item__price" data-cms-price="tosti">€ 3,20</div></div>
+            <div class="menu-item"><div><div class="menu-item__name">Portie bitterballen (8 st)</div></div><div class="menu-item__price" data-cms-price="bitterballen">€ 5,00</div></div>
+          </div>
+
+          <div class="menu-section reveal d5">
+            <div class="menu-heading">Zoet</div>
+            <div class="menu-item"><div><div class="menu-item__name">Appelgebak</div></div><div class="menu-item__price" data-cms-price="appelgebak">€ 3,00</div></div>
+            <div class="menu-item"><div><div class="menu-item__name">Luxe gebak</div><div class="menu-item__desc">Diverse soorten</div></div><div class="menu-item__price" data-cms-price="luxegebak">€ 3,40</div></div>
+            <div class="menu-item"><div><div class="menu-item__name">Petitfour</div></div><div class="menu-item__price" data-cms-price="petitfour">€ 1,20</div></div>
+            <div class="menu-item"><div><div class="menu-item__name">Stroopwafel</div></div><div class="menu-item__price" data-cms-price="stroopwafel">€ 1,50</div></div>
+          </div>
+
+          <div class="notice-box reveal d6" style="margin-top:24px; background:rgba(255,255,255,.04); border-color:rgba(255,255,255,.08); border-left-color:var(--gold);">
+            <p style="color:rgba(255,255,255,.5); font-size:13px;">Menukaart seizoen 2026. Kleine aanpassingen voorbehouden.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══ CTA ════════════════════════════════════════════════════════ -->
+<section style="background:var(--green-deep);">
+  <div class="wrap" style="text-align:center; padding-block:80px;">
+    <span class="label label--light reveal" style="display:block; text-align:center;" data-i18n="horeca.cta.label">Open tijdens het seizoen</span>
+    <div class="rule rule--center rule--light reveal d1"></div>
+    <h2 class="h-display h-display--white reveal d2" style="font-size:clamp(2.4rem,5vw,4.2rem); margin-bottom:24px;" data-i18n="horeca.cta.title">Di t/m zo van<br><em>10.30 – 16.30 uur</em></h2>
+    <p class="body-copy body-copy--white reveal d3" style="max-width:480px; margin:0 auto 36px;" data-i18n="horeca.cta.body">
+      Seizoen 29 april – 4 oktober 2026. Maandag gesloten.
+    </p>
+    <a class='btn btn-gold reveal d4' href='./openingstijden.html'><span data-i18n="horeca.cta.btn">Openingstijden &amp; toegang</span></a>
+  </div>
+</section>
+
+
+<!-- ══ FOOTER ═════════════════════════════════════════════════════ -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer__gold-line"></div>
+    <div class="footer__grid">
+      <div>
+        <div class="footer__logo">
+          <img class="footer__crest" src="assets/images/wapenschild-t.webp" alt="Wapen" />
+          <span class="footer__brand">Kasteel Warmelo</span>
+        </div>
+        <p class="footer__desc" data-i18n="footer.desc">Eeuwenoud landgoed in het hart van Twente. Historische tuinen, meesterlijke zandsculpturen en vakantiewoningen in de Orangerie.</p>
+        <div class="social-links" style="margin-top:24px;">
+          <a href="https://www.facebook.com/warmelodiepenheim/" data-cms-link="facebook" class="social-link" target="_blank" rel="noopener"><i class="fab fa-facebook-f"></i></a>
+          <a href="https://www.instagram.com/kasteelwarmelo/" data-cms-link="instagram" class="social-link" target="_blank" rel="noopener"><i class="fab fa-instagram"></i></a>
+        </div>
+      </div>
+      <div>
+        <div class="footer__heading" data-i18n="footer.open">Bezoek</div>
+        <ul class="footer__links">
+          <li><a data-i18n='footer.link.sand' href='./zandsculpturen.html'>Zandsculpturen</a></li>
+          <li><a data-i18n='footer.link.gardens' href='./tuinen.html'>Historische Tuinen</a></li>
+          <li><a data-i18n='footer.link.events' href='./evenementen.html'>Evenementen</a></li>
+          <li><a data-i18n='footer.link.visit' href='./openingstijden.html'>Openingstijden</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer__heading" data-i18n="footer.visit">Faciliteiten</div>
+        <ul class="footer__links">
+          <li><a data-i18n='footer.link.horeca' href='./horeca.html'>Horeca &amp; Terras</a></li>
+          <li><a data-i18n='footer.link.stay' href='./verhuur.html'>Vakantiewoning</a></li>
+          <li><a data-i18n='footer.link.contact' href='./contact.html'>Contact</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer__heading" data-i18n="footer.follow">Contact</div>
+        <div class="footer__contact">
+          <div class="footer__contact-item"><i class="fas fa-location-dot"></i><span>Stedeke 11, 7478 RV Diepenheim</span></div>
+          <div class="footer__contact-item"><i class="fas fa-phone"></i><a href="tel:+310547352547">0547 – 352547</a></div>
+          <div class="footer__contact-item"><i class="fas fa-envelope"></i><a href="mailto:info@kasteelwarmelo.nl">info@kasteelwarmelo.nl</a></div>
+        </div>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <span data-i18n="footer.copy.short">© 2026 Kasteel Warmelo</span>
+      <span data-i18n="footer.copy">Diepenheim, Twente</span>
+      <span class="footer__credit">built by <a href="https://drpbuildlab.com" target="_blank" rel="noopener">DRP BuildLab</a></span>
+    </div>
+  </div>
+</footer>
+
+<div id="lightbox" class="lightbox">
+  <button class="lightbox__close">✕</button>
+  <img loading="lazy" id="lightboxImg" class="lightbox__img" src="" alt="" />
+</div>
+
+<script src="assets/js/warmelo.min.js?v=5" defer></script>
+<script src="assets/js/i18n.min.js?v=8" defer></script>
+<script src="assets/js/warmelo-cms.min.js?v=8" defer></script>
+</body>
+</html>

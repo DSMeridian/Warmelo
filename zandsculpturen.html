@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Zandsculpturen — Kasteel Warmelo</title>
+  <meta name="description" content="28 meesterlijke zandsculpturen in de historische tuinen van Kasteel Warmelo. Elk jaar een nieuw thema, gemaakt door internationale kunstenaars." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500;1,600&family=Inter:wght@300;400;500&display=swap" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500;1,600&family=Inter:wght@300;400;500&display=swap" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    <link rel="icon" type="image/x-icon" href="assets/images/favicon/favicon.ico" />
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/images/favicon/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="assets/images/favicon/favicon-16x16.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/images/favicon/apple-touch-icon.png" />
+  <link rel="stylesheet" href="assets/css/warmelo.min.css?v=8" />
+  <link rel="stylesheet" href="assets/css/zandsculpturen.css" />
+<script src="assets/js/lang-init.js"></script>
+</head>
+<body>
+
+
+
+<!-- ══ NAV ═══════════════════════════════════════════════════════ -->
+<nav class="nav">
+  <div class="wrap nav__inner">
+    <a class='nav__logo' href='./index.html'>
+      <img class="nav__crest" src="assets/images/wapenschild-t.webp" alt="Wapen" />
+      <span class="nav__name">Kasteel Warmelo</span>
+    </a>
+    <div class="nav__links">
+      <a data-i18n='nav.home' href='./index.html'>Home</a>
+      <a class='active' aria-current='page' data-i18n='nav.sand' href='./zandsculpturen.html'>Zandsculpturen</a>
+      <a data-i18n='nav.gardens' href='./tuinen.html'>Tuinen</a>
+      <a data-i18n='nav.events' href='./evenementen.html'>Evenementen</a>
+      <a data-i18n='nav.horeca' href='./horeca.html'>Horeca</a>
+      <a data-i18n='nav.stay' href='./verhuur.html'>Verblijven</a>
+      <a data-i18n='nav.visit' href='./openingstijden.html'>Bezoek</a>
+    </div>
+    <div class="lang-switcher">
+      <button class="lang-btn" data-lang="nl">NL</button>
+      <button class="lang-btn" data-lang="en">EN</button>
+      <button class="lang-btn" data-lang="de">DE</button>
+    </div>
+    <a class='nav__cta' data-i18n='nav.cta' href='./contact.html'>Contact</a>
+    <button class="nav__ham" aria-label="Menu"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+<div class="nav__overlay">
+  <button class="nav__close">✕</button>
+  <a data-i18n='nav.home' href='./index.html'>Home</a>
+  <a class='active' aria-current='page' data-i18n='nav.sand' href='./zandsculpturen.html'>Zandsculpturen</a>
+  <a data-i18n='nav.gardens' href='./tuinen.html'>Tuinen</a>
+  <a data-i18n='nav.events' href='./evenementen.html'>Evenementen</a>
+  <a data-i18n='nav.horeca' href='./horeca.html'>Horeca</a>
+  <a data-i18n='nav.stay' href='./verhuur.html'>Verblijven</a>
+  <a data-i18n='nav.visit' href='./openingstijden.html'>Bezoek</a>
+  <a data-i18n='nav.cta' href='./contact.html'>Contact</a>
+  <div class="lang-switcher" style="margin-top:32px;">
+    <button class="lang-btn" data-lang="nl">NL</button>
+    <button class="lang-btn" data-lang="en">EN</button>
+    <button class="lang-btn" data-lang="de">DE</button>
+  </div>
+</div>
+
+
+<!-- ══ PAGE HERO ═════════════════════════════════════════════════ -->
+<header class="page-hero grain">
+  <div class="page-hero__bg">
+    <img loading="lazy" src="assets/images/new-sand-park-panoramic.webp" alt="Zandsculpturen 2026 in het park van Kasteel Warmelo" data-cms-img="zandsculpturen-hero" />
+  </div>
+  <div class="page-hero__atmo"></div>
+  <div class="wrap page-hero__content">
+    <div class="breadcrumb">
+      <a href='./index.html'>Home</a>
+      <span class="breadcrumb__sep">◆</span>
+      <span>Zandsculpturen</span>
+    </div>
+    <div class="page-hero__eyebrow">
+      <span class="page-hero__eyebrow-line"></span>
+      <span data-i18n="sand.hero.eyebrow">Seizoen 2026 · Kasteel Warmelo</span>
+    </div>
+    <h1 class="page-hero__title" data-i18n="sand.hero.title">Zand&shy;sculpturen<br><em>in het park</em></h1>
+  </div>
+  <div class="scroll-cue"><div class="scroll-cue__line"></div><span data-i18n="home.scroll">Ontdek</span></div>
+</header>
+
+
+<!-- ══ INTRO ══════════════════════════════════════════════════════ -->
+<section class="section section--dark" style="background:var(--green-deep);">
+  <div class="wrap">
+    <div class="split split--wide">
+      <div>
+        <span class="label label--light reveal" data-i18n="sand.intro.label">Het concept</span>
+        <div class="rule rule--light reveal d1"></div>
+        <h2 class="h-display h-display--white reveal d2" style="margin-bottom:28px;" data-i18n="sand.intro.title">
+          Meesterwerken<br><em>uit zand</em>
+        </h2>
+        <p class="body-copy body-copy--white reveal d3" style="margin-bottom:20px;" data-i18n="sand.intro.body1">
+          Wandelend door de prachtige historische tuin komt u langs kunstig uitgehouwen zandsculpturen met elk jaar een nieuw thema. De expositie telt 28 bijzondere sculpturen in het Engelse deel van het park van Kasteel Warmelo, dat in de 18e eeuw werd aangelegd.
+        </p>
+        <p class="body-copy body-copy--white reveal d4" style="margin-bottom:20px;" data-i18n="sand.intro.body2">
+          De sculpturen zijn gemaakt door tien kunstenaars uit Nederland, Ierland, Italië, Letland, Tsjechië en Amerika. In totaal is er zo'n 2000 kubieke meter zand in verwerkt. Het zand komt van tussen de rivieren en is op flinke diepte gewonnen.
+        </p>
+        <p class="body-copy body-copy--white reveal d5" style="margin-bottom:36px;" data-i18n="sand.intro.body3">
+          Elk jaar verrast het landgoed bezoekers met een geheel nieuw thema — van mythologie tot moderne sprookjes. Een bezoek is voor jong en oud een onvergetelijke ervaring.
+        </p>
+        <a class='btn btn-gold reveal d6' href='./openingstijden.html'><span data-i18n="sand.intro.btn">Bezoek plannen</span></a>
+      </div>
+      <div class="sand-intro-imgs reveal d2">
+        <div style="height:440px;" class="zoom si-top"><img style="object-position:55.2% 0.0%;" loading="lazy" src="assets/images/was.webp" data-cms-img="zand-was" alt="Zandsculptuur" /></div>
+        <div style="height:580px;" class="zoom si-top"><img loading="lazy" src="assets/images/img_9647.webp" data-cms-img="zand-img9647" alt="Zandsculptuur" /></div>
+        <div style="height:440px;" class="zoom si-bot"><img style="object-position:48.7% 11.6%;" loading="lazy" src="assets/images/koe.webp" data-cms-img="zand-koe" alt="Zandsculptuur" /></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══ FEITEN ═════════════════════════════════════════════════════ -->
+<section style="background:var(--ink); padding-block:60px;">
+  <div class="wrap">
+    <div class="sand-facts">
+      <div class="sand-fact reveal">
+        <div class="sand-fact__num" data-count="28" data-suffix="">0</div>
+        <div class="sand-fact__lbl" data-i18n="sand.facts.sculptures">Sculpturen</div>
+      </div>
+      <div class="sand-fact reveal d1">
+        <div class="sand-fact__num" data-count="10" data-suffix="">0</div>
+        <div class="sand-fact__lbl" data-i18n="sand.facts.artists">Kunstenaars</div>
+      </div>
+      <div class="sand-fact reveal d2">
+        <div class="sand-fact__num" data-count="6" data-suffix="">0</div>
+        <div class="sand-fact__lbl" data-i18n="sand.facts.countries">Landen</div>
+      </div>
+      <div class="sand-fact reveal d3">
+        <div class="sand-fact__num" data-count="2000" data-suffix=" m³">0</div>
+        <div class="sand-fact__lbl" data-i18n="sand.facts.sand">Zand</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══ MAIN GALLERY ═══════════════════════════════════════════════ -->
+<section class="section section--cream">
+  <div class="wrap">
+    <div style="text-align:center; margin-bottom:60px;">
+      <span class="label reveal" style="text-align:center; display:block;" data-i18n="sand.gallery.label">Impressies</span>
+      <div class="rule rule--center reveal d1"></div>
+      <h2 class="h-display reveal d2" style="margin-bottom:16px;" data-i18n="sand.gallery.title">Galerij van<br><em style="color:var(--gold);">voorgaande jaren</em></h2>
+      <p class="body-copy reveal d3" style="max-width:520px; margin-inline:auto;" data-i18n="sand.gallery.body">Een indruk van de prachtige sculpturen die de afgelopen jaren in het park te bewonderen waren.</p>
+    </div>
+
+    <div class="gallery gallery--masonry reveal">
+      <!-- Row 1: shepherd | harrypotter | schutterij (tall, rows 1-2) -->
+      <div class="gallery__item" style="grid-row:1;grid-column:1;" data-lightbox="assets/images/img_8341.webp"><img loading="lazy" src="assets/images/img_8341.webp" data-cms-img="zand-img8341" alt="Zandsculptuur" style="object-position:center 35%;" /></div>
+      <div class="gallery__item" style="grid-row:1;grid-column:2;" data-lightbox="assets/images/harry-potter-kl.webp"><img loading="lazy" src="assets/images/harry-potter-kl.webp" data-cms-img="zand-harrypotter" alt="Harry Potter" style="object-position:center 25%;" /></div>
+      <div class="gallery__item" style="grid-row:1/3;grid-column:3;" data-lightbox="assets/images/schutterij.webp"><img loading="lazy" src="assets/images/schutterij.webp" data-cms-img="zand-schutterij" alt="Schutterij" style="object-position:center 20%;" /></div>
+      <!-- Row 2: dino | koe | (schutterij continues) -->
+      <div class="gallery__item" style="grid-row:2;grid-column:1;" data-lightbox="assets/images/dino.webp"><img loading="lazy" src="assets/images/dino.webp" data-cms-img="zand-dino" alt="Dino sculptuur" style="object-position:center top;" /></div>
+      <div class="gallery__item" style="grid-row:2;grid-column:2;height:440px;" data-lightbox="assets/images/koe.webp"><img loading="lazy" src="assets/images/koe.webp" data-cms-img="zand-koe" alt="Koe sculptuur" style="object-position:48.7% 11.6%;" /></div>
+      <!-- Rows 3-4: flex wrapper (class used for mobile override) -->
+      <div class="gal-bottom" style="grid-row:3/5;grid-column:1/4;display:flex;gap:3px;height:523px;overflow:hidden;">
+        <!-- Left 2/3: piper (smaller, top) + women (larger, bottom) -->
+        <div class="gal-bottom-left" style="flex:2;display:flex;flex-direction:column;gap:3px;min-width:0;overflow:hidden;">
+          <div class="gallery__item" style="flex:5;min-height:0;height:320px;" data-lightbox="assets/images/rattenvanger.webp">
+            <img class="cms-scaled" loading="lazy" src="assets/images/rattenvanger.webp" data-cms-img="zand-rattenvanger" alt="Rattenvanger"
+                 style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:100.0% 8.9%;--cms-scale:1.2;--cms-scale-hover:1.284;--cms-origin:100.0% 8.9%;" />
+          </div>
+          <div class="gallery__item" style="flex:7;min-height:0;height:440px;" data-lightbox="assets/images/was.webp">
+            <img loading="lazy" src="assets/images/was.webp" data-cms-img="zand-was" alt="Was sculptuur"
+                 style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:55.2% 0.0%;" />
+          </div>
+        </div>
+        <!-- Right 1/3: clock fills full height -->
+        <div class="gallery__item" style="flex:1;min-height:0;min-width:0;height:580px;" data-lightbox="assets/images/img_9647.webp">
+          <img loading="lazy" src="assets/images/img_9647.webp" data-cms-img="zand-img9647" alt="Sculptuur"
+               style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 25%;" />
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══ VOOR KINDEREN ══════════════════════════════════════════════ -->
+<section class="section section--green">
+  <div class="wrap">
+    <div class="split">
+      <div class="zoom reveal" style="height:500px;">
+        <img loading="lazy" src="assets/images/kinderen.webp" data-cms-img="zand-kinderen" alt="Kinderen bij zandsculpturen" style="height:100%;" />
+      </div>
+      <div>
+        <span class="label label--light reveal" data-i18n="sand.kids.label">Familie</span>
+        <div class="rule rule--light reveal d1"></div>
+        <h2 class="h-display h-display--white reveal d2" style="margin-bottom:24px;" data-i18n="sand.kids.title">Voor<br><em>de kinderen</em></h2>
+        <p class="body-copy body-copy--white reveal d3" style="margin-bottom:20px;" data-i18n="sand.kids.body1">
+          Lekker er op uit in eigen land, genieten in de natuur en mee doen aan een speurtocht. Er zijn leuke prijzen te winnen. Elke maand trekken wij 5 winnaars die hun kaart met de goede antwoorden hebben ingeleverd.
+        </p>
+        <p class="body-copy body-copy--white reveal d4" style="margin-bottom:36px;" data-i18n="sand.kids.body2">
+          In het park is er veel ruimte en van alles te ontdekken. Een onvergetelijke dag voor het hele gezin — zowel voor de kleinsten als voor de grote kinderen.
+        </p>
+        <div style="background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.1); padding:28px 32px;" class="reveal d5">
+          <div style="font-size:9px; letter-spacing:.28em; text-transform:uppercase; color:var(--gold-bright); margin-bottom:14px;" data-i18n="sand.kids.price.label">Toegangsprijzen kinderen</div>
+          <div style="font-size:15px; color:var(--white); line-height:2.2;" data-i18n="sand.kids.price.line">
+            Kinderen 6–12 jaar &nbsp;&nbsp; <strong style="color:var(--gold-bright);" data-cms="price-kind">€ 4</strong><br>
+            Kinderen &lt; 6 jaar &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <strong style="color:rgba(120,220,120,.9);">Gratis</strong>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══ PARALLAX CTA ════════════════════════════════════════════════ -->
+<section class="parallax-section">
+  <div class="parallax-section__bg" style="background-image:url('assets/images/new-lake-rhodo-panoramic.jpg');"></div>
+  <div class="parallax-section__overlay"></div>
+  <div class="parallax-section__content">
+    <div class="wrap" style="text-align:center; padding-block:80px;">
+      <span class="label label--light reveal" style="display:block; text-align:center;" data-i18n="sand.cta.label">Seizoen 2026</span>
+      <h2 class="h-display h-display--white reveal d1" style="font-size:clamp(2.6rem,5vw,4.5rem); margin-bottom:24px;" data-i18n="sand.cta.title">Kom het zelf<br><em>beleven</em></h2>
+      <p class="body-copy body-copy--white reveal d2" style="max-width:500px; margin:0 auto 36px;" data-i18n="sand.cta.body">
+        29 april t/m 4 oktober 2026 — elke dag van 10.30 tot 16.30 uur (maandag gesloten).
+      </p>
+      <div style="display:flex; gap:14px; justify-content:center; flex-wrap:wrap;" class="reveal d3">
+        <a class='btn btn-gold' href='./openingstijden.html'><span data-i18n="sand.cta.btn1">Openingstijden &amp; prijzen</span></a>
+        <a class='btn btn-outline-w' href='./contact.html'><span data-i18n="sand.cta.btn2">Contact opnemen</span></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══ FOOTER ═════════════════════════════════════════════════════ -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer__gold-line"></div>
+    <div class="footer__grid">
+      <div>
+        <div class="footer__logo">
+          <img class="footer__crest" src="assets/images/wapenschild-t.webp" alt="Wapen" />
+          <span class="footer__brand">Kasteel Warmelo</span>
+        </div>
+        <p class="footer__desc" data-i18n="footer.desc">Eeuwenoud landgoed in het hart van Twente. Historische tuinen, meesterlijke zandsculpturen en vakantiewoningen in de Orangerie.</p>
+        <div class="social-links" style="margin-top:24px;">
+          <a href="https://www.facebook.com/warmelodiepenheim/" data-cms-link="facebook" class="social-link" target="_blank" rel="noopener"><i class="fab fa-facebook-f"></i></a>
+          <a href="https://www.instagram.com/kasteelwarmelo/" data-cms-link="instagram" class="social-link" target="_blank" rel="noopener"><i class="fab fa-instagram"></i></a>
+        </div>
+      </div>
+      <div>
+        <div class="footer__heading" data-i18n="footer.open">Bezoek</div>
+        <ul class="footer__links">
+          <li><a data-i18n='footer.link.sand' href='./zandsculpturen.html'>Zandsculpturen</a></li>
+          <li><a data-i18n='footer.link.gardens' href='./tuinen.html'>Historische Tuinen</a></li>
+          <li><a data-i18n='footer.link.events' href='./evenementen.html'>Evenementen</a></li>
+          <li><a data-i18n='footer.link.visit' href='./openingstijden.html'>Openingstijden</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer__heading" data-i18n="footer.visit">Faciliteiten</div>
+        <ul class="footer__links">
+          <li><a data-i18n='footer.link.horeca' href='./horeca.html'>Horeca &amp; Terras</a></li>
+          <li><a data-i18n='footer.link.stay' href='./verhuur.html'>Vakantiewoning</a></li>
+          <li><a data-i18n='footer.link.contact' href='./contact.html'>Contact</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer__heading" data-i18n="footer.follow">Contact</div>
+        <div class="footer__contact">
+          <div class="footer__contact-item"><i class="fas fa-location-dot"></i><span>Stedeke 11, 7478 RV Diepenheim</span></div>
+          <div class="footer__contact-item"><i class="fas fa-phone"></i><a href="tel:+310547352547">0547 – 352547</a></div>
+          <div class="footer__contact-item"><i class="fas fa-envelope"></i><a href="mailto:info@kasteelwarmelo.nl">info@kasteelwarmelo.nl</a></div>
+        </div>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <span data-i18n="footer.copy.short">© 2026 Kasteel Warmelo</span>
+      <span data-i18n="footer.copy">Diepenheim, Twente</span>
+      <span class="footer__credit">built by <a href="https://drpbuildlab.com" target="_blank" rel="noopener">DRP BuildLab</a></span>
+    </div>
+  </div>
+</footer>
+
+<div id="lightbox" class="lightbox">
+  <button class="lightbox__close">✕</button>
+  <img loading="lazy" id="lightboxImg" class="lightbox__img" src="" alt="" />
+</div>
+
+<script src="assets/js/warmelo.min.js?v=5" defer></script>
+<script src="assets/js/i18n.min.js?v=8" defer></script>
+<script src="assets/js/warmelo-cms.min.js?v=8" defer></script>
+</body>
+</html>

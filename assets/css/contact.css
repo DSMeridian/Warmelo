@@ -1,0 +1,27 @@
+.contact-block {
+  display: flex; align-items: flex-start; gap: 20px;
+  padding: 28px 0;
+  border-bottom: 1px solid rgba(255,255,255,.07);
+}
+.contact-block:last-child { border-bottom: none; }
+.contact-block__icon {
+  width: 48px; height: 48px; flex-shrink: 0;
+  background: rgba(191,140,42,.12);
+  border: 1px solid rgba(191,140,42,.25);
+  display: flex; align-items: center; justify-content: center;
+}
+.contact-block__icon i { color: var(--gold); font-size: 16px; }
+.contact-block__label {
+  font-size: 9px; font-weight: 500; letter-spacing: .26em;
+  text-transform: uppercase; color: var(--gold); margin-bottom: 6px;
+}
+.contact-block__value {
+  font-size: 15px; color: rgba(255,255,255,.75); line-height: 1.7;
+}
+.contact-block__value a {
+  color: var(--white); transition: color var(--ease);
+}
+.contact-block__value a:hover { color: var(--gold-bright); }
+@media(max-width:600px) {
+  .name-row { grid-template-columns: 1fr !important; }
+}

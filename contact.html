@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact — Kasteel Warmelo</title>
+  <meta name="description" content="Neem contact op met Kasteel Warmelo in Diepenheim. Telefoon 0547-352547, e-mail info@kasteelwarmelo.nl." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500;1,600&family=Inter:wght@300;400;500&display=swap" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500;1,600&family=Inter:wght@300;400;500&display=swap" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    <link rel="icon" type="image/x-icon" href="assets/images/favicon/favicon.ico" />
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/images/favicon/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="assets/images/favicon/favicon-16x16.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/images/favicon/apple-touch-icon.png" />
+  <link rel="stylesheet" href="assets/css/warmelo.min.css?v=8" />
+  <link rel="stylesheet" href="assets/css/contact.css" />
+<script src="assets/js/lang-init.js"></script>
+</head>
+<body>
+
+
+<!-- ══ NAV ═══════════════════════════════════════════════════════ -->
+<nav class="nav">
+  <div class="wrap nav__inner">
+    <a class='nav__logo' href='./index.html'>
+      <img class="nav__crest" src="assets/images/wapenschild-t.webp" alt="Wapen" />
+      <span class="nav__name">Kasteel Warmelo</span>
+    </a>
+    <div class="nav__links">
+      <a data-i18n='nav.home' href='./index.html'>Home</a>
+      <a data-i18n='nav.sand' href='./zandsculpturen.html'>Zandsculpturen</a>
+      <a data-i18n='nav.gardens' href='./tuinen.html'>Tuinen</a>
+      <a data-i18n='nav.events' href='./evenementen.html'>Evenementen</a>
+      <a data-i18n='nav.horeca' href='./horeca.html'>Horeca</a>
+      <a data-i18n='nav.stay' href='./verhuur.html'>Verblijven</a>
+      <a data-i18n='nav.visit' href='./openingstijden.html'>Bezoek</a>
+    </div>
+    <div class="lang-switcher">
+      <button class="lang-btn" data-lang="nl">NL</button>
+      <button class="lang-btn" data-lang="en">EN</button>
+      <button class="lang-btn" data-lang="de">DE</button>
+    </div>
+    <a class='nav__cta active' aria-current='page' data-i18n='nav.cta' href='./contact.html'>Contact</a>
+    <button class="nav__ham" aria-label="Menu"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+<div class="nav__overlay">
+  <button class="nav__close">✕</button>
+  <a data-i18n='nav.home' href='./index.html'>Home</a>
+  <a data-i18n='nav.sand' href='./zandsculpturen.html'>Zandsculpturen</a>
+  <a data-i18n='nav.gardens' href='./tuinen.html'>Tuinen</a>
+  <a data-i18n='nav.events' href='./evenementen.html'>Evenementen</a>
+  <a data-i18n='nav.horeca' href='./horeca.html'>Horeca</a>
+  <a data-i18n='nav.stay' href='./verhuur.html'>Verblijven</a>
+  <a data-i18n='nav.visit' href='./openingstijden.html'>Bezoek</a>
+  <a class='active' aria-current='page' data-i18n='nav.cta' href='./contact.html'>Contact</a>
+  <div class="lang-switcher" style="margin-top:32px;">
+    <button class="lang-btn" data-lang="nl">NL</button>
+    <button class="lang-btn" data-lang="en">EN</button>
+    <button class="lang-btn" data-lang="de">DE</button>
+  </div>
+</div>
+
+<!-- ══ PAGE HERO ═════════════════════════════════════════════════ -->
+<header class="page-hero grain" style="height:clamp(380px,50vh,600px);">
+  <div class="page-hero__bg">
+    <img loading="lazy" src="assets/images/new-castle-moat-blue.webp" alt="Kasteel Warmelo met gracht en tuinen" data-cms-img="contact-hero" />
+  </div>
+  <div class="page-hero__atmo"></div>
+  <div class="wrap page-hero__content">
+    <div class="breadcrumb">
+      <a href='./index.html'>Home</a>
+      <span class="breadcrumb__sep">◆</span>
+      <span>Contact</span>
+    </div>
+    <div class="page-hero__eyebrow">
+      <span class="page-hero__eyebrow-line"></span>
+      <span data-i18n="contact.hero.eyebrow">Kasteel Warmelo · Diepenheim</span>
+    </div>
+    <h1 class="page-hero__title" data-i18n="contact.hero.title">Neem<br><em>contact op</em></h1>
+  </div>
+  <div class="scroll-cue"><div class="scroll-cue__line"></div><span data-i18n="home.scroll">Ontdek</span></div>
+</header>
+
+
+<!-- ══ CONTACT MAIN ═══════════════════════════════════════════════ -->
+<section class="section" style="background:var(--ink);">
+  <div class="wrap">
+    <div class="split split--text">
+
+      <!-- Contact info -->
+      <div>
+        <span class="label label--light reveal" data-i18n="contact.info.label">Bereikbaarheid</span>
+        <div class="rule rule--light reveal d1"></div>
+        <h2 class="h-display h-display--white reveal d2" style="margin-bottom:36px;" data-i18n="contact.info.title">Zo vindt u<br><em>ons</em></h2>
+
+        <div class="reveal d3">
+          <div class="contact-block">
+            <div class="contact-block__icon"><i class="fas fa-location-dot"></i></div>
+            <div>
+              <div class="contact-block__label" data-i18n="contact.block.address.label">Adres</div>
+              <div class="contact-block__value" data-i18n="contact.block.address.value">
+                Landgoed Warmelo<br>
+                Stedeke 11<br>
+                7478 RV Diepenheim
+              </div>
+            </div>
+          </div>
+
+          <div class="contact-block">
+            <div class="contact-block__icon"><i class="fas fa-map-pin"></i></div>
+            <div>
+              <div class="contact-block__label" data-i18n="contact.block.entrance.label">Ingang &amp; parkeren</div>
+              <div class="contact-block__value">
+                Borculoseweg, Diepenheim<br>
+                <span style="font-size:13px; color:rgba(255,255,255,.4);" data-i18n="contact.block.entrance.note">Gratis parkeren aan de Borculoseweg</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="contact-block">
+            <div class="contact-block__icon"><i class="fas fa-phone"></i></div>
+            <div>
+              <div class="contact-block__label" data-i18n="contact.block.phone.label">Telefoon</div>
+              <div class="contact-block__value">
+                <a href="tel:+310547352547">0547 – 352547</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="contact-block">
+            <div class="contact-block__icon"><i class="fas fa-envelope"></i></div>
+            <div>
+              <div class="contact-block__label" data-i18n="contact.block.email.label">E-mail</div>
+              <div class="contact-block__value">
+                <a href="mailto:info@kasteelwarmelo.nl">info@kasteelwarmelo.nl</a><br>
+                <a href="mailto:info@kasteelwarmelo.nl" style="font-size:13px; color:rgba(255,255,255,.4);">info@kasteelwarmelo.nl</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="contact-block">
+            <div class="contact-block__icon"><i class="fab fa-facebook-f"></i></div>
+            <div>
+              <div class="contact-block__label" data-i18n="contact.block.social.label">Sociale media</div>
+              <div class="contact-block__value">
+                <a href="https://www.facebook.com/warmelodiepenheim/" data-cms-link="facebook" target="_blank" rel="noopener">Facebook — Kasteel Warmelo</a><br>
+                <a href="https://www.instagram.com/kasteelwarmelo/" data-cms-link="instagram" target="_blank" rel="noopener" style="color:rgba(255,255,255,.55);">Instagram — @kasteelwarmelo</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="contact-block">
+            <div class="contact-block__icon"><i class="fas fa-clock"></i></div>
+            <div>
+              <div class="contact-block__label" data-i18n="contact.block.hours.label">Openingstijden</div>
+              <div class="contact-block__value" style="font-size:14px;" data-i18n="contact.block.hours.value">
+                Seizoen: <strong style="color:var(--gold-bright);" data-cms="season-period">29 april – 4 oktober 2026</strong><br>
+                Di t/m zo: <span data-cms="season-hours">10.30 – 16.30 uur</span><br>
+                <span style="color:rgba(255,100,100,.65);">Maandag gesloten</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Contact form -->
+      <div>
+        <span class="label label--light reveal" data-i18n="contact.form.label">Stuur een bericht</span>
+        <div class="rule rule--light reveal d1"></div>
+        <h2 class="h-display h-display--white reveal d2" style="margin-bottom:36px;" data-i18n="contact.form.title">Contactformulier</h2>
+
+        <form id="contactForm" class="reveal d3" novalidate>
+          <input type="text" name="bot-field" style="display:none" />
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px;" class="name-row">
+            <div class="form-group">
+              <label class="form-label" for="fname" data-i18n="label.fname">Voornaam</label>
+              <input class="form-input form-input--dark" type="text" id="fname" name="fname" placeholder="Jan" data-i18n-placeholder="ph.fname" required />
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="lname" data-i18n="label.lname">Achternaam</label>
+              <input class="form-input form-input--dark" type="text" id="lname" name="lname" placeholder="de Vries" data-i18n-placeholder="ph.lname" required />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="email" data-i18n="label.email">E-mailadres</label>
+            <input class="form-input form-input--dark" type="email" id="email" name="email" placeholder="jan@voorbeeld.nl" data-i18n-placeholder="ph.email" required />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="phone" data-i18n="label.phone">Telefoonnummer <span style="color:rgba(255,255,255,.25);">(optioneel)</span></label>
+            <input class="form-input form-input--dark" type="tel" id="phone" name="phone" placeholder="06 12 34 56 78" data-i18n-placeholder="ph.phone" />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="subject" data-i18n="label.subject">Onderwerp</label>
+            <select class="form-input form-input--dark" id="subject" name="subject" style="cursor:pointer;">
+              <option value="" disabled selected data-i18n="contact.subject.placeholder">Kies een onderwerp...</option>
+              <option value="algemeen" data-i18n="contact.subject.general">Algemene vraag</option>
+              <option value="zandsculpturen" data-i18n="contact.subject.sand">Zandsculpturen &amp; bezoek</option>
+              <option value="verhuur" data-i18n="contact.subject.stay">Vakantiewoning reserveren</option>
+              <option value="evenementen" data-i18n="contact.subject.events">Evenement op het landgoed</option>
+              <option value="schoolbezoek" data-i18n="contact.subject.school">Schoolbezoek / groepen</option>
+              <option value="overig" data-i18n="contact.subject.other">Overig</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="message" data-i18n="label.message">Uw bericht</label>
+            <textarea class="form-textarea form-textarea--dark" id="message" name="message" placeholder="Schrijf hier uw vraag of opmerking..." data-i18n-placeholder="ph.message" required></textarea>
+          </div>
+
+          <button type="submit" class="btn btn-gold" style="width:100%; justify-content:center;">
+            <i class="fas fa-paper-plane" style="font-size:12px;"></i>
+            <span data-i18n="contact.form.submit">Bericht versturen</span>
+          </button>
+
+          <p style="margin-top:16px; font-size:12px; color:rgba(255,255,255,.3); text-align:center; line-height:1.7;" data-i18n="contact.form.privacy">
+            Uw gegevens worden niet gedeeld met derden.<br>
+            U ontvangt zo snel mogelijk een reactie.
+          </p>
+        </form>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ══ MAP SECTION ════════════════════════════════════════════════ -->
+<section style="height:480px; position:relative; background:var(--green-deep);">
+  <iframe
+    src="https://maps.google.com/maps?q=Kasteel+Warmelo,+Stedeke+11,+7478+RV+Diepenheim,+Nederland&t=k&z=16&ie=UTF8&iwloc=B&output=embed"
+    width="100%" height="100%"
+    style="border:0; display:block;"
+    allowfullscreen="" loading="lazy"
+    referrerpolicy="no-referrer-when-downgrade"
+    title="Kasteel Warmelo op de kaart">
+  </iframe>
+  <div style="position:absolute; top:24px; left:50%; transform:translateX(-50%); background:var(--ink); padding:12px 20px; display:flex; align-items:center; gap:12px; box-shadow:0 8px 40px rgba(0,0,0,.4); z-index:10; white-space:nowrap; max-width:calc(100vw - 32px); overflow:hidden;">
+    <i class="fas fa-location-dot" style="color:var(--gold); flex-shrink:0;"></i>
+    <span style="font-size:13px; color:var(--white); overflow:hidden; text-overflow:ellipsis;" data-i18n="contact.map.pin">Borculoseweg · Diepenheim · Gratis parkeren</span>
+  </div>
+</section>
+
+
+<!-- ══ QUICK LINKS ════════════════════════════════════════════════ -->
+<section class="section" style="background:var(--green-deep);">
+  <div class="wrap">
+    <div style="text-align:center; margin-bottom:56px;">
+      <span class="label label--light reveal" style="display:block; text-align:center;" data-i18n="contact.explore.label">Verkennen</span>
+      <div class="rule rule--center rule--light reveal d1"></div>
+      <h2 class="h-display h-display--white reveal d2" data-i18n="contact.explore.title">Wat vindt u<br><em>op Warmelo?</em></h2>
+    </div>
+    <div class="card-grid">
+      <div class="card card--dark reveal">
+        <div class="card__img" style="height:180px;">
+          <img loading="lazy" src="assets/images/img_8341.webp" data-cms-img="contact-zand" alt="Zandsculpturen" />
+        </div>
+        <div class="card__body">
+          <div class="card__tag" data-i18n="contact.card1.tag">Seizoen 2026</div>
+          <h3 class="card__title" data-i18n="contact.card1.title">Zandsculpturen</h3>
+          <p class="card__text" data-i18n="contact.card1.text">28 meesterwerken door internationale kunstenaars in de historische tuin.</p>
+          <a class='card__link' data-i18n='contact.card1.link' href='./zandsculpturen.html'>Ontdek <span class="card__arrow">→</span></a>
+        </div>
+      </div>
+      <div class="card card--dark reveal d1">
+        <div class="card__img" style="height:180px;">
+          <img loading="lazy" src="assets/images/park.webp" data-cms-img="contact-park" alt="Tuinen" />
+        </div>
+        <div class="card__body">
+          <div class="card__tag" data-i18n="contact.card2.tag">7 hectare</div>
+          <h3 class="card__title" data-i18n="contact.card2.title">Historische Tuinen</h3>
+          <p class="card__text" data-i18n="contact.card2.text">Vier eeuwen tuinarchitectuur — van Franse geometrische tuin tot Engels park.</p>
+          <a class='card__link' data-i18n='contact.card2.link' href='./tuinen.html'>Ontdek <span class="card__arrow">→</span></a>
+        </div>
+      </div>
+      <div class="card card--dark reveal d2">
+        <div class="card__img" style="height:180px;">
+          <img loading="lazy" src="assets/images/boven-12.webp" data-cms-img="contact-boven" alt="Vakantiewoning" />
+        </div>
+        <div class="card__body">
+          <div class="card__tag" data-i18n="contact.card3.tag">De Orangerie</div>
+          <h3 class="card__title" data-i18n="contact.card3.title">Vakantiewoningen</h3>
+          <p class="card__text" data-i18n="contact.card3.text">Overnachten op het landgoed in de voormalige Orangerie — met privétuin.</p>
+          <a class='card__link' data-i18n='contact.card3.link' href='./verhuur.html'>Ontdek <span class="card__arrow">→</span></a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══ FOOTER ═════════════════════════════════════════════════════ -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer__gold-line"></div>
+    <div class="footer__grid">
+      <div>
+        <div class="footer__logo">
+          <img class="footer__crest" src="assets/images/wapenschild-t.webp" alt="Wapen" />
+          <span class="footer__brand">Kasteel Warmelo</span>
+        </div>
+        <p class="footer__desc" data-i18n="footer.desc">Eeuwenoud landgoed in het hart van Twente. Historische tuinen, meesterlijke zandsculpturen en vakantiewoningen in de Orangerie.</p>
+        <div class="social-links" style="margin-top:24px;">
+          <a href="https://www.facebook.com/warmelodiepenheim/" data-cms-link="facebook" class="social-link" target="_blank" rel="noopener"><i class="fab fa-facebook-f"></i></a>
+          <a href="https://www.instagram.com/kasteelwarmelo/" data-cms-link="instagram" class="social-link" target="_blank" rel="noopener"><i class="fab fa-instagram"></i></a>
+        </div>
+      </div>
+      <div>
+        <div class="footer__heading" data-i18n="footer.open">Bezoek</div>
+        <ul class="footer__links">
+          <li><a data-i18n='footer.link.sand' href='./zandsculpturen.html'>Zandsculpturen</a></li>
+          <li><a data-i18n='footer.link.gardens' href='./tuinen.html'>Historische Tuinen</a></li>
+          <li><a data-i18n='footer.link.events' href='./evenementen.html'>Evenementen</a></li>
+          <li><a data-i18n='footer.link.visit' href='./openingstijden.html'>Openingstijden</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer__heading" data-i18n="footer.visit">Faciliteiten</div>
+        <ul class="footer__links">
+          <li><a data-i18n='footer.link.horeca' href='./horeca.html'>Horeca &amp; Terras</a></li>
+          <li><a data-i18n='footer.link.stay' href='./verhuur.html'>Vakantiewoning</a></li>
+          <li><a data-i18n='footer.link.contact' href='./contact.html'>Contact</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer__heading" data-i18n="footer.follow">Contact</div>
+        <div class="footer__contact">
+          <div class="footer__contact-item"><i class="fas fa-location-dot"></i><span>Stedeke 11, 7478 RV Diepenheim</span></div>
+          <div class="footer__contact-item"><i class="fas fa-phone"></i><a href="tel:+310547352547">0547 – 352547</a></div>
+          <div class="footer__contact-item"><i class="fas fa-envelope"></i><a href="mailto:info@kasteelwarmelo.nl">info@kasteelwarmelo.nl</a></div>
+        </div>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <span data-i18n="footer.copy.short">© 2026 Kasteel Warmelo</span>
+      <span data-i18n="footer.copy">Diepenheim, Twente</span>
+      <span class="footer__credit">built by <a href="https://drpbuildlab.com" target="_blank" rel="noopener">DRP BuildLab</a></span>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/js/warmelo.min.js?v=5" defer></script>
+<script src="assets/js/i18n.min.js?v=8" defer></script>
+<script src="assets/js/warmelo-cms.min.js?v=8" defer></script>
+</body>
+</html>
