@@ -1,0 +1,20 @@
+.menu-section { padding: 40px 0; border-bottom: 1px solid rgba(255,255,255,.07); }
+.menu-section:last-child { border-bottom: none; padding-bottom: 0; }
+.menu-heading {
+  font-family: var(--ff-display); font-size: 1.6rem;
+  color: var(--gold-bright); margin-bottom: 20px;
+  display: flex; align-items: center; gap: 16px;
+}
+.menu-heading::after { content: ''; flex: 1; height: 1px; background: rgba(191,140,42,.2); }
+.menu-item {
+  display: flex; justify-content: space-between; align-items: baseline;
+  padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,.04);
+}
+.menu-item:last-child { border-bottom: none; }
+.menu-item__name { font-size: 14px; color: rgba(255,255,255,.7); }
+.menu-item__desc { font-size: 12px; color: rgba(255,255,255,.35); margin-top: 2px; }
+.menu-item__price { font-family: var(--ff-display); font-size: 1.1rem; color: var(--gold); white-space: nowrap; margin-left: 20px; }
+@media(max-width:900px) {
+  .horeca-terras-grid { grid-template-columns: 1fr !important; }
+  .horeca-terras-grid .zoom { min-height: 260px !important; }
+}

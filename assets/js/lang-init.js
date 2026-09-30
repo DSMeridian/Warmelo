@@ -1,0 +1,1 @@
+(function(){try{var l=localStorage.getItem("warmelo_lang");if(l){window._warmeloLang=l;document.documentElement.lang=l==="de"?"de":l==="en"?"en":"nl";if(l!=="nl"){var s=document.createElement("style");s.id="__lh";s.textContent="body{opacity:0!important;transition:none!important}";document.head.appendChild(s);}}}catch(e){}})();

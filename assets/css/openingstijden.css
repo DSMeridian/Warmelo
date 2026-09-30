@@ -1,0 +1,48 @@
+.big-hours {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 3px;
+    }
+    .bh-item {
+      background: var(--green-soft);
+      padding: 40px 32px;
+      text-align: center;
+      transition: background .25s;
+    }
+    .bh-item:hover { background: var(--emerald); }
+    .bh-item--closed { background: rgba(255,60,60,.06); }
+    .bh-day { font-size: 9px; font-weight: 500; letter-spacing: .28em; text-transform: uppercase; color: rgba(255,255,255,.45); margin-bottom: 12px; }
+    .bh-time { font-family: var(--ff-display); font-size: 1.6rem; color: var(--white); }
+    .bh-time--closed { color: rgba(255,100,100,.7); }
+
+    .price-card {
+      background: var(--ivory);
+      border: 1px solid var(--ivory-dark);
+      padding: 36px;
+      text-align: center;
+      transition: transform .35s var(--spring), box-shadow .35s;
+    }
+    .price-card:hover { transform: translateY(-6px); box-shadow: 0 24px 60px rgba(6,12,8,.1); }
+    .price-card--featured { background: var(--green); border-color: var(--gold); }
+    .price-card__who { font-size: 9px; font-weight: 500; letter-spacing: .3em; text-transform: uppercase; color: var(--muted); margin-bottom: 12px; }
+    .price-card--featured .price-card__who { color: rgba(255,255,255,.5); }
+    .price-card__price { font-family: var(--ff-display); font-size: 3.5rem; color: var(--green); line-height: 1; }
+    .price-card--featured .price-card__price { color: var(--gold-bright); }
+    .price-card__note { font-size: 12px; color: var(--muted); margin-top: 10px; }
+    .price-card--featured .price-card__note { color: rgba(255,255,255,.45); }
+
+    .price-cards { display:grid; grid-template-columns:repeat(4,1fr); gap:3px; }
+    @media(max-width:700px) {
+      .big-hours { grid-template-columns: 1fr 1fr; }
+      .price-cards { grid-template-columns: 1fr 1fr; }
+    }
+    @media(max-width:480px) {
+      .big-hours { grid-template-columns: 1fr; }
+      .price-cards { grid-template-columns: 1fr 1fr; }
+      .price-card { padding: 24px 16px; }
+      .price-card__price { font-size: 2.6rem; }
+    }
+
+/* hover states (moved from inline onmouseenter/onmouseleave handlers) */
+.hover-gold:hover{background:var(--gold-bright)!important}
+.hover-outline-gold:hover{border-color:var(--gold)!important;color:var(--gold)!important}

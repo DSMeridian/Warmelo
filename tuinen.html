@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Historische Tuinen — Kasteel Warmelo</title>
+  <meta name="description" content="Vier eeuwen tuinarchitectuur op Kasteel Warmelo — van Franse geometrische tuinen tot het Engelse landschapspark en het pinetum." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500;1,600&family=Inter:wght@300;400;500&display=swap" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500;1,600&family=Inter:wght@300;400;500&display=swap" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    <link rel="icon" type="image/x-icon" href="assets/images/favicon/favicon.ico" />
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/images/favicon/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="assets/images/favicon/favicon-16x16.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/images/favicon/apple-touch-icon.png" />
+  <link rel="stylesheet" href="assets/css/warmelo.min.css?v=8" />
+  <link rel="stylesheet" href="assets/css/tuinen.css" />
+<script src="assets/js/lang-init.js"></script>
+</head>
+<body>
+
+
+
+<!-- ══ NAV ═══════════════════════════════════════════════════════ -->
+<nav class="nav">
+  <div class="wrap nav__inner">
+    <a class='nav__logo' href='./index.html'>
+      <img class="nav__crest" src="assets/images/wapenschild-t.webp" alt="Wapen" />
+      <span class="nav__name">Kasteel Warmelo</span>
+    </a>
+    <div class="nav__links">
+      <a data-i18n='nav.home' href='./index.html'>Home</a>
+      <a data-i18n='nav.sand' href='./zandsculpturen.html'>Zandsculpturen</a>
+      <a class='active' aria-current='page' data-i18n='nav.gardens' href='./tuinen.html'>Tuinen</a>
+      <a data-i18n='nav.events' href='./evenementen.html'>Evenementen</a>
+      <a data-i18n='nav.horeca' href='./horeca.html'>Horeca</a>
+      <a data-i18n='nav.stay' href='./verhuur.html'>Verblijven</a>
+      <a data-i18n='nav.visit' href='./openingstijden.html'>Bezoek</a>
+    </div>
+    <div class="lang-switcher">
+      <button class="lang-btn" data-lang="nl">NL</button>
+      <button class="lang-btn" data-lang="en">EN</button>
+      <button class="lang-btn" data-lang="de">DE</button>
+    </div>
+    <a class='nav__cta' data-i18n='nav.cta' href='./contact.html'>Contact</a>
+    <button class="nav__ham" aria-label="Menu"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+<div class="nav__overlay">
+  <button class="nav__close">✕</button>
+  <a data-i18n='nav.home' href='./index.html'>Home</a>
+  <a data-i18n='nav.sand' href='./zandsculpturen.html'>Zandsculpturen</a>
+  <a class='active' aria-current='page' data-i18n='nav.gardens' href='./tuinen.html'>Tuinen</a>
+  <a data-i18n='nav.events' href='./evenementen.html'>Evenementen</a>
+  <a data-i18n='nav.horeca' href='./horeca.html'>Horeca</a>
+  <a data-i18n='nav.stay' href='./verhuur.html'>Verblijven</a>
+  <a data-i18n='nav.visit' href='./openingstijden.html'>Bezoek</a>
+  <a data-i18n='nav.cta' href='./contact.html'>Contact</a>
+  <div class="lang-switcher" style="margin-top:32px;">
+    <button class="lang-btn" data-lang="nl">NL</button>
+    <button class="lang-btn" data-lang="en">EN</button>
+    <button class="lang-btn" data-lang="de">DE</button>
+  </div>
+</div>
+
+
+<!-- ══ PAGE HERO ═════════════════════════════════════════════════ -->
+<header class="page-hero grain">
+  <div class="page-hero__bg">
+    <img loading="lazy" src="assets/images/new-castle-garden.webp" alt="Kasteel Warmelo met historische tuinen en gracht" data-cms-img="tuinen-hero" />
+  </div>
+  <div class="page-hero__atmo"></div>
+  <div class="wrap page-hero__content">
+    <div class="breadcrumb">
+      <a href='./index.html'>Home</a>
+      <span class="breadcrumb__sep">◆</span>
+      <span>Tuinen</span>
+    </div>
+    <div class="page-hero__eyebrow">
+      <span class="page-hero__eyebrow-line"></span>
+      <span data-i18n="gardens.hero.eyebrow">7 hectare · Eeuwenoud landgoed</span>
+    </div>
+    <h1 class="page-hero__title" data-i18n="gardens.hero.title">Vier eeuwen<br><em>tuinarchitectuur</em></h1>
+  </div>
+  <div class="scroll-cue"><div class="scroll-cue__line"></div><span data-i18n="home.scroll">Ontdek</span></div>
+</header>
+
+
+<!-- ══ INTRO ══════════════════════════════════════════════════════ -->
+<section class="section" style="background:var(--ivory);">
+  <div class="wrap">
+    <div class="split split--text">
+      <div>
+        <span class="label reveal" data-i18n="gardens.intro.label">Het landgoed</span>
+        <div class="rule reveal d1"></div>
+        <h2 class="h-display reveal d2" style="margin-bottom:28px;" data-i18n="gardens.intro.title">Een levend<br><em style="color:var(--gold);">erfgoed</em></h2>
+        <p class="body-copy reveal d3" style="margin-bottom:20px;" data-i18n="gardens.intro.body1">
+          Kasteel Warmelo ligt aan de rand van Diepenheim, omgeven door bos en gelegen binnen de 7 hectare historische tuin. Het landgoed weerspiegelt vier eeuwen tuinarchitectuur — van middeleeuwse kruidentuinen tot de formele Franse geometrische tuin en het romantische Engelse landschapspark.
+        </p>
+        <p class="body-copy reveal d4" style="margin-bottom:20px;" data-i18n="gardens.intro.body2">
+          In 1992 startte een grootscheepse en ingrijpende renovatie van de historische tuinen en het bijbehorende grachtenstelsel. Alle grachten zijn in 2009 uitgebaggerd en voorzien van nieuwe beschoeiingen — dit proces van renovatie werd in 2010 afgerond.
+        </p>
+        <p class="body-copy reveal d5" style="margin-bottom:36px;" data-i18n="gardens.intro.body3">
+          De natuur leeft, groeit en sterft af. Zo zijn we op Kasteel Warmelo het gehele jaar door druk om dit historische erfgoed te bewaren voor de toekomst.
+        </p>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px;" class="reveal d6 stats-grid-2col">
+          <div style="border-left:2px solid var(--gold); padding-left:16px;">
+            <div style="font-family:var(--ff-display); font-size:2rem; color:var(--green);" data-count="7" data-suffix=" ha">0</div>
+            <div style="font-size:9px; letter-spacing:.28em; text-transform:uppercase; color:var(--muted); margin-top:4px;" data-i18n="gardens.intro.stat1">Historische tuin</div>
+          </div>
+          <div style="border-left:2px solid var(--gold); padding-left:16px;">
+            <div style="font-family:var(--ff-display); font-size:2rem; color:var(--green);" data-count="4" data-suffix=" stijlen">0</div>
+            <div style="font-size:9px; letter-spacing:.28em; text-transform:uppercase; color:var(--muted); margin-top:4px;" data-i18n="gardens.intro.stat2">Tuinstijlen</div>
+          </div>
+        </div>
+      </div>
+      <div style="display:flex; flex-direction:column; gap:3px;" class="reveal d2">
+        <div class="zoom" style="height:320px;"><img loading="lazy" src="assets/images/new-park-lake-flowers.webp" alt="Vijver met rododendrons in het park van Kasteel Warmelo" data-cms-img="tuinen-zomer" style="height:100%;" /></div>
+        <div class="zoom" style="height:220px;"><img loading="lazy" src="assets/images/new-castle-path-sunlight.webp" alt="Formeel tuinpad naar Kasteel Warmelo" data-cms-img="tuinen-achterkant" style="height:100%;" /></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══ TUINSTIJLEN TIMELINE ═══════════════════════════════════════ -->
+<section class="section" style="background:var(--green);">
+  <div class="wrap">
+    <div class="split">
+      <div>
+        <span class="label label--light reveal" data-i18n="gardens.timeline.label">Geschiedenis</span>
+        <div class="rule rule--light reveal d1"></div>
+        <h2 class="h-display h-display--white reveal d2" style="margin-bottom:48px;" data-i18n="gardens.timeline.title">De evolutie<br><em>van de tuin</em></h2>
+
+        <div class="timeline">
+          <div class="timeline-item reveal d3">
+            <div class="timeline-era" data-i18n="gardens.tl1.era">Middeleeuwen</div>
+            <div class="timeline-title" data-i18n="gardens.tl1.title">Kruidentuin &amp; moestuin</div>
+            <p class="timeline-text" data-i18n="gardens.tl1.text">Reeds in de middeleeuwen kende men tuinen binnen de veilige ommuring van burchten en kloosters — veelal moes- of kruidentuinen.</p>
+          </div>
+          <div class="timeline-item reveal d4">
+            <div class="timeline-era" data-i18n="gardens.tl2.era">17e–18e eeuw</div>
+            <div class="timeline-title" data-i18n="gardens.tl2.title">Franse geometrische tuin</div>
+            <p class="timeline-text" data-i18n="gardens.tl2.text">In navolging van Italië en Frankrijk ontwikkelde zich een tuinstijl met strakke lijnen en een assenstelsel. De formele Franse tuin van Warmelo werd reeds op de kaarten van Hottinger (1773) ingetekend.</p>
+          </div>
+          <div class="timeline-item reveal d5">
+            <div class="timeline-era" data-i18n="gardens.tl3.era">18e–19e eeuw</div>
+            <div class="timeline-title" data-i18n="gardens.tl3.title">Engels landschapspark</div>
+            <p class="timeline-text" data-i18n="gardens.tl3.text">Na het midden van de 18e eeuw ontstond een geheel nieuwe opvatting — de nadruk op oorspronkelijke landschappelijke schoonheid, met kunstmatige heuvels, vijvers en rustieke bruggetjes.</p>
+          </div>
+          <div class="timeline-item reveal d6">
+            <div class="timeline-era" data-i18n="gardens.tl4.era">20e eeuw</div>
+            <div class="timeline-title" data-i18n="gardens.tl4.title">Restauratie &amp; pinetum</div>
+            <p class="timeline-text" data-i18n="gardens.tl4.text">De 'put-tuin' werd in de jaren twintig aangelegd door baronesse Creutz, met behulp van tuinarchitect Hugo Poortman. Het pinetum werd later gerestaureerd op verzoek van prinses Armgard von Lippe Biesterfeld.</p>
+          </div>
+          <div class="timeline-item reveal d7">
+            <div class="timeline-era" data-i18n="gardens.tl5.era">1992 – heden</div>
+            <div class="timeline-title" data-i18n="gardens.tl5.title">Grootscheepse renovatie</div>
+            <p class="timeline-text" data-i18n="gardens.tl5.text">Overwoekerde lanen werden hersteld, exotische loof- en naaldbomen geplant, grachten uitgebaggerd. Het levend erfgoed wordt dagelijks onderhouden en bewaard voor de toekomst.</p>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:grid; grid-template-columns:1fr; gap:3px;" class="reveal d2">
+        <div class="zoom" style="height:260px;"><img loading="lazy" src="assets/images/img_8930.webp" alt="Kasteeltuin" data-cms-img="tuinen-evolutie" style="height:100%;" /></div>
+        <div class="zoom" style="height:260px;"><img loading="lazy" src="assets/images/kasteel-warmelo-diepenheim.webp" data-cms-img="tuinen-kasteel" alt="Kasteel Warmelo" style="height:100%;" /></div>
+        <div class="zoom" style="height:200px;"><img loading="lazy" src="assets/images/_mg_9556.webp" data-cms-img="tuinen-tuinen2" alt="Historische tuinen" style="height:100%;" /></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+
+<!-- ══ CTA PARALLAX ═══════════════════════════════════════════════ -->
+<section class="parallax-section">
+  <div class="parallax-section__bg" style="background-image:url('assets/images/new-english-garden-panoramic.jpg');"></div>
+  <div class="parallax-section__overlay"></div>
+  <div class="parallax-section__content">
+    <div class="wrap" style="text-align:center; padding-block:80px;">
+      <span class="label label--light reveal" style="display:block; text-align:center;" data-i18n="gardens.cta.label">Kom wandelen</span>
+      <h2 class="h-display h-display--white reveal d1" style="font-size:clamp(2.6rem,5vw,4.5rem); margin-bottom:24px;" data-i18n="gardens.cta.title">Ontdek de<br><em>historische tuinen</em></h2>
+      <p class="body-copy body-copy--white reveal d2" style="max-width:500px; margin:0 auto 36px;" data-i18n="gardens.cta.body">
+        Seizoen 29 april – 4 oktober 2026. Dinsdag t/m zondag van 10.30 tot 16.30 uur.
+      </p>
+      <div style="display:flex; gap:14px; justify-content:center; flex-wrap:wrap;" class="reveal d3">
+        <a class='btn btn-gold' href='./openingstijden.html'><span data-i18n="gardens.cta.btn1">Plan uw bezoek</span></a>
+        <a class='btn btn-outline-w' href='./zandsculpturen.html'><span data-i18n="gardens.cta.btn2">Zandsculpturen</span></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══ FOOTER ═════════════════════════════════════════════════════ -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer__gold-line"></div>
+    <div class="footer__grid">
+      <div>
+        <div class="footer__logo">
+          <img class="footer__crest" src="assets/images/wapenschild-t.webp" alt="Wapen" />
+          <span class="footer__brand">Kasteel Warmelo</span>
+        </div>
+        <p class="footer__desc" data-i18n="footer.desc">Eeuwenoud landgoed in het hart van Twente. Historische tuinen, meesterlijke zandsculpturen en vakantiewoningen in de Orangerie.</p>
+        <div class="social-links" style="margin-top:24px;">
+          <a href="https://www.facebook.com/warmelodiepenheim/" data-cms-link="facebook" class="social-link" target="_blank" rel="noopener"><i class="fab fa-facebook-f"></i></a>
+          <a href="https://www.instagram.com/kasteelwarmelo/" data-cms-link="instagram" class="social-link" target="_blank" rel="noopener"><i class="fab fa-instagram"></i></a>
+        </div>
+      </div>
+      <div>
+        <div class="footer__heading" data-i18n="footer.open">Bezoek</div>
+        <ul class="footer__links">
+          <li><a data-i18n='footer.link.sand' href='./zandsculpturen.html'>Zandsculpturen</a></li>
+          <li><a data-i18n='footer.link.gardens' href='./tuinen.html'>Historische Tuinen</a></li>
+          <li><a data-i18n='footer.link.events' href='./evenementen.html'>Evenementen</a></li>
+          <li><a data-i18n='footer.link.visit' href='./openingstijden.html'>Openingstijden</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer__heading" data-i18n="footer.visit">Faciliteiten</div>
+        <ul class="footer__links">
+          <li><a data-i18n='footer.link.horeca' href='./horeca.html'>Horeca &amp; Terras</a></li>
+          <li><a data-i18n='footer.link.stay' href='./verhuur.html'>Vakantiewoning</a></li>
+          <li><a data-i18n='footer.link.contact' href='./contact.html'>Contact</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer__heading" data-i18n="footer.follow">Contact</div>
+        <div class="footer__contact">
+          <div class="footer__contact-item"><i class="fas fa-location-dot"></i><span>Stedeke 11, 7478 RV Diepenheim</span></div>
+          <div class="footer__contact-item"><i class="fas fa-phone"></i><a href="tel:+310547352547">0547 – 352547</a></div>
+          <div class="footer__contact-item"><i class="fas fa-envelope"></i><a href="mailto:info@kasteelwarmelo.nl">info@kasteelwarmelo.nl</a></div>
+        </div>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <span data-i18n="footer.copy.short">© 2026 Kasteel Warmelo</span>
+      <span data-i18n="footer.copy">Diepenheim, Twente</span>
+      <span class="footer__credit">built by <a href="https://drpbuildlab.com" target="_blank" rel="noopener">DRP BuildLab</a></span>
+    </div>
+  </div>
+</footer>
+
+<div id="lightbox" class="lightbox">
+  <button class="lightbox__close">✕</button>
+  <img loading="lazy" id="lightboxImg" class="lightbox__img" src="" alt="" />
+</div>
+
+<script src="assets/js/warmelo.min.js?v=5" defer></script>
+<script src="assets/js/i18n.min.js?v=8" defer></script>
+<script src="assets/js/warmelo-cms.min.js?v=8" defer></script>
+</body>
+</html>
