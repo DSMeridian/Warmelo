@@ -1,0 +1,8 @@
+{
+  "name": "kasteel-warmelo",
+  "private": true,
+  "description": "Kasteel Warmelo website — static pages plus the CMS backend in netlify/functions",
+  "dependencies": {
+    "@netlify/blobs": "^11.1.3"
+  }
+}
