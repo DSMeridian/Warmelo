@@ -1,0 +1,2036 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Website Beheer — Kasteel Warmelo</title>
+<link rel="icon" type="image/x-icon" href="assets/images/favicon/favicon.ico" />
+<link rel="icon" type="image/png" sizes="32x32" href="assets/images/favicon/favicon-32x32.png" />
+<link rel="icon" type="image/png" sizes="16x16" href="assets/images/favicon/favicon-16x16.png" />
+<link rel="apple-touch-icon" sizes="180x180" href="assets/images/favicon/apple-touch-icon.png" />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --g0:#090f0b;--g1:#0d1f14;--g2:#162a1c;--g3:#1e3828;--g4:#243d2e;--g5:#2c4838;
+  --gold:#bf8c2a;--gold-l:#d4a843;--gold-d:rgba(191,140,42,.15);
+  --w:#f4f0e8;--m:rgba(244,240,232,.5);--m2:rgba(244,240,232,.25);--m3:rgba(244,240,232,.1);
+  --red:#e07070;--ok:#7dcf8a;--warn:#e0a040;
+  --r:3px;--ffs:'Cormorant Garamond',Georgia,serif;--ff:'Inter',system-ui,sans-serif;
+}
+html,body{height:100%;overflow:hidden;font-family:var(--ff);background:var(--g1);color:var(--w);font-size:12px}
+
+/* ── LOGIN ───────────────────────────────────────────────────────── */
+#loginScreen{position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;background:radial-gradient(ellipse at 40% 40%,#1e3828 0%,#050a07 100%)}
+.lb{width:380px;padding:52px 48px 44px;background:rgba(22,42,28,.98);border:1px solid var(--gold-d);text-align:center}
+.lb-logo{font-family:var(--ffs);font-size:2rem;color:var(--w);margin-bottom:4px}
+.lb-sub{font-size:8.5px;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);display:block;margin-bottom:38px}
+.lb input{width:100%;padding:13px 16px;margin-bottom:10px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);color:var(--w);font-family:var(--ff);font-size:14px;letter-spacing:.1em;outline:none}
+.lb input:focus{border-color:var(--gold)}
+.lb-btn{width:100%;padding:14px;background:var(--gold);border:none;color:#0d1f14;font-size:9.5px;font-weight:700;letter-spacing:.25em;text-transform:uppercase;cursor:pointer;transition:background .2s}
+.lb-btn:hover{background:var(--gold-l)}
+.lb-err{font-size:11px;color:var(--red);margin-top:12px;min-height:16px}
+.lb-back{display:block;margin-top:20px;font-size:10px;color:var(--m);text-decoration:none;letter-spacing:.06em;transition:color .2s}
+.lb-back:hover{color:var(--gold)}
+
+/* ── SHELL ───────────────────────────────────────────────────────── */
+#adminPanel{display:none;height:100vh}
+.al{display:flex;height:100vh}
+
+/* ── LEFT: FRAME ─────────────────────────────────────────────────── */
+.fp{width:58vw;flex-shrink:0;display:flex;flex-direction:column;border-right:1px solid rgba(255,255,255,.07);background:#111}
+.pt{display:flex;flex-wrap:nowrap;overflow-x:auto;background:var(--g2);border-bottom:1px solid rgba(255,255,255,.07);padding:10px 12px 0;gap:2px;flex-shrink:0}
+.pt::-webkit-scrollbar{height:3px}.pt::-webkit-scrollbar-thumb{background:var(--gold-d)}
+.ptb{padding:8px 14px;font-size:11px;font-weight:500;letter-spacing:.04em;background:transparent;border:none;border-radius:3px 3px 0 0;color:var(--m);cursor:pointer;white-space:nowrap;transition:all .15s;border-bottom:2px solid transparent;font-family:var(--ff)}
+.ptb:hover{color:var(--w);background:var(--g3)}
+.ptb.active{color:var(--w);background:var(--g3);border-bottom-color:var(--gold)}
+#siteFrame{flex:1;border:none;background:#fff}
+
+/* ── RIGHT: EDITOR ───────────────────────────────────────────────── */
+.ep{flex:1;display:flex;flex-direction:column;overflow:hidden;background:var(--g2)}
+.eh{padding:13px 20px;border-bottom:1px solid rgba(255,255,255,.07);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.eh-page{font-family:var(--ffs);font-size:1.25rem;font-weight:400}
+.eh-sub{font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-left:8px}
+.eh-btns{display:flex;gap:5px}
+.ib{padding:6px 10px;background:var(--g3);border:1px solid rgba(255,255,255,.08);color:var(--m);font-size:13px;cursor:pointer;border-radius:var(--r);transition:all .15s;font-family:var(--ff)}
+.ib:hover{color:var(--w);border-color:rgba(255,255,255,.2)}
+
+/* ── STORAGE BAR ─────────────────────────────────────────────────── */
+.sb-bar{padding:9px 20px 11px;background:var(--g2);border-bottom:1px solid rgba(255,255,255,.05);flex-shrink:0}
+.sb-lbl{display:flex;justify-content:space-between;font-size:9px;color:var(--m2);margin-bottom:5px}
+.sb-track{height:3px;background:var(--g3);border-radius:99px}
+.sb-fill{height:100%;background:var(--gold);border-radius:99px;transition:width .3s}
+.sb-fill.warn{background:var(--warn)}.sb-fill.danger{background:var(--red)}
+
+/* ── EDITOR SCROLL ───────────────────────────────────────────────── */
+.es{flex:1;overflow-y:auto;padding-bottom:4px}
+.es::-webkit-scrollbar{width:4px}.es::-webkit-scrollbar-thumb{background:var(--g4)}
+
+/* ── SECTIONS ────────────────────────────────────────────────────── */
+.edsec{border-bottom:1px solid rgba(255,255,255,.05)}
+.edsec-hd{display:flex;align-items:center;justify-content:space-between;padding:13px 20px;cursor:pointer;user-select:none;transition:background .15s}
+.edsec-hd:hover{background:rgba(255,255,255,.02)}
+.edsec-hl{display:flex;align-items:center;gap:8px}
+.edsec-ico{font-size:13px;line-height:1}
+.edsec-lbl{font-size:11px;font-weight:600;letter-spacing:.05em}
+.edsec-cnt{font-size:9px;color:var(--m2);background:var(--g3);padding:2px 7px;border-radius:99px}
+.edsec-tog{font-size:11px;color:var(--m2);transition:transform .2s;line-height:1}
+.edsec-tog.open{transform:rotate(180deg)}
+.edsec-body{display:none;padding:4px 20px 18px}
+.edsec-body.open{display:block}
+
+/* ── FORM ────────────────────────────────────────────────────────── */
+.fr{margin-bottom:9px}
+.fl{display:block;font-size:9.5px;font-weight:500;letter-spacing:.08em;color:var(--m);text-transform:uppercase;margin-bottom:4px}
+.fk{font-size:9px;color:var(--m2);font-family:monospace;margin-bottom:4px}
+.fi,.fta{width:100%;padding:8px 11px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);color:var(--w);font-family:var(--ff);font-size:12px;outline:none;border-radius:var(--r);transition:border-color .2s}
+.fi:focus,.fta:focus{border-color:var(--gold);background:rgba(255,255,255,.06)}
+.fta{resize:vertical;min-height:68px;line-height:1.5}
+.fh{font-size:9.5px;color:var(--m2);margin-top:3px}
+.fg{margin-bottom:18px}
+.fg-t{font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:9px;padding-bottom:5px;border-bottom:1px solid rgba(191,140,42,.2)}
+.fr2{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:9px}
+.fr3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:9px}
+
+/* ── IMAGE UPLOAD ────────────────────────────────────────────────── */
+.imgf{margin-bottom:12px;padding:11px;background:var(--g3);border-radius:var(--r);border:1px solid rgba(255,255,255,.06)}
+.imgf-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:7px}
+.imgf-name{font-size:10px;font-weight:500}
+.imgf-id{font-size:9px;color:var(--m2);font-family:monospace}
+.imgf-prev{width:100%;height:110px;object-fit:cover;border-radius:var(--r);margin-bottom:7px;display:block;background:var(--g4)}
+.imgf-prev-bg{width:100%;height:80px;border-radius:var(--r);margin-bottom:7px;background-size:cover;background-position:center;background-color:var(--g4)}
+.imgf-none{width:100%;height:70px;border-radius:var(--r);margin-bottom:7px;display:flex;align-items:center;justify-content:center;background:var(--g4);font-size:10px;color:var(--m2)}
+.imgf-acts{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.ubtn{padding:6px 11px;background:var(--g4);border:1px solid rgba(255,255,255,.1);color:var(--w);font-size:10px;font-weight:500;cursor:pointer;border-radius:var(--r);transition:all .15s;white-space:nowrap;font-family:var(--ff)}
+.ubtn:hover{background:var(--g5);border-color:rgba(255,255,255,.2)}
+.rbtn{padding:6px 10px;background:transparent;border:1px solid rgba(255,255,255,.08);color:var(--m);font-size:10px;cursor:pointer;border-radius:var(--r);transition:all .15s;font-family:var(--ff)}
+.rbtn:hover{border-color:var(--red);color:var(--red)}
+.size-warn{font-size:9.5px;color:var(--warn);margin-top:4px}
+
+/* ── EVENT CARDS ─────────────────────────────────────────────────── */
+.evc{padding:11px;background:var(--g3);border-radius:var(--r);border:1px solid rgba(255,255,255,.06);margin-bottom:9px}
+.evc-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:9px}
+.evc-num{font-size:10px;font-weight:600;color:var(--gold)}
+.evc-hide{display:flex;align-items:center;gap:5px;font-size:10px;color:var(--m);cursor:pointer}
+.evc-hide input{accent-color:var(--gold)}
+
+/* ── SAVE BAR ────────────────────────────────────────────────────── */
+.savebar{flex-shrink:0;padding:11px 20px;background:var(--g0);border-top:1px solid rgba(255,255,255,.08);display:flex;align-items:center;justify-content:space-between;gap:10px}
+.savest{font-size:11px;color:var(--m2);min-width:200px}
+.savest.ok{color:var(--ok)}.savest.unsaved{color:var(--warn)}.savest.saving{color:var(--gold)}
+.save-acts{display:flex;gap:7px;align-items:center}
+.sbtn{padding:8px 13px;background:transparent;border:1px solid rgba(255,255,255,.12);color:var(--m);font-size:10px;font-weight:500;letter-spacing:.06em;cursor:pointer;border-radius:var(--r);transition:all .15s;font-family:var(--ff)}
+.sbtn:hover{border-color:rgba(255,255,255,.25);color:var(--w)}
+.savebtn{padding:10px 22px;background:var(--gold);border:none;color:#0d1f14;font-size:10.5px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;cursor:pointer;border-radius:var(--r);transition:background .15s;font-family:var(--ff)}
+.savebtn:hover{background:var(--gold-l)}.savebtn:disabled{opacity:.5;cursor:not-allowed}
+/* ── SERVER STATUS BAR ───────────────────────────────────────────── */
+.srv-bar{flex-shrink:0;padding:5px 20px;background:var(--g0);border-top:1px solid rgba(255,255,255,.04);display:flex;align-items:center;gap:8px}
+.srv-dot{width:7px;height:7px;border-radius:50%;background:var(--m2);flex-shrink:0;transition:background .4s}
+.srv-dot.online{background:var(--ok)}.srv-dot.offline{background:var(--red)}.srv-dot.checking{background:var(--warn);animation:pulse .8s ease-in-out infinite alternate}
+@keyframes pulse{from{opacity:.4}to{opacity:1}}
+.srv-lbl{font-size:9.5px;color:var(--m2);flex:1}
+.srv-sync{padding:3px 9px;background:transparent;border:1px solid rgba(255,255,255,.1);color:var(--m);font-size:9px;cursor:pointer;border-radius:var(--r);font-family:var(--ff);transition:all .15s;white-space:nowrap}
+.srv-sync:hover{border-color:var(--gold);color:var(--gold)}
+
+/* ── MISC ────────────────────────────────────────────────────────── */
+.empty{padding:20px;text-align:center;color:var(--m2);font-size:11px}
+.loading{padding:20px;text-align:center;color:var(--m2);font-size:11px}
+
+/* ── EDIT-MODE HINT (below page tabs) ───────────────────────────── */
+.fp-hint{flex-shrink:0;padding:5px 14px;background:rgba(9,15,11,.9);border-bottom:1px solid rgba(191,140,42,.18);font-size:10px;color:rgba(191,140,42,.8);letter-spacing:.04em;display:flex;align-items:center;gap:6px}
+.fp-hint span{opacity:.5}
+
+/* ── FIELD FLASH ────────────────────────────────────────────────── */
+.field-flash{box-shadow:0 0 0 3px rgba(191,140,42,.45)!important;border-color:#bf8c2a!important}
+.imgf-flash{box-shadow:0 0 0 3px rgba(191,140,42,.45)!important}
+
+/* ── UPLOAD MODAL ────────────────────────────────────────────────── */
+#uploadModal{position:fixed;inset:0;z-index:99999;display:none;align-items:center;justify-content:center}
+.um-bd{position:absolute;inset:0;background:rgba(0,0,0,.75);backdrop-filter:blur(4px)}
+.um-box{position:relative;width:460px;max-width:90vw;background:var(--g2);border:1px solid rgba(191,140,42,.3);border-radius:4px;overflow:hidden;box-shadow:0 24px 60px rgba(0,0,0,.6)}
+.um-hd{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid rgba(255,255,255,.07)}
+.um-title{font-family:var(--ffs);font-size:1.2rem;font-weight:400}
+.um-close{background:none;border:none;color:var(--m);font-size:18px;cursor:pointer;padding:4px 6px;line-height:1;border-radius:var(--r)}
+.um-close:hover{color:var(--w)}
+.um-body{padding:20px}
+.um-current{margin-bottom:16px;border-radius:var(--r);overflow:hidden;background:var(--g3);display:none}
+.um-current img{width:100%;max-height:160px;object-fit:cover;display:block}
+.um-current-lbl{padding:6px 10px;font-size:9.5px;color:var(--m2);background:var(--g4)}
+.um-drop{border:2px dashed rgba(255,255,255,.15);border-radius:var(--r);padding:28px 20px;text-align:center;cursor:pointer;transition:all .15s}
+.um-drop:hover,.um-drop.over{border-color:var(--gold);background:rgba(191,140,42,.06)}
+.um-drop-ico{font-size:36px;margin-bottom:10px;line-height:1}
+.um-drop-txt{font-size:13px;margin-bottom:4px}
+.um-drop-sub{font-size:10px;color:var(--m2);margin-bottom:16px}
+.um-pick{display:inline-block;padding:9px 20px;background:var(--gold);color:#0d1f14;font-size:10px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;border:none;cursor:pointer;border-radius:var(--r);font-family:var(--ff)}
+.um-pick:hover{background:var(--gold-l)}
+.um-warn{font-size:10px;color:var(--warn);margin-top:10px;min-height:16px;text-align:left}
+.um-foot{display:flex;justify-content:flex-end;gap:8px;padding:14px 20px;border-top:1px solid rgba(255,255,255,.06)}
+/* ── IMAGE FIT: tile button ──────────────────────────────────────── */
+.imgfit-btn{margin-top:8px;width:100%;padding:7px 10px;background:rgba(191,140,42,.1);border:1px solid rgba(191,140,42,.3);color:var(--gold);font-size:10px;font-weight:500;cursor:pointer;border-radius:var(--r);font-family:var(--ff);transition:all .15s;text-align:left;display:flex;align-items:center;gap:6px}
+.imgfit-btn:hover{background:rgba(191,140,42,.2);border-color:var(--gold)}
+.imgfit-badge{font-size:9px;color:var(--m2);margin-left:auto;max-width:130px;text-align:right;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+/* ── CROP MODAL ──────────────────────────────────────────────────── */
+#cropModal{position:fixed;inset:0;z-index:999999;display:none;align-items:center;justify-content:center}
+.cm-bd{position:absolute;inset:0;background:rgba(0,0,0,.8);backdrop-filter:blur(6px)}
+.cm-box{position:relative;width:500px;max-width:95vw;background:var(--g2);border:1px solid rgba(191,140,42,.35);border-radius:5px;overflow:hidden;box-shadow:0 32px 80px rgba(0,0,0,.7);display:flex;flex-direction:column;max-height:92vh}
+.cm-hd{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid rgba(255,255,255,.07);flex-shrink:0}
+.cm-title{font-family:var(--ffs);font-size:1.15rem;font-weight:400}
+.cm-close{background:none;border:none;color:var(--m);font-size:18px;cursor:pointer;padding:4px 7px;line-height:1;border-radius:var(--r)}
+.cm-close:hover{color:var(--w)}
+.cm-body{padding:16px 18px;overflow-y:auto;flex:1}
+/* Preview area */
+.cm-hint{font-size:10px;color:var(--m2);margin-bottom:10px;line-height:1.5}
+.cm-prev-wrap{position:relative;border-radius:3px;overflow:hidden;background:var(--g4);cursor:crosshair;touch-action:none;user-select:none;border:2px solid rgba(255,255,255,.08);transition:border-color .15s}
+.cm-prev-wrap:hover{border-color:rgba(191,140,42,.5)}
+.cm-prev-wrap.dragging{border-color:var(--gold);cursor:grabbing}
+#cmImg{display:block;width:100%;height:100%;object-fit:cover;pointer-events:none;transition:object-position .05s,transform .05s}
+/* Focal point indicator */
+.cm-focal{position:absolute;width:28px;height:28px;border-radius:50%;border:2.5px solid var(--gold);background:rgba(191,140,42,.25);pointer-events:none;transform:translate(-50%,-50%);transition:left .05s,top .05s;box-shadow:0 0 0 2px rgba(0,0,0,.5)}
+.cm-focal::before,.cm-focal::after{content:'';position:absolute;background:var(--gold);border-radius:2px}
+.cm-focal::before{width:1.5px;height:10px;left:50%;top:50%;transform:translate(-50%,-50%)}
+.cm-focal::after{width:10px;height:1.5px;left:50%;top:50%;transform:translate(-50%,-50%)}
+/* Corner grid lines */
+.cm-grid-line{position:absolute;pointer-events:none;background:rgba(255,255,255,.12)}
+/* Controls */
+.cm-ctrl{margin-top:14px}
+.cm-ctrl-lbl{font-size:9.5px;font-weight:600;letter-spacing:.1em;color:var(--m2);text-transform:uppercase;margin-bottom:7px}
+.cm-zoom-row{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.cm-zoom-ico{font-size:13px;color:var(--m2);flex-shrink:0;width:16px;text-align:center}
+.cm-slider{-webkit-appearance:none;appearance:none;flex:1;height:4px;background:var(--g4);border-radius:99px;outline:none;cursor:pointer}
+.cm-slider::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:16px;height:16px;border-radius:50%;background:var(--gold);cursor:grab;box-shadow:0 1px 6px rgba(0,0,0,.4)}
+.cm-slider::-webkit-slider-thumb:active{cursor:grabbing}
+.cm-slider::-moz-range-thumb{width:16px;height:16px;border-radius:50%;background:var(--gold);border:none;cursor:grab}
+.cm-zoom-val{font-size:11px;color:var(--w);width:34px;text-align:right;flex-shrink:0}
+/* Height presets */
+.cm-presets{display:flex;gap:6px;flex-wrap:wrap;margin-top:4px}
+.cm-pre{padding:5px 12px;background:var(--g4);border:1px solid rgba(255,255,255,.08);color:var(--m);font-size:10px;cursor:pointer;border-radius:var(--r);font-family:var(--ff);transition:all .12s;white-space:nowrap}
+.cm-pre:hover{background:var(--g5);color:var(--w);border-color:rgba(255,255,255,.2)}
+.cm-pre.cm-pre-active{background:rgba(191,140,42,.2);border-color:var(--gold);color:var(--gold)}
+/* Reset */
+.cm-reset{padding:5px 12px;background:transparent;border:1px solid rgba(255,255,255,.08);color:var(--m2);font-size:10px;cursor:pointer;border-radius:var(--r);font-family:var(--ff);transition:all .12s}
+.cm-reset:hover{border-color:var(--red);color:var(--red)}
+/* Footer */
+.cm-foot{display:flex;align-items:center;justify-content:space-between;padding:12px 18px;border-top:1px solid rgba(255,255,255,.07);flex-shrink:0}
+.cm-foot-l{display:flex;gap:7px;align-items:center}
+
+/* ── URL INPUT IN MODAL ──────────────────────────────────────────── */
+.um-sep{display:flex;align-items:center;gap:10px;margin:14px 0;color:var(--m2);font-size:10px}
+.um-sep::before,.um-sep::after{content:'';flex:1;height:1px;background:rgba(255,255,255,.1)}
+.um-url-row{display:flex;gap:8px;margin-top:0}
+.um-url-in{flex:1;padding:9px 11px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);color:var(--w);font-family:var(--ff);font-size:11px;outline:none;border-radius:var(--r);transition:border-color .2s}
+.um-url-in:focus{border-color:var(--gold);background:rgba(255,255,255,.06)}
+.um-url-in::placeholder{color:var(--m2)}
+.um-url-btn{padding:9px 14px;background:var(--g4);border:1px solid rgba(255,255,255,.1);color:var(--w);font-size:10px;font-weight:500;cursor:pointer;border-radius:var(--r);white-space:nowrap;font-family:var(--ff);transition:all .15s}
+.um-url-btn:hover{background:var(--g5);border-color:rgba(255,255,255,.25)}
+/* ── PAYLOAD SIZE WARNING ────────────────────────────────────────── */
+.payload-warn{padding:8px 12px;background:rgba(224,160,64,.1);border:1px solid rgba(224,160,64,.3);border-radius:var(--r);font-size:10px;color:var(--warn);margin-bottom:8px;display:none}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="loginScreen">
+  <div class="lb">
+    <div class="lb-logo">Kasteel Warmelo</div>
+    <span class="lb-sub">Website Beheer</span>
+    <input type="password" id="pwInput" placeholder="Wachtwoord" autocomplete="current-password"
+      onkeydown="if(event.key==='Enter')doLogin()" />
+    <button class="lb-btn" onclick="doLogin()">Aanmelden</button>
+    <div class="lb-err" id="loginErr"></div>
+    <a class='lb-back' href='/'>← Terug naar website</a>
+  </div>
+</div>
+
+<!-- ADMIN -->
+<div id="adminPanel">
+  <div class="al">
+
+    <!-- LEFT: IFRAME -->
+    <div class="fp">
+      <div class="pt" id="pageTabs">
+        <button class="ptb active" data-page="index.html" onclick="switchPage(this)">Home</button>
+        <button class="ptb" data-page="zandsculpturen.html" onclick="switchPage(this)">Zandsculpturen</button>
+        <button class="ptb" data-page="tuinen.html" onclick="switchPage(this)">Tuinen</button>
+        <button class="ptb" data-page="evenementen.html" onclick="switchPage(this)">Evenementen</button>
+        <button class="ptb" data-page="horeca.html" onclick="switchPage(this)">Horeca</button>
+        <button class="ptb" data-page="verhuur.html" onclick="switchPage(this)">Verhuur</button>
+        <button class="ptb" data-page="openingstijden.html" onclick="switchPage(this)">Bezoek</button>
+        <button class="ptb" data-page="contact.html" onclick="switchPage(this)">Contact</button>
+      </div>
+      <div class="fp-hint">✏️ <strong>Bewerkingsmodus</strong> <span>— klik op tekst, foto, video of link in de preview om direct te bewerken</span></div>
+      <iframe id="siteFrame" src="index.html" onload="onFrameLoad()"></iframe>
+    </div>
+
+    <!-- RIGHT: EDITOR -->
+    <div class="ep">
+      <div class="eh">
+        <div>
+          <span class="eh-page" id="edPage">Home</span>
+          <span class="eh-sub">Bewerken</span>
+        </div>
+        <div class="eh-btns">
+          <button class="ib" onclick="reloadFrame()" title="Herladen">↺</button>
+          <button class="ib" onclick="confirmReset()" title="Alles wissen">⊘</button>
+          <button class="ib" onclick="closeAdmin()" title="Terug naar website" style="margin-left:6px;color:var(--gold);border-color:rgba(191,140,42,.3)">← Website</button>
+        </div>
+      </div>
+
+      <div class="sb-bar">
+        <div class="sb-lbl"><span>Opslag gebruikt</span><span id="storUsed">— KB / ~5 MB</span></div>
+        <div class="sb-track"><div class="sb-fill" id="storFill" style="width:0%"></div></div>
+      </div>
+
+      <div class="es" id="edScroll">
+
+        <!-- Dynamic sections filled by JS after iframe loads -->
+        <div id="dynTexts"></div>
+        <div id="dynImages"></div>
+        <div id="dynVideos"></div>
+
+        <!-- SEIZOEN & TOEGANG -->
+        <div class="edsec" id="secSeason">
+          <div class="edsec-hd" onclick="toggleSec('secSeason')">
+            <div class="edsec-hl">
+              <span class="edsec-ico">🌿</span>
+              <span class="edsec-lbl">Seizoen &amp; Toegang</span>
+            </div>
+            <span class="edsec-tog open" id="tog_secSeason">▾</span>
+          </div>
+          <div class="edsec-body open" id="body_secSeason">
+            <div class="fg">
+              <div class="fg-t">Openingsperiode</div>
+              <div class="fr">
+                <label class="fl">Periode <span class="fh" style="text-transform:none;letter-spacing:0">— startdatum t/m einddatum seizoen</span></label>
+                <input type="text" class="fi" id="f_sp" placeholder="29 april – 4 oktober"
+                  oninput="onGlobal('season','period',this.value)"
+                  onfocus="highlightInFrame('[data-cms=&quot;season-period&quot;]')" />
+                <div class="fh">📍 Zichtbaar op: <strong>Home</strong> · <strong>Bezoek</strong> · <strong>Contact</strong></div>
+              </div>
+              <div class="fr2">
+                <div class="fr">
+                  <label class="fl">Openingstijden <span class="fh" style="text-transform:none;letter-spacing:0">— tijden per dag</span></label>
+                  <input type="text" class="fi" id="f_sh" placeholder="10.30 – 16.30 uur"
+                    oninput="onGlobal('season','hours',this.value)"
+                    onfocus="highlightInFrame('[data-cms=&quot;season-hours&quot;]')" />
+                  <div class="fh">📍 Home · Bezoek · Contact</div>
+                </div>
+                <div class="fr">
+                  <label class="fl">Gesloten op</label>
+                  <input type="text" class="fi" id="f_sc" placeholder="Maandag"
+                    oninput="onGlobal('season','closed',this.value)"
+                    onfocus="highlightInFrame('[data-cms=&quot;season-closed&quot;]')" />
+                  <div class="fh">📍 Bezoek-pagina</div>
+                </div>
+              </div>
+            </div>
+            <div class="fg">
+              <div class="fg-t">Toegangsprijzen</div>
+              <div class="fr3">
+                <div class="fr">
+                  <label class="fl">Volwassene (€)</label>
+                  <input type="text" class="fi" id="f_pv" placeholder="8,50"
+                    oninput="onPrice('volwassene',this.value)"
+                    onfocus="highlightInFrame('[data-cms=&quot;price-volwassene&quot;]')" />
+                  <div class="fh">📍 Home · Bezoek</div>
+                </div>
+                <div class="fr">
+                  <label class="fl">Kind 6–12 (€)</label>
+                  <input type="text" class="fi" id="f_pk" placeholder="2,50"
+                    oninput="onPrice('kind',this.value)"
+                    onfocus="highlightInFrame('[data-cms=&quot;price-kind&quot;]')" />
+                  <div class="fh">📍 Home · Bezoek · Zandsculpturen</div>
+                </div>
+                <div class="fr">
+                  <label class="fl">Gratis tot</label>
+                  <input type="text" class="fi" id="f_pg" placeholder="6 jaar"
+                    oninput="onPrice('gratis',this.value)" />
+                  <div class="fh">📍 Bezoek-pagina</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- AGENDA -->
+        <div class="edsec" id="secEvents">
+          <div class="edsec-hd" onclick="toggleSec('secEvents')">
+            <div class="edsec-hl">
+              <span class="edsec-ico">📅</span>
+              <span class="edsec-lbl">Agenda</span>
+              <span class="edsec-cnt">6 events</span>
+            </div>
+            <span class="edsec-tog" id="tog_secEvents">▾</span>
+          </div>
+          <div class="edsec-body" id="body_secEvents">
+            <div id="evCards"></div>
+          </div>
+        </div>
+
+        <!-- HORECA MENU -->
+        <div class="edsec" id="secMenu">
+          <div class="edsec-hd" onclick="toggleSec('secMenu')">
+            <div class="edsec-hl">
+              <span class="edsec-ico">🍽️</span>
+              <span class="edsec-lbl">Horeca Menukaart</span>
+            </div>
+            <span class="edsec-tog" id="tog_secMenu">▾</span>
+          </div>
+          <div class="edsec-body" id="body_secMenu">
+            <div id="menuItems"></div>
+          </div>
+        </div>
+
+        <!-- LINKS & SOCIAAL -->
+        <div class="edsec" id="secLinks">
+          <div class="edsec-hd" onclick="toggleSec('secLinks')">
+            <div class="edsec-hl">
+              <span class="edsec-ico">🔗</span>
+              <span class="edsec-lbl">Links &amp; Sociaal</span>
+            </div>
+            <span class="edsec-tog" id="tog_secLinks">▾</span>
+          </div>
+          <div class="edsec-body" id="body_secLinks">
+            <div class="fg">
+              <div class="fg-t">Social media</div>
+              <div class="fr">
+                <label class="fl">Facebook URL</label>
+                <input type="url" class="fi" id="f_lk_facebook" placeholder="https://www.facebook.com/…"
+                  oninput="onLink('facebook',this.value)" />
+              </div>
+              <div class="fr">
+                <label class="fl">Instagram URL</label>
+                <input type="url" class="fi" id="f_lk_instagram" placeholder="https://www.instagram.com/…"
+                  oninput="onLink('instagram',this.value)" />
+              </div>
+            </div>
+            <div class="fg">
+              <div class="fg-t">Overige links</div>
+              <div class="fr">
+                <label class="fl">YouTube URL</label>
+                <input type="url" class="fi" id="f_lk_youtube" placeholder="https://www.youtube.com/…"
+                  oninput="onLink('youtube',this.value)" />
+              </div>
+              <div class="fr">
+                <label class="fl">Tripadvisor URL</label>
+                <input type="url" class="fi" id="f_lk_tripadvisor" placeholder="https://www.tripadvisor.com/…"
+                  oninput="onLink('tripadvisor',this.value)" />
+              </div>
+              <div class="fr">
+                <label class="fl">Google Maps URL</label>
+                <input type="url" class="fi" id="f_lk_maps" placeholder="https://maps.google.com/…"
+                  oninput="onLink('maps',this.value)" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /es -->
+
+      <!-- SERVER STATUS -->
+      <div class="srv-bar">
+        <div class="srv-dot checking" id="srvDot"></div>
+        <span class="srv-lbl" id="srvLbl">Verbinding controleren…</span>
+        <button class="srv-sync" onclick="syncFromServer()">↓ Sync van server</button>
+      </div>
+
+      <!-- PAYLOAD WARNING -->
+      <div class="payload-warn" id="payloadWarn">
+        ⚠ Grote afbeeldingen: verklein afbeeldingen naar &lt; 1 MB voor het beste resultaat.
+      </div>
+
+      <!-- SAVE BAR -->
+      <div class="savebar">
+        <div class="savest" id="saveStatus">Geen openstaande wijzigingen</div>
+        <div class="save-acts">
+          <button class="sbtn" onclick="doExport()">↓ Back-up</button>
+          <button class="sbtn" onclick="document.getElementById('importFile').click()">↑ Importeer</button>
+          <input type="file" id="importFile" accept=".json" style="display:none" onchange="doImport(this)" />
+          <button class="savebtn" id="saveBtn" onclick="saveChanges()">Opslaan</button>
+        </div>
+      </div>
+    </div><!-- /ep -->
+
+  </div><!-- /al -->
+</div><!-- /adminPanel -->
+
+<!-- UPLOAD MODAL -->
+<div id="uploadModal">
+  <div class="um-bd" onclick="hideUploadModal()"></div>
+  <div class="um-box">
+    <div class="um-hd">
+      <span class="um-title" id="umTitle">Afbeelding wisselen</span>
+      <button class="um-close" onclick="hideUploadModal()">✕</button>
+    </div>
+    <div class="um-body">
+      <div class="um-current" id="umCurrent">
+        <img id="umCurrentImg" src="" alt="" />
+        <div class="um-current-lbl">Huidige afbeelding</div>
+      </div>
+      <div class="um-drop" id="umDrop"
+        onclick="document.getElementById('umFile').click()"
+        ondragover="event.preventDefault();this.classList.add('over')"
+        ondragleave="this.classList.remove('over')"
+        ondrop="onUmDrop(event)">
+        <div class="um-drop-ico" id="umIco">📷</div>
+        <div class="um-drop-txt">Sleep een bestand hierheen</div>
+        <div class="um-drop-sub">of klik om te bladeren</div>
+        <button class="um-pick" onclick="event.stopPropagation();document.getElementById('umFile').click()">Bestand kiezen</button>
+        <input type="file" id="umFile" style="display:none" onchange="onUmFile(this)" />
+      </div>
+      <div class="um-warn" id="umWarn"></div>
+      <div class="um-sep" id="umSepUrl">of gebruik een URL</div>
+      <div class="um-url-row" id="umUrlRow">
+        <input type="url" class="um-url-in" id="umUrlIn" placeholder="https://kasteel-warmelo.nl/Web/images/..." />
+        <button class="um-url-btn" onclick="applyUploadUrl()">Toepassen</button>
+      </div>
+    </div>
+    <div class="um-foot">
+      <button class="sbtn" onclick="hideUploadModal()">Annuleren</button>
+    </div>
+  </div>
+</div>
+
+<!-- CROP MODAL -->
+<div id="cropModal">
+  <div class="cm-bd" onclick="closeCropModal()"></div>
+  <div class="cm-box">
+    <div class="cm-hd">
+      <span class="cm-title">Weergave aanpassen</span>
+      <button class="cm-close" onclick="closeCropModal()">✕</button>
+    </div>
+    <div class="cm-body">
+      <p class="cm-hint">Sleep in het vak om het brandpunt te verschuiven · Gebruik de schuifregelaar om in of uit te zoomen · De stippellijn toont wat er zichtbaar is.</p>
+
+      <div class="cm-prev-wrap" id="cmPreview"
+        onpointerdown="cmStartDrag(event)"
+        onpointermove="cmDoDrag(event)"
+        onpointerup="cmEndDrag(event)"
+        onpointerleave="cmEndDrag(event)">
+        <img id="cmImg" src="" alt="" />
+        <!-- Rule-of-thirds grid lines -->
+        <div class="cm-grid-line" style="left:33.33%;top:0;width:1.5px;height:100%"></div>
+        <div class="cm-grid-line" style="left:66.66%;top:0;width:1.5px;height:100%"></div>
+        <div class="cm-grid-line" style="top:33.33%;left:0;height:1.5px;width:100%"></div>
+        <div class="cm-grid-line" style="top:66.66%;left:0;height:1.5px;width:100%"></div>
+        <!-- Focal point dot -->
+        <div class="cm-focal" id="cmFocal"></div>
+      </div>
+
+      <!-- Zoom -->
+      <div class="cm-ctrl" style="margin-top:16px">
+        <div class="cm-ctrl-lbl">Zoom</div>
+        <div class="cm-zoom-row">
+          <span class="cm-zoom-ico">🔍</span>
+          <input type="range" class="cm-slider" id="cmZoomSlider"
+            min="100" max="250" step="5" value="100"
+            oninput="cmSetZoom(this.value)" />
+          <span class="cm-zoom-val" id="cmZoomVal">1×</span>
+        </div>
+      </div>
+
+      <!-- Cell height presets -->
+      <div class="cm-ctrl" id="cmSizeBlock">
+        <div class="cm-ctrl-lbl">Celgrootte <span id="cmSizeHint" style="font-size:9px;color:var(--gold);font-weight:400;letter-spacing:0;text-transform:none;margin-left:6px"></span></div>
+        <div class="cm-presets" id="cmPresets">
+          <button class="cm-pre" data-h="140" onclick="cmSetHeight(140,this)">Smal<br><span style="font-size:8.5px;opacity:.6">140 px</span></button>
+          <button class="cm-pre cm-pre-active" data-h="220" onclick="cmSetHeight(220,this)">Normaal<br><span style="font-size:8.5px;opacity:.6">220 px</span></button>
+          <button class="cm-pre" data-h="320" onclick="cmSetHeight(320,this)">Breed<br><span style="font-size:8.5px;opacity:.6">320 px</span></button>
+          <button class="cm-pre" data-h="440" onclick="cmSetHeight(440,this)">Hoog<br><span style="font-size:8.5px;opacity:.6">440 px</span></button>
+          <button class="cm-pre" data-h="580" onclick="cmSetHeight(580,this)">Groot<br><span style="font-size:8.5px;opacity:.6">580 px</span></button>
+        </div>
+      </div>
+    </div>
+
+    <div class="cm-foot">
+      <div class="cm-foot-l">
+        <button class="cm-reset" onclick="cmResetAll()">↺ Origineel herstellen</button>
+      </div>
+      <div style="display:flex;gap:7px">
+        <button class="sbtn" onclick="closeCropModal()">Annuleren</button>
+        <button class="savebtn" onclick="cmApplyAndClose()">Toepassen</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+'use strict';
+let   PW        = '';   // set once /api/cms-login accepts it; sent with every save
+const CMS_KEY  = 'warmelo_cms_content';
+const UPL_PFX   = 'warmelo_upload_';
+const CMS_API   = '/api/cms';
+const N_EVENTS  = 6;
+
+let pending      = {};
+let uploads      = {};   // key → dataURL (not yet in localStorage)
+let curPage      = 'index.html';
+let unsaved      = false;
+let serverOnline = false;
+
+const PAGE_NAMES = {
+  'index.html':'Home','zandsculpturen.html':'Zandsculpturen','tuinen.html':'Tuinen',
+  'evenementen.html':'Evenementen','horeca.html':'Horeca','verhuur.html':'Verhuur',
+  'openingstijden.html':'Bezoek','contact.html':'Contact'
+};
+
+/* ── CLOSE ADMIN ────────────────────────────────────────────────── */
+function closeAdmin() {
+  if (unsaved && !confirm('Er zijn niet-opgeslagen wijzigingen.\nToch de editor verlaten?')) return;
+  window.location.href = curPage || 'index.html';
+}
+
+/* ── LOGIN ──────────────────────────────────────────────────────── */
+async function doLogin() {
+  const input = document.getElementById('pwInput');
+  const err   = document.getElementById('loginErr');
+  const pw    = input.value;
+  err.textContent = '';
+  let r;
+  try {
+    r = await fetch('/api/cms-login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ password: pw })
+    });
+  } catch (e) {
+    err.textContent = 'Server niet bereikbaar — probeer het later opnieuw.';
+    return;
+  }
+  if (r.ok) {
+    PW = pw;
+    document.getElementById('loginScreen').style.display = 'none';
+    const p = document.getElementById('adminPanel');
+    p.style.display = 'block';
+    initAdmin();
+  } else {
+    err.textContent = r.status === 401 ? 'Ongeldig wachtwoord.' : 'Aanmelden mislukt (status ' + r.status + ').';
+    input.value = '';
+    input.focus();
+  }
+}
+
+/* ── SERVER STATUS ──────────────────────────────────────────────── */
+function setServerStatus(state, msg) {
+  const dot = document.getElementById('srvDot');
+  const lbl = document.getElementById('srvLbl');
+  if (dot) { dot.className = 'srv-dot ' + state; }
+  if (lbl) lbl.textContent = msg;
+  serverOnline = (state === 'online');
+}
+
+async function checkServer() {
+  setServerStatus('checking', 'Verbinding controleren…');
+  try {
+    const r = await fetch(CMS_API, { cache: 'no-store' });
+    if (r.ok) {
+      setServerStatus('online', '✓ Server verbonden — wijzigingen worden permanent opgeslagen voor alle bezoekers');
+    } else {
+      setServerStatus('offline', '⚠ Server niet bereikbaar (status ' + r.status + ') — wijzigingen worden alleen lokaal opgeslagen');
+    }
+  } catch (e) {
+    setServerStatus('offline', '⚠ Geen serververbinding — lokaal werkend (voer "netlify dev" uit voor volledige functionaliteit)');
+  }
+}
+
+async function syncFromServer() {
+  setServerStatus('checking', 'Ophalen van server…');
+  try {
+    const r = await fetch(CMS_API, { cache: 'no-store' });
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    const data = await r.json();
+    localStorage.setItem(CMS_KEY, JSON.stringify(data));
+    pending = {}; uploads = {}; unsaved = false;
+    setSt('✓ Gesynchroniseerd van server', 'ok');
+    setServerStatus('online', '✓ Server verbonden — gesynchroniseerd om ' + new Date().toLocaleTimeString('nl-NL',{hour:'2-digit',minute:'2-digit'}));
+    updateStorage(); reloadFrame(); loadGlobals(); buildEvCards(); buildMenu();
+  } catch (e) {
+    setServerStatus('offline', '⚠ Sync mislukt: ' + e.message);
+  }
+}
+
+/* ── INIT ───────────────────────────────────────────────────────── */
+function initAdmin() {
+  checkServer().then(() => {
+    if (serverOnline) {
+      // Load latest content from server into local cache
+      fetch(CMS_API, { cache: 'no-store' })
+        .then(r => r.ok ? r.json() : null)
+        .then(data => {
+          if (data && Object.keys(data).length > 0) {
+            localStorage.setItem(CMS_KEY, JSON.stringify(data));
+          }
+          buildEvCards();
+          buildMenu();
+          loadGlobals();
+          updateStorage();
+        })
+        .catch(() => { buildEvCards(); buildMenu(); loadGlobals(); updateStorage(); });
+    } else {
+      buildEvCards();
+      buildMenu();
+      loadGlobals();
+      updateStorage();
+    }
+  });
+}
+
+/* ── PAGE SWITCH ────────────────────────────────────────────────── */
+function switchPage(tab) {
+  const page = tab.dataset.page;
+  if (page === curPage) return;
+  curPage = page;
+  document.querySelectorAll('.ptb').forEach(t => t.classList.remove('active'));
+  tab.classList.add('active');
+  document.getElementById('edPage').textContent = PAGE_NAMES[page] || page;
+  document.getElementById('siteFrame').src = page;
+  document.getElementById('dynTexts').innerHTML  = '<div class="loading">Pagina laden…</div>';
+  document.getElementById('dynImages').innerHTML = '';
+  document.getElementById('dynVideos').innerHTML = '';
+}
+
+function reloadFrame() {
+  try { document.getElementById('siteFrame').contentWindow.location.reload(); }
+  catch(e) { document.getElementById('siteFrame').src = curPage; }
+}
+
+/* ── FRAME LOAD ─────────────────────────────────────────────────── */
+function onFrameLoad() {
+  try {
+    const d = iDoc();
+    if (!d) return;
+    // Prevent recursive editing if the iframe somehow loaded admin.html
+    try { if (d.location.pathname.includes('admin.html')) return; } catch(e) {}
+
+    // Sync active tab when the iframe navigates via internal links
+    try {
+      const loaded = d.location.pathname.split('/').pop() || 'index.html';
+      if (loaded !== curPage && PAGE_NAMES[loaded]) {
+        curPage = loaded;
+        document.querySelectorAll('.ptb').forEach(t =>
+          t.classList.toggle('active', t.dataset.page === curPage));
+        document.getElementById('edPage').textContent = PAGE_NAMES[curPage];
+      }
+    } catch(e) {}
+
+    scanTexts(d);
+    scanImages(d);
+    scanVideos(d);
+    applyPendingToFrame(d);
+    injectEditHandlers(d);
+  } catch(e) {
+    document.getElementById('dynTexts').innerHTML = '<div class="empty">Kan pagina niet scannen (cross-origin?).</div>';
+  }
+}
+
+/* ── INJECT CLICK-TO-EDIT INTO IFRAME ───────────────────────────── */
+function injectEditHandlers(d) {
+  // Inject hover-outline styles
+  const old = d.getElementById('__cms_st');
+  if (old) old.remove();
+  const st = d.createElement('style');
+  st.id = '__cms_st';
+  st.textContent =
+    '.__ce{outline:2px dashed transparent!important;outline-offset:3px;cursor:pointer!important;transition:outline-color .15s!important}' +
+    '.__ce:hover{outline-color:rgba(191,140,42,.65)!important}' +
+    '.__cm{cursor:pointer!important}' +
+    '.__cb{opacity:0;transition:opacity .2s}';
+  d.head.appendChild(st);
+
+  // ── text: data-i18n
+  d.querySelectorAll('[data-i18n]').forEach(el => {
+    if (el.__ce) return; el.__ce = true;
+    el.classList.add('__ce');
+    el.addEventListener('click', e => { e.preventDefault(); e.stopPropagation(); focusField('i18n', el.getAttribute('data-i18n')); }, true);
+  });
+
+  // ── season / price keys → click jumps to Seizoen & Toegang section
+  const seasonFieldMap = {
+    'season-period':'f_sp','season-hours':'f_sh','season-closed':'f_sc',
+    'season-label':'f_sl','season-text':'f_st',
+    'price-volwassene':'f_pv','price-kind':'f_pk','price-gratis':'f_pg'
+  };
+  d.querySelectorAll('[data-cms]').forEach(el => {
+    const k = el.getAttribute('data-cms');
+    const fid = seasonFieldMap[k];
+    if (fid) {
+      if (el.__ce) return; el.__ce = true;
+      el.classList.add('__ce');
+      el.addEventListener('click', e => { e.preventDefault(); e.stopPropagation(); window.parent.focusSeasonField(fid); }, true);
+      return;
+    }
+    if (el.__ce) return; el.__ce = true;
+    el.classList.add('__ce');
+    el.addEventListener('click', e => { e.preventDefault(); e.stopPropagation(); focusField('cms', k); }, true);
+  });
+
+  // ── tagged images: data-cms-img
+  d.querySelectorAll('[data-cms-img]').forEach(el => {
+    if (el.__ce) return; el.__ce = true;
+    const id = el.getAttribute('data-cms-img');
+    addImgHoverBadge(d, el, '📷 Bewerken', () => {
+      window.parent.focusImgTile(id, 'img');
+    });
+  });
+
+  // ── untagged images (skip nav/footer/lightbox icons)
+  d.querySelectorAll('img:not([data-cms-img])').forEach((el, i) => {
+    if (el.__ce) return;
+    const src = el.getAttribute('src') || '';
+    if (!src || src.startsWith('data:') || /wapenschild|logo|icon|emblem/i.test(src)) return;
+    if (el.closest('nav, footer, .nav, .footer, #lightbox, [style*="display:none"]')) return;
+    el.__ce = true;
+    const fname = src.split('/').pop().replace(/[^a-z0-9]/gi,'_').toLowerCase().slice(0,30);
+    const autoId = 'auto_' + fname + '_' + i;
+    el.setAttribute('data-cms-img', autoId);
+    addImgHoverBadge(d, el, '📷 Foto wisselen', () => window.parent.showUploadModal(autoId, 'img', el.src));
+  });
+
+  // ── tagged backgrounds: data-cms-bg
+  d.querySelectorAll('[data-cms-bg]').forEach(el => {
+    if (el.__ce) return; el.__ce = true;
+    const id = el.getAttribute('data-cms-bg');
+    addFixedBadge(d, el, '📷 Achtergrond wisselen', () => window.parent.showUploadModal(id, 'bg', null));
+  });
+
+  // ── tagged videos: data-cms-vid
+  d.querySelectorAll('[data-cms-vid]').forEach(el => {
+    if (el.__ce) return; el.__ce = true;
+    const id = el.getAttribute('data-cms-vid');
+    addFixedBadge(d, el, '🎬 Video wisselen', () => window.parent.showUploadModal(id, 'vid', null));
+  });
+
+  // ── untagged videos
+  d.querySelectorAll('video:not([data-cms-vid])').forEach((el, i) => {
+    if (el.__ce) return; el.__ce = true;
+    const autoId = 'auto_vid_' + i;
+    el.setAttribute('data-cms-vid', autoId);
+    addFixedBadge(d, el, '🎬 Video wisselen', () => window.parent.showUploadModal(autoId, 'vid', null));
+  });
+
+  // ── social / external links (data-cms-link)
+  d.querySelectorAll('[data-cms-link]').forEach(el => {
+    if (el.__ce) return; el.__ce = true;
+    const id = el.getAttribute('data-cms-link');
+    el.classList.add('__ce');
+    el.addEventListener('click', e => {
+      e.preventDefault(); e.stopPropagation();
+      window.parent.focusLinkField(id);
+    }, true);
+  });
+}
+
+function css(el) {
+  // Use the element's own document's window for getComputedStyle — avoids
+  // cross-frame style access issues when admin reads iframe element styles.
+  return el.ownerDocument.defaultView.getComputedStyle(el);
+}
+
+function addImgHoverBadge(d, el, label, cb) {
+  // Skip hidden fallback images (e.g. hero__bg-img which is display:none)
+  if (css(el).display === 'none') return;
+  // Absolutely/fixed-positioned images must not be wrapped — badge on parent
+  if (css(el).position !== 'static') {
+    addFixedBadge(d, el.parentElement || el, label, cb);
+    return;
+  }
+  const wrap = d.createElement('div');
+  wrap.className = '__cm';
+  wrap.style.cssText = 'display:inline-block;position:relative;line-height:0;width:' + (el.style.width||'100%');
+  el.parentNode.insertBefore(wrap, el);
+  wrap.appendChild(el);
+  const btn = mkBadge(d, label);
+  wrap.appendChild(btn);
+  wrap.addEventListener('mouseenter', () => { btn.style.opacity = '1'; });
+  wrap.addEventListener('mouseleave', () => { btn.style.opacity = '0'; });
+  btn.addEventListener('click', e => { e.preventDefault(); e.stopPropagation(); cb(); }, true);
+  wrap.addEventListener('click', e => { e.preventDefault(); e.stopPropagation(); cb(); }, true);
+}
+
+function addFixedBadge(d, el, label, cb) {
+  // For <video>: go up TWO levels (video → hero__media → hero section) because
+  // hero__media has will-change:transform which isolates its stacking context
+  // below sibling overlay divs — the badge would be invisible there.
+  let target = el;
+  if (el && el.tagName === 'VIDEO') {
+    const p = el.parentElement;
+    target = (p && p.parentElement) ? p.parentElement : (p || el);
+  }
+  if (!target) return;
+  if (css(target).position === 'static') target.style.position = 'relative';
+  target.style.cursor = 'pointer';
+  const btn = mkBadge(d, label);
+  target.appendChild(btn);
+  target.addEventListener('mouseenter', () => { btn.style.opacity = '1'; });
+  target.addEventListener('mouseleave', () => { btn.style.opacity = '0'; });
+  btn.addEventListener('click', e => { e.preventDefault(); e.stopPropagation(); cb(); }, true);
+  target.addEventListener('click', e => { if (e.target !== btn) { e.preventDefault(); e.stopPropagation(); cb(); } }, true);
+}
+
+function mkBadge(d, label) {
+  const btn = d.createElement('button');
+  btn.className = '__cb';
+  btn.textContent = label;
+  btn.style.cssText = 'position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:9999;' +
+    'background:rgba(191,140,42,.95);color:#0d1f14;border:none;padding:10px 18px;' +
+    'font-size:12px;font-weight:700;cursor:pointer;border-radius:3px;font-family:sans-serif;' +
+    'letter-spacing:.04em;white-space:nowrap;pointer-events:auto;box-shadow:0 4px 16px rgba(0,0,0,.4)';
+  return btn;
+}
+
+/* ── FOCUS SEASON/PRICE FIELD (called from iframe click) ────────── */
+function focusSeasonField(fieldId) {
+  openSec('secSeason');
+  const el = document.getElementById(fieldId);
+  if (!el) return;
+  const scroll = document.getElementById('edScroll');
+  const top = el.getBoundingClientRect().top - scroll.getBoundingClientRect().top + scroll.scrollTop - 60;
+  scroll.scrollTo({ top, behavior: 'smooth' });
+  setTimeout(() => {
+    el.focus();
+    el.classList.add('field-flash');
+    setTimeout(() => el.classList.remove('field-flash'), 2200);
+  }, 200);
+}
+
+/* ── HIGHLIGHT MATCHING ELEMENTS IN IFRAME PREVIEW ─────────────── */
+function highlightInFrame(selector) {
+  const d = iDoc(); if (!d) return;
+  const els = d.querySelectorAll(selector);
+  if (!els.length) return;
+  els.forEach(el => {
+    const prevOutline = el.style.outline;
+    const prevBg = el.style.backgroundColor;
+    el.style.transition = 'outline 0.15s, background-color 0.15s';
+    el.style.outline = '3px solid rgba(191,140,42,0.9)';
+    el.style.backgroundColor = 'rgba(191,140,42,0.15)';
+    setTimeout(() => {
+      el.style.outline = prevOutline;
+      el.style.backgroundColor = prevBg;
+    }, 2000);
+  });
+  els[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+/* ── FOCUS EDITOR FIELD (called from iframe click) ──────────────── */
+function focusField(type, key) {
+  openSec('secTexts');
+  const id = 'fi_' + type + '_' + key.replace(/[.\-]/g,'_');
+  const el = document.getElementById(id);
+  if (!el) return;
+  const scroll = document.getElementById('edScroll');
+  const top = el.getBoundingClientRect().top - scroll.getBoundingClientRect().top + scroll.scrollTop - 60;
+  scroll.scrollTo({ top, behavior: 'smooth' });
+  setTimeout(() => {
+    el.focus();
+    el.classList.add('field-flash');
+    setTimeout(() => el.classList.remove('field-flash'), 2200);
+  }, 200);
+}
+
+/* ── UPLOAD MODAL ────────────────────────────────────────────────── */
+let umTarget = null; // { id, type }
+
+function showUploadModal(id, type, currentSrc) {
+  umTarget = { id, type };
+  const isVid = type === 'vid';
+  document.getElementById('umTitle').textContent = isVid ? 'Video wisselen' : 'Afbeelding wisselen';
+  document.getElementById('umIco').textContent = isVid ? '🎬' : '📷';
+  document.getElementById('umFile').accept = isVid ? 'video/*' : 'image/*';
+  document.getElementById('umWarn').textContent = '';
+  document.getElementById('umUrlIn').value = '';
+  // URL option: visible for images and backgrounds, show hint for video
+  const sepEl = document.getElementById('umSepUrl');
+  const urlRow = document.getElementById('umUrlRow');
+  if (isVid) {
+    if (sepEl) sepEl.textContent = 'of geef een URL naar een geüploade video';
+    if (urlRow) urlRow.style.display = 'flex';
+    document.getElementById('umUrlIn').placeholder = 'https://kasteel-warmelo.nl/Web/hero.mp4';
+  } else {
+    if (sepEl) sepEl.textContent = 'of gebruik een URL';
+    if (urlRow) urlRow.style.display = 'flex';
+    document.getElementById('umUrlIn').placeholder = 'https://kasteel-warmelo.nl/Web/images/...';
+  }
+  // Show current image if available
+  const cur = document.getElementById('umCurrent');
+  const curImg = document.getElementById('umCurrentImg');
+  if (!isVid && currentSrc && !currentSrc.startsWith('data:') && currentSrc.length < 300) {
+    curImg.src = currentSrc; cur.style.display = 'block';
+  } else { cur.style.display = 'none'; }
+  document.getElementById('uploadModal').style.display = 'flex';
+}
+
+function hideUploadModal() {
+  document.getElementById('uploadModal').style.display = 'none';
+  umTarget = null;
+  document.getElementById('umFile').value = '';
+  document.getElementById('umUrlIn').value = '';
+}
+
+/* ── APPLY URL DIRECTLY (no upload needed) ───────────────────────── */
+function applyUploadUrl() {
+  const url = document.getElementById('umUrlIn').value.trim();
+  if (!url || !umTarget) return;
+  const { id, type } = umTarget;
+
+  // Store directly as URL (no base64, no localStorage needed)
+  if (type === 'img')  { pending.images      = pending.images||{};      pending.images[id]      = url; }
+  if (type === 'bg')   { pending.backgrounds = pending.backgrounds||{}; pending.backgrounds[id] = url; }
+  if (type === 'vid')  { pending.videos      = pending.videos||{};      pending.videos[id]      = url; }
+
+  // Apply live in iframe
+  const doc = iDoc();
+  if (doc) {
+    if (type === 'img') doc.querySelectorAll('[data-cms-img="'+id+'"]').forEach(el => { el.src = url; let lb=el.parentElement; while(lb&&lb!==doc.body){if(lb.hasAttribute('data-lightbox')){lb.setAttribute('data-lightbox',url);break;}lb=lb.parentElement;} });
+    if (type === 'bg')  doc.querySelectorAll('[data-cms-bg="'+id+'"]').forEach(el => el.style.backgroundImage = "url('"+url+"')");
+    if (type === 'vid') doc.querySelectorAll('[data-cms-vid="'+id+'"]').forEach(el => { const s=el.querySelector('source'); if(s){s.setAttribute('src',url);el.load();} });
+  }
+
+  // Update preview tile if visible
+  const fid = 'uf_' + type + '_' + id.replace(/[.\-]/g,'_');
+  const prevEl = document.getElementById('prev_' + fid);
+  if (prevEl) updatePrevEl('prev_' + fid, type, url);
+
+  markDirty();
+  hideUploadModal();
+}
+
+function onUmFile(input) {
+  if (!input.files[0] || !umTarget) return;
+  processMediaUpload(input.files[0]);
+  hideUploadModal();
+}
+
+function onUmDrop(e) {
+  e.preventDefault();
+  document.getElementById('umDrop').classList.remove('over');
+  if (!e.dataTransfer.files[0] || !umTarget) return;
+  processMediaUpload(e.dataTransfer.files[0]);
+  hideUploadModal();
+}
+
+/* ── Upload image to server immediately — no localStorage needed ── */
+async function uploadImageToServer(id, type, dataURL) {
+  const imgId = 'cms_' + type + '_' + id.replace(/[^a-z0-9_-]/gi,'_');
+  try {
+    const r = await fetch('/api/cms-img?id=' + encodeURIComponent(imgId), {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ password: PW, data: dataURL })
+    });
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    const res = await r.json();
+    return res.url; // e.g. "/api/cms-img?id=cms_img_xyz"
+  } catch(e) {
+    console.warn('Image server upload failed, keeping in memory:', e.message);
+    // Fallback: keep in memory only (will be included in main save)
+    const uk = curPage.replace('.html','') + '_' + type + '_' + id;
+    uploads[uk] = dataURL;
+    return 'warmelo_upload:' + uk;
+  }
+}
+
+function processMediaUpload(file) {
+  if (!umTarget) return;
+  const { id, type } = umTarget;
+  const MB = file.size / 1024 / 1024;
+  if (type === 'vid' && MB > 60) { alert('Video is te groot ('+MB.toFixed(0)+' MB). Comprimeer voor gebruik.'); return; }
+  if (type !== 'vid' && MB > 8)  { alert('Afbeelding is te groot ('+MB.toFixed(1)+' MB). Comprimeer naar <2 MB voor beste resultaat.'); }
+
+  const reader = new FileReader();
+  reader.onload = async e => {
+    const dataURL = e.target.result;
+
+    // 1. Apply preview to iframe immediately (no waiting)
+    const doc = iDoc();
+    if (doc) {
+      if (type === 'img') {
+        doc.querySelectorAll('[data-cms-img="'+id+'"]').forEach(el => {
+          const img = el.tagName === 'IMG' ? el : el.querySelector('img');
+          if (img) img.src = dataURL; else el.src = dataURL;
+          // Update lightbox URL on ancestor
+          let lbEl = el; while(lbEl&&lbEl!==doc.body){if(lbEl.hasAttribute('data-lightbox')){lbEl.setAttribute('data-lightbox',dataURL);break;}lbEl=lbEl.parentElement;}
+        });
+      }
+      if (type === 'bg') doc.querySelectorAll('[data-cms-bg="'+id+'"]').forEach(el => el.style.backgroundImage="url('"+dataURL+"')");
+      if (type === 'vid') doc.querySelectorAll('[data-cms-vid="'+id+'"]').forEach(el => { const s=el.querySelector('source'); if(s){s.setAttribute('src',dataURL);el.load();} });
+    }
+
+    // Update editor preview tile immediately
+    const fid = 'uf_' + type + '_' + id.replace(/[.\-]/g,'_');
+    const prevEl = document.getElementById('prev_' + fid);
+    if (prevEl) updatePrevEl('prev_' + fid, type, dataURL);
+
+    if (type === 'vid') {
+      // Videos: can't store on server (too large). Show notice only.
+      const mb = MB.toFixed(1);
+      const notice = document.createElement('div');
+      notice.style.cssText = 'margin-top:10px;padding:12px 16px;background:rgba(191,140,42,.12);border:1px solid rgba(191,140,42,.35);font-size:12px;color:rgba(255,255,255,.8);line-height:1.6;border-radius:2px;';
+      notice.innerHTML = '✅ <strong style="color:var(--gold);">Video getoond in preview</strong> — '+mb+' MB<br>'
+        + '⚠ Videos zijn te groot voor browseropslag. Zet het bestand online via de beheerder.';
+      notice.className = 'vid-notice';
+      markDirty();
+      return;
+    }
+
+    // 2. Upload image to server immediately (bypasses localStorage entirely)
+    setSt('⬆ Afbeelding uploaden…', 'saving');
+    const serverUrl = await uploadImageToServer(id, type, dataURL);
+
+    // 3. Store server URL (not base64) in pending — tiny, no localStorage pressure
+    if (type === 'img')  { pending.images      = pending.images||{};      pending.images[id]      = serverUrl; }
+    if (type === 'bg')   { pending.backgrounds = pending.backgrounds||{}; pending.backgrounds[id] = serverUrl; }
+
+    setSt('● Afbeelding opgeslagen — klik Opslaan om alles te bevestigen', 'unsaved');
+    markDirty();
+  };
+  reader.readAsDataURL(file);
+}
+
+/* ── FOCUS IMAGE TILE IN RIGHT PANEL (called from iframe click) ─── */
+function focusImgTile(id, type) {
+  openSec('secImages');
+  const scroll = document.getElementById('edScroll');
+  const tiles  = document.querySelectorAll('.imgf');
+  for (const tile of tiles) {
+    const idEl = tile.querySelector('.imgf-id');
+    if (idEl && idEl.textContent.trim() === id) {
+      const top = tile.getBoundingClientRect().top
+        - scroll.getBoundingClientRect().top
+        + scroll.scrollTop - 60;
+      scroll.scrollTo({ top, behavior: 'smooth' });
+      setTimeout(() => {
+        tile.classList.add('imgf-flash');
+        setTimeout(() => tile.classList.remove('imgf-flash'), 2000);
+      }, 200);
+      return;
+    }
+  }
+  showUploadModal(id, type, null);
+}
+
+/* ─────────────────────────────────────────────────────────────────
+   CROP MODAL — visual position + zoom + height
+   ──────────────────────────────────────────────────────────────── */
+let cmId = null, cmType = null;
+let cmX = 50, cmY = 50;  // focal point as 0-100 percentages
+let cmScale = 1.0;        // zoom multiplier
+let cmHeight = null;      // cell height override in px (null = keep original)
+let cmDragging = false;
+
+const CM_DEFAULT_H = 220; // px, default gallery cell height
+
+function openCropModal(id, type, src) {
+  cmId = id; cmType = type;
+  const s   = getCms();
+  const fit = Object.assign({}, (s.imgfit && s.imgfit[id]) || {}, (pending.imgfit && pending.imgfit[id]) || {});
+
+  /* parse saved pos ("45.3% 62.1%") */
+  if (fit.pos) {
+    const parts = fit.pos.match(/([\d.]+)%\s+([\d.]+)%/);
+    if (parts) { cmX = parseFloat(parts[1]); cmY = parseFloat(parts[2]); }
+  } else { cmX = 50; cmY = 50; }
+  cmScale  = fit.scale  || 1.0;
+  cmHeight = fit.height ? parseInt(fit.height) : null;
+
+  /* ── Detect actual container dimensions from iframe ─────────── */
+  let containerAR  = 4 / 3;  // fallback aspect ratio
+  let detectedH    = CM_DEFAULT_H;
+  let containerCtx = '';
+  try {
+    const d = iDoc();
+    if (d) {
+      const imgEl = d.querySelector('[data-cms-img="'+id+'"]');
+      if (imgEl) {
+        const cont = imgEl.closest('.gallery__item, .zoom') || imgEl.parentElement;
+        if (cont && cont.offsetWidth && cont.offsetHeight) {
+          detectedH    = cont.offsetHeight;
+          containerAR  = cont.offsetWidth / cont.offsetHeight;
+          const tag    = cont.className || '';
+          containerCtx = tag.includes('span') ? ' (ruim vak)' : '';
+        }
+      }
+    }
+  } catch(e) {}
+
+  /* show detected size hint below presets */
+  const hint = document.getElementById('cmSizeHint');
+  if (hint) hint.textContent = detectedH !== CM_DEFAULT_H
+    ? '⬆ Huidige celgrootte: ' + detectedH + ' px' + containerCtx
+    : '';
+
+  /* mark the matching preset active */
+  const activeH = cmHeight || detectedH;
+  document.querySelectorAll('.cm-pre').forEach(btn => {
+    btn.classList.toggle('cm-pre-active', parseInt(btn.dataset.h) === activeH);
+  });
+
+  /* set preview size: width fills modal, height from actual AR */
+  const prev    = document.getElementById('cmPreview');
+  const maxW    = Math.min(window.innerWidth * 0.88, 460);
+  const prevH   = Math.min(maxW / containerAR, 320);
+  prev.style.height = prevH + 'px';
+
+  /* resolve image src */
+  let resolvedSrc = src;
+  if (src && src.startsWith('warmelo_upload:')) {
+    const key = src.replace('warmelo_upload:', '');
+    resolvedSrc = uploads[key] || localStorage.getItem(UPL_PFX + key) || src;
+  }
+  if (!resolvedSrc || resolvedSrc === 'null' || resolvedSrc === '') {
+    try {
+      const el = iDoc() && iDoc().querySelector('[data-cms-img="'+id+'"]');
+      if (el) resolvedSrc = el.src || el.getAttribute('src');
+    } catch(e) {}
+  }
+  document.getElementById('cmImg').src = resolvedSrc || '';
+
+  /* sync zoom slider */
+  document.getElementById('cmZoomSlider').value = Math.round(cmScale * 100);
+  document.getElementById('cmZoomVal').textContent = cmScale.toFixed(1) + '×';
+
+  cmUpdatePreview();
+  document.getElementById('cropModal').style.display = 'flex';
+}
+
+function closeCropModal() {
+  document.getElementById('cropModal').style.display = 'none';
+  cmId = null;
+}
+
+/* Update preview image object-position, scale, focal dot */
+function cmUpdatePreview() {
+  const img   = document.getElementById('cmImg');
+  const focal = document.getElementById('cmFocal');
+  img.style.objectPosition = cmX + '% ' + cmY + '%';
+  img.style.transform      = cmScale > 1 ? 'scale(' + cmScale + ')' : '';
+  img.style.transformOrigin = cmX + '% ' + cmY + '%';
+  focal.style.left = cmX + '%';
+  focal.style.top  = cmY + '%';
+}
+
+/* Drag handlers on preview area */
+function cmGetPct(e, el) {
+  const rect = el.getBoundingClientRect();
+  const cx = (e.clientX - rect.left)  / rect.width  * 100;
+  const cy = (e.clientY - rect.top)   / rect.height * 100;
+  return [Math.max(0, Math.min(100, cx)), Math.max(0, Math.min(100, cy))];
+}
+
+function cmStartDrag(e) {
+  cmDragging = true;
+  e.currentTarget.classList.add('dragging');
+  e.currentTarget.setPointerCapture(e.pointerId);
+  [cmX, cmY] = cmGetPct(e, e.currentTarget);
+  cmUpdatePreview();
+}
+function cmDoDrag(e) {
+  if (!cmDragging) return;
+  [cmX, cmY] = cmGetPct(e, e.currentTarget);
+  cmUpdatePreview();
+}
+function cmEndDrag(e) {
+  if (!cmDragging) return;
+  cmDragging = false;
+  e.currentTarget.classList.remove('dragging');
+}
+
+/* Zoom slider */
+function cmSetZoom(val) {
+  cmScale = parseInt(val) / 100;
+  document.getElementById('cmZoomVal').textContent = cmScale.toFixed(1) + '×';
+  cmUpdatePreview();
+}
+
+/* Height presets */
+function cmSetHeight(h, btn) {
+  cmHeight = h;
+  document.querySelectorAll('.cm-pre').forEach(b => b.classList.remove('cm-pre-active'));
+  if (btn) btn.classList.add('cm-pre-active');
+  /* resize preview box proportionally (cap at 340) */
+  document.getElementById('cmPreview').style.height = Math.min(h, 340) + 'px';
+}
+
+/* Reset all fit settings */
+function cmResetAll() {
+  cmX = 50; cmY = 50; cmScale = 1.0; cmHeight = null;
+  document.getElementById('cmZoomSlider').value = 100;
+  document.getElementById('cmZoomVal').textContent = '1.0×';
+  document.querySelectorAll('.cm-pre').forEach(b => b.classList.toggle('cm-pre-active', parseInt(b.dataset.h) === CM_DEFAULT_H));
+  document.getElementById('cmPreview').style.height = Math.min(CM_DEFAULT_H, 340) + 'px';
+  cmUpdatePreview();
+}
+
+/* Apply settings and close */
+function cmApplyAndClose() {
+  if (!cmId) return;
+  pending.imgfit         = pending.imgfit || {};
+  pending.imgfit[cmId]   = {};
+  const fit = pending.imgfit[cmId];
+
+  if (cmX !== 50 || cmY !== 50) fit.pos    = cmX.toFixed(1) + '% ' + cmY.toFixed(1) + '%';
+  if (cmScale > 1.01)            fit.scale  = parseFloat(cmScale.toFixed(2));
+  if (cmHeight && cmHeight !== CM_DEFAULT_H) fit.height = cmHeight + 'px';
+
+  /* apply to iframe */
+  applyFitToFrame(cmId);
+
+  /* refresh the tile badge in right panel */
+  const fid  = 'tile_uf_' + cmType + '_' + cmId.replace(/[.\-]/g,'_');
+  const tile = document.getElementById(fid);
+  if (tile) {
+    const btn   = tile.querySelector('.imgfit-btn');
+    const badge = btn && btn.querySelector('.imgfit-badge');
+    const summary = [
+      fit.scale ? Math.round(fit.scale*100)+'%' : '',
+      fit.height || '',
+      fit.pos ? 'pos' : '',
+    ].filter(Boolean).join(' · ');
+    if (badge) badge.textContent = summary;
+    else if (btn && summary) { const s = document.createElement('span'); s.className='imgfit-badge'; s.textContent=summary; btn.appendChild(s); }
+    /* also update the tiny preview */
+    const prevImg = tile.querySelector('.imgf-prev');
+    if (prevImg) {
+      prevImg.style.objectPosition = fit.pos || '';
+      prevImg.style.transform = fit.scale > 1 ? 'scale('+fit.scale+')' : '';
+      prevImg.style.transformOrigin = fit.pos || '50% 50%';
+    }
+  }
+
+  markDirty();
+  closeCropModal();
+}
+
+/* Apply pending imgfit to iframe — scale only via class to avoid overlap bugs */
+function applyFitToFrame(id) {
+  const d = iDoc(); if (!d) return;
+  const saved = (getCms().imgfit && getCms().imgfit[id]) || {};
+  const pend  = (pending.imgfit  && pending.imgfit[id])  || {};
+  const fit   = Object.assign({}, saved, pend);
+  d.querySelectorAll('[data-cms-img="'+id+'"]').forEach(img => {
+    img.style.objectPosition = fit.pos || '';
+    if (fit.scale && fit.scale > 1.01) {
+      img.classList.add('cms-scaled');
+      img.style.setProperty('--cms-scale',       fit.scale);
+      img.style.setProperty('--cms-scale-hover', parseFloat((fit.scale * 1.07).toFixed(3)));
+      img.style.setProperty('--cms-origin',      fit.pos || '50% 50%');
+    } else {
+      img.classList.remove('cms-scaled');
+      img.style.removeProperty('--cms-scale');
+      img.style.removeProperty('--cms-scale-hover');
+      img.style.removeProperty('--cms-origin');
+    }
+    if (fit.height) {
+      const container = img.closest ? img.closest('.gallery__item, .zoom') : img.parentElement;
+      if (container) container.style.height = fit.height;
+    }
+  });
+  d.querySelectorAll('[data-cms-bg="'+id+'"]').forEach(el => {
+    if (fit.pos) el.style.backgroundPosition = fit.pos;
+  });
+}
+
+/* ── FOCUS LINK FIELD (called from iframe link click) ───────────── */
+function focusLinkField(id) {
+  openSec('secLinks');
+  const el = document.getElementById('f_lk_' + id);
+  if (!el) return;
+  const scroll = document.getElementById('edScroll');
+  const top = el.getBoundingClientRect().top - scroll.getBoundingClientRect().top + scroll.scrollTop - 60;
+  scroll.scrollTo({ top, behavior: 'smooth' });
+  setTimeout(() => {
+    el.focus(); el.select();
+    el.classList.add('field-flash');
+    setTimeout(() => el.classList.remove('field-flash'), 2200);
+  }, 200);
+}
+
+/* ── TRIGGER IMAGE UPLOAD from editor panel (right side buttons) ─── */
+function triggerImgUpload(id, type) {
+  showUploadModal(id, type, null);
+}
+function triggerVidUpload(id) {
+  showUploadModal(id, 'vid', null);
+}
+
+/* ── SCAN: TEXTS ────────────────────────────────────────────────── */
+function scanTexts(d) {
+  const i18n = new Map(), cms = new Map();
+  d.querySelectorAll('[data-i18n]').forEach(el => {
+    const k = el.getAttribute('data-i18n');
+    if (k && !i18n.has(k)) i18n.set(k, el.textContent.trim());
+  });
+  d.querySelectorAll('[data-cms]').forEach(el => {
+    const k = el.getAttribute('data-cms');
+    if (!k || /^season-|^price-/.test(k)) return;
+    if (!cms.has(k)) {
+      const defVal = el.hasAttribute('data-count') ? el.getAttribute('data-count') : el.innerHTML.trim();
+      cms.set(k, defVal);
+    }
+  });
+
+  if (!i18n.size && !cms.size) {
+    document.getElementById('dynTexts').innerHTML = '<div class="empty">Geen bewerkbare teksten op deze pagina.</div>';
+    return;
+  }
+
+  const s = getCms();
+  let h = secWrap('secTexts', '✏️', 'Teksten', i18n.size + cms.size + ' velden');
+
+  if (i18n.size) {
+    const lang = previewLang();
+    h += '<div class="fg"><div class="fg-t">Meertalige teksten <span style="opacity:.5;font-size:10px;">(taal: '+lang.toUpperCase()+')</span></div>';
+    for (const [k, def] of i18n) {
+      const saved   = getI18nForLang(s.i18n, lang)[k] || '';
+      const pended  = getI18nForLang(pending.i18n, lang)[k] || '';
+      const cur = saved || pended;
+      h += mkTextFld(k, 'i18n', cur || def);
+    }
+    h += '</div>';
+  }
+  if (cms.size) {
+    h += '<div class="fg" style="margin-top:14px"><div class="fg-t">Pagina-specifieke teksten</div>';
+    for (const [k, def] of cms) {
+      const cur = (s.text && s.text[k]) || (pending.text && pending.text[k]) || '';
+      h += mkTextFld(k, 'cms', cur || def);
+    }
+    h += '</div>';
+  }
+  h += '</div></div>';
+  document.getElementById('dynTexts').innerHTML = h;
+  openSec('secTexts');
+}
+
+function mkTextFld(key, type, val) {
+  const id = 'fi_' + type + '_' + key.replace(/[.\-]/g,'_');
+  const long = val && val.length > 90;
+  let h = '<div class="fr"><div class="fk">' + esc(key) + '</div>';
+  if (long) {
+    h += '<textarea id="'+id+'" class="fta" rows="3" data-fk="'+esc(key)+'" data-ft="'+type+'" oninput="onTxt(this)">'+esc(val)+'</textarea>';
+  } else {
+    h += '<input type="text" id="'+id+'" class="fi" data-fk="'+esc(key)+'" data-ft="'+type+'" value="'+escA(val)+'" oninput="onTxt(this)" />';
+  }
+  return h + '</div>';
+}
+
+/* ── SCAN: IMAGES ───────────────────────────────────────────────── */
+function scanImages(d) {
+  const imgs = new Map(), bgs = new Map();
+  d.querySelectorAll('[data-cms-img]').forEach(el => {
+    const id = el.getAttribute('data-cms-img');
+    if (id && !imgs.has(id)) imgs.set(id, { src: el.getAttribute('src')||'', alt: el.alt||id });
+  });
+  d.querySelectorAll('[data-cms-bg]').forEach(el => {
+    const id = el.getAttribute('data-cms-bg');
+    if (id && !bgs.has(id)) bgs.set(id, id);
+  });
+
+  if (!imgs.size && !bgs.size) { document.getElementById('dynImages').innerHTML=''; return; }
+
+  const s = getCms();
+  let h = secWrap('secImages', '🖼', 'Afbeeldingen', imgs.size + bgs.size + ' afbeeldingen', true);
+
+  if (imgs.size) {
+    h += '<div class="fg"><div class="fg-t">Pagina-afbeeldingen</div>';
+    for (const [id, info] of imgs) {
+      let src = info.src;
+      if (s.images && s.images[id]) src = resolveAny(s.images[id]);
+      if (pending.images && pending.images[id]) src = resolveAny(pending.images[id]);
+      h += mkImgFld(id, 'img', src, info.alt);
+    }
+    h += '</div>';
+  }
+  if (bgs.size) {
+    h += '<div class="fg" style="margin-top:14px"><div class="fg-t">Achtergrondafbeeldingen</div>';
+    for (const [id] of bgs) {
+      let src = null;
+      if (s.backgrounds && s.backgrounds[id]) src = resolveAny(s.backgrounds[id]);
+      if (pending.backgrounds && pending.backgrounds[id]) src = resolveAny(pending.backgrounds[id]);
+      h += mkImgFld(id, 'bg', src, id);
+    }
+    h += '</div>';
+  }
+  h += '</div></div>';
+  document.getElementById('dynImages').innerHTML = h;
+}
+
+function mkImgFld(id, type, curSrc, lbl) {
+  const fid    = 'uf_' + type + '_' + id.replace(/[.\-]/g,'_');
+  const s      = getCms();
+  const fit    = (s.imgfit && s.imgfit[id]) || {};
+  const hasFit = !!(fit.pos || fit.scale || fit.height);
+
+  let h = '<div class="imgf" id="tile_'+fid+'">';
+  h += '<div class="imgf-hd"><span class="imgf-name">'+esc(lbl)+'</span><span class="imgf-id">'+esc(id)+'</span></div>';
+
+  const goodSrc = curSrc && !curSrc.startsWith('warmelo_upload:');
+  if (goodSrc && type === 'img') {
+    const posStyle = fit.pos   ? 'object-position:'+fit.pos+';' : '';
+    const scaleStyle = fit.scale && fit.scale > 1 ? 'transform:scale('+fit.scale+');transform-origin:'+(fit.pos||'50% 50%')+';' : '';
+    h += '<img class="imgf-prev" src="'+escA(curSrc)+'" alt="'+escA(lbl)+'" id="prev_'+fid+'" style="object-fit:cover;'+posStyle+scaleStyle+'" />';
+  } else if (goodSrc && type === 'bg') {
+    h += '<div class="imgf-prev-bg" id="prev_'+fid+'" style="background-image:url(\''+escA(curSrc)+'\')"></div>';
+  } else {
+    h += '<div class="imgf-none" id="prev_'+fid+'">Geen afbeelding</div>';
+  }
+
+  h += '<div class="imgf-acts">';
+  h += '<button class="ubtn" onclick="showUploadModal(\''+esc(id)+'\',\''+type+'\',null)">📁 Foto wisselen</button>';
+  h += '<button class="rbtn" onclick="resetImg(\''+esc(id)+'\',\''+type+'\',\'prev_'+fid+'\')">Origineel</button>';
+  h += '</div>';
+
+  /* ── Single "crop" button opens the visual modal ── */
+  const fitSummary = hasFit
+    ? [(fit.scale&&fit.scale>1 ? Math.round(fit.scale*100)+'% zoom':''), (fit.height||''), (fit.pos||'')].filter(Boolean).join(' · ')
+    : '';
+  h += '<button class="imgfit-btn" onclick="openCropModal(\''+esc(id)+'\',\''+type+'\',\''+escA(curSrc||'')+'\')">';
+  h += '✂ Bijsnijden &amp; schalen';
+  if (fitSummary) h += ' <span class="imgfit-badge">'+esc(fitSummary)+'</span>';
+  h += '</button>';
+
+  h += '<div class="size-warn" id="swarn_'+fid+'" style="display:none"></div>';
+  return h + '</div>';
+}
+
+/* ── SCAN: VIDEOS ───────────────────────────────────────────────── */
+function scanVideos(d) {
+  const vids = new Map();
+  d.querySelectorAll('[data-cms-vid]').forEach(el => {
+    const id = el.getAttribute('data-cms-vid');
+    if (!id || vids.has(id)) return;
+    const s = el.querySelector('source');
+    vids.set(id, s ? (s.getAttribute('src')||'') : '');
+  });
+
+  if (!vids.size) { document.getElementById('dynVideos').innerHTML=''; return; }
+
+  let h = secWrap('secVideos', '🎬', "Video's", vids.size+" video's", true);
+  for (const [id, src] of vids) {
+    const fid = 'vf_' + id.replace(/[.\-]/g,'_');
+    h += '<div class="imgf">';
+    h += '<div class="imgf-hd"><span class="imgf-name">'+esc(id)+'</span><span class="imgf-id">data-cms-vid="'+esc(id)+'"</span></div>';
+    if (src) h += '<div style="font-size:10px;color:var(--m2);margin-bottom:7px">Huidig: '+esc(src.split('/').pop())+'</div>';
+    h += '<input type="file" id="'+fid+'" accept="video/*" style="display:none" data-id="'+esc(id)+'" onchange="onVid(this)" />';
+    h += '<button class="ubtn" onclick="document.getElementById(\''+fid+'\').click()">📁 Video kiezen</button>';
+    h += '</div>';
+  }
+  h += '</div></div>';
+  document.getElementById('dynVideos').innerHTML = h;
+}
+
+/* ── SECTION WRAPPER HELPER ─────────────────────────────────────── */
+function secWrap(id, ico, lbl, cnt, open) {
+  const o = open ? ' open' : '';
+  return '<div class="edsec" id="'+id+'">'+
+    '<div class="edsec-hd" onclick="toggleSec(\''+id+'\')">'+
+    '<div class="edsec-hl"><span class="edsec-ico">'+ico+'</span>'+
+    '<span class="edsec-lbl">'+lbl+'</span>'+
+    '<span class="edsec-cnt">'+cnt+'</span></div>'+
+    '<span class="edsec-tog'+o+'" id="tog_'+id+'">▾</span></div>'+
+    '<div class="edsec-body'+o+'" id="body_'+id+'">';
+}
+
+function toggleSec(id) {
+  const body = document.getElementById('body_'+id);
+  const tog  = document.getElementById('tog_'+id);
+  if (!body) return;
+  const open = body.classList.contains('open');
+  body.classList.toggle('open', !open);
+  if (tog) tog.classList.toggle('open', !open);
+}
+function openSec(id) {
+  const body = document.getElementById('body_'+id);
+  const tog  = document.getElementById('tog_'+id);
+  if (body) body.classList.add('open');
+  if (tog) tog.classList.add('open');
+}
+
+/* ── BUILD: EVENT CARDS ─────────────────────────────────────────── */
+function buildEvCards() {
+  const s = getCms();
+  let h = '';
+  for (let i = 1; i <= N_EVENTS; i++) {
+    const ev = (s.events && s.events[i-1]) || {};
+    h += '<div class="evc">';
+    h += '<div class="evc-hd"><span class="evc-num">Event '+i+'</span>';
+    h += '<label class="evc-hide"><input type="checkbox" id="ev'+i+'_hid" '+(ev.hidden?'checked':'')+' onchange="onEv('+i+')" /> Verbergen</label></div>';
+    h += '<div class="fr3">';
+    h += '<div class="fr"><label class="fl">Dag</label><input type="text" class="fi" id="ev'+i+'_d" value="'+escA(ev.day||'')+'" placeholder="15" oninput="onEv('+i+')" /></div>';
+    h += '<div class="fr"><label class="fl">Maand</label><input type="text" class="fi" id="ev'+i+'_m" value="'+escA(ev.month||'')+'" placeholder="JUL" oninput="onEv('+i+')" /></div>';
+    h += '<div class="fr"><label class="fl">Tag</label><input type="text" class="fi" id="ev'+i+'_t" value="'+escA(ev.tag||'')+'" placeholder="Muziek" oninput="onEv('+i+')" /></div>';
+    h += '</div>';
+    h += '<div class="fr"><label class="fl">Titel</label><input type="text" class="fi" id="ev'+i+'_ti" value="'+escA(ev.title||'')+'" oninput="onEv('+i+')" /></div>';
+    h += '<div class="fr"><label class="fl">Beschrijving</label><textarea class="fta" id="ev'+i+'_de" rows="2" oninput="onEv('+i+')">'+esc(ev.desc||'')+'</textarea></div>';
+    h += '</div>';
+  }
+  document.getElementById('evCards').innerHTML = h;
+}
+
+/* ── BUILD: MENU ────────────────────────────────────────────────── */
+function buildMenu() {
+  const groups = [
+    { lbl: 'Warme dranken', items: [
+      {id:'koffie',      lbl:'Koffie'},
+      {id:'espresso',    lbl:'Espresso'},
+      {id:'cappuccino',  lbl:'Cappuccino'},
+      {id:'thee',        lbl:'Thee'},
+      {id:'muntthee',    lbl:'Verse muntthee'},
+      {id:'kannetje',    lbl:'Kannetje koffie'},
+    ]},
+    { lbl: 'Frisdranken', items: [
+      {id:'frisdrank',     lbl:'Div. soorten frisdrank'},
+      {id:'vitaminewater', lbl:'Vitaminewater'},
+    ]},
+    { lbl: 'Alcoholische dranken', items: [
+      {id:'wittewijn', lbl:'Witte wijn (250 ml)'},
+      {id:'rose',      lbl:'Rosé (250 ml)'},
+      {id:'rodewijn',  lbl:'Rode wijn (250 ml)'},
+      {id:'bier',      lbl:'Bier'},
+      {id:'witbier',   lbl:'Witbier'},
+      {id:'radler',    lbl:'Radler (2.3%)'},
+      {id:'bier00',    lbl:'Bier 0,0%'},
+    ]},
+    { lbl: 'Verse broodjes', items: [
+      {id:'gezond',    lbl:'Broodje Gezond'},
+      {id:'brie',      lbl:'Broodje Brie'},
+      {id:'eiersalade',lbl:'Broodje Eiersalade'},
+      {id:'kipkerrie', lbl:'Broodje Kipkerrie'},
+      {id:'ham',       lbl:'Broodje Ham'},
+      {id:'kaas',      lbl:'Broodje Kaas'},
+    ]},
+    { lbl: 'Warme snacks', items: [
+      {id:'appelflap',  lbl:'Appelflap'},
+      {id:'saucijzen',  lbl:'Saucijzenbroodje'},
+      {id:'kroket',     lbl:'Broodje Kroket'},
+      {id:'tosti',      lbl:"Tosti's diverse soorten"},
+      {id:'bitterballen',lbl:'Portie bitterballen (8 st)'},
+    ]},
+    { lbl: 'Zoet', items: [
+      {id:'appelgebak', lbl:'Appelgebak'},
+      {id:'luxegebak',  lbl:'Luxe gebak'},
+      {id:'petitfour',  lbl:'Petitfour'},
+      {id:'stroopwafel',lbl:'Stroopwafel'},
+    ]},
+  ];
+  const s = getCms();
+  let h = '';
+  groups.forEach(g => {
+    h += '<div class="fg"><div class="fg-t">'+esc(g.lbl)+'</div><div class="fr2">';
+    g.items.forEach(it => {
+      const cur = (s.menu && s.menu[it.id]) || (pending.menu && pending.menu[it.id]) || '';
+      h += '<div class="fr"><label class="fl">'+esc(it.lbl)+'</label>';
+      h += '<div style="display:flex;align-items:center;gap:5px"><span style="color:var(--gold);font-size:12px">€</span>';
+      h += '<input type="text" class="fi" id="mn_'+it.id+'" value="'+escA(cur)+'" placeholder="0,00" oninput="onMenu(\''+it.id+'\',this.value)" /></div></div>';
+    });
+    h += '</div></div>';
+  });
+  document.getElementById('menuItems').innerHTML = h;
+}
+
+/* ── LOAD EXISTING GLOBALS ──────────────────────────────────────── */
+function loadGlobals() {
+  const c = getCms();
+  const s = c.season||{}, p = c.prices||{}, l = c.links||{};
+  setFld('f_sp', s.period); setFld('f_sh', s.hours);  setFld('f_sc', s.closed);
+  setFld('f_sl', s.label);  setFld('f_st', s.text);
+  setFld('f_pv', p.volwassene); setFld('f_pk', p.kind); setFld('f_pg', p.gratis);
+  setFld('f_lk_facebook', l.facebook); setFld('f_lk_instagram', l.instagram);
+  setFld('f_lk_youtube', l.youtube);   setFld('f_lk_tripadvisor', l.tripadvisor);
+  setFld('f_lk_maps', l.maps);
+}
+function setFld(id, v) { const el = document.getElementById(id); if (el && v) el.value = v; }
+
+/* ── CHANGE HANDLERS ────────────────────────────────────────────── */
+/* Get the active language of the iframe preview */
+function previewLang() {
+  try { const d = iDoc(); if (d) return d.documentElement.lang || 'nl'; } catch(e){}
+  return 'nl';
+}
+
+/* Get i18n overrides for a specific language (handles both old flat + new per-lang format) */
+function getI18nForLang(src, lang) {
+  if (!src) return {};
+  // New per-language format: { nl: {...}, en: {...}, de: {...} }
+  if (src.nl || src.en || src.de) return src[lang] || {};
+  // Old flat format (backwards compat): apply to all languages
+  return src;
+}
+
+function onTxt(el) {
+  const k = el.dataset.fk, t = el.dataset.ft, v = el.value;
+  if (t === 'i18n') {
+    const lang = previewLang();
+    pending.i18n = pending.i18n||{};
+    pending.i18n[lang] = pending.i18n[lang]||{};
+    pending.i18n[lang][k] = v;
+    applyFrame('[data-i18n="'+k+'"]', v, true);
+  } else {
+    pending.text = pending.text||{}; pending.text[k] = v;
+    applyFrame('[data-cms="'+k+'"]', v, false);
+  }
+  markDirty();
+}
+
+function onGlobal(sec, fld, v) {
+  pending[sec] = pending[sec]||{}; pending[sec][fld] = v;
+  applyFrame('[data-cms="'+sec+'-'+fld+'"]', v, false);
+  markDirty();
+}
+
+function onPrice(fld, v) {
+  pending.prices = pending.prices||{}; pending.prices[fld] = v;
+  const disp = (fld !== 'gratis' && v) ? '€ ' + v : v;
+  applyFrame('[data-cms="price-'+fld+'"]', disp, false);
+  markDirty();
+}
+
+function onLink(id, v) {
+  pending.links = pending.links||{}; pending.links[id] = v;
+  // Update all matching links in iframe live
+  const doc = iDoc(); if (!doc) { markDirty(); return; }
+  doc.querySelectorAll('[data-cms-link="'+id+'"]').forEach(el => el.href = v);
+  markDirty();
+}
+
+function onEv(i) {
+  if (!pending.events) {
+    const c = getCms();
+    pending.events = c.events ? JSON.parse(JSON.stringify(c.events)) : Array.from({length:N_EVENTS},()=>({}));
+    while (pending.events.length < N_EVENTS) pending.events.push({});
+  }
+  const ev = pending.events[i-1] = pending.events[i-1] || {};
+  ev.day    = document.getElementById('ev'+i+'_d').value;
+  ev.month  = document.getElementById('ev'+i+'_m').value;
+  ev.tag    = document.getElementById('ev'+i+'_t').value;
+  ev.title  = document.getElementById('ev'+i+'_ti').value;
+  ev.desc   = document.getElementById('ev'+i+'_de').value;
+  ev.hidden = document.getElementById('ev'+i+'_hid').checked;
+  const d = iDoc(); if (!d) { markDirty(); return; }
+  const card = d.querySelector('[data-cms-event="'+i+'"]');
+  if (card) {
+    setIn(card,'.event-card__day',ev.day); setIn(card,'.event-card__month',ev.month);
+    setIn(card,'.event-card__tag',ev.tag); setIn(card,'.event-card__title',ev.title);
+    setIn(card,'.event-card__desc',ev.desc);
+    card.style.display = ev.hidden ? 'none' : '';
+  }
+  markDirty();
+}
+
+function onMenu(id, v) {
+  pending.menu = pending.menu||{}; pending.menu[id] = v;
+  const d = iDoc(); if (!d) { markDirty(); return; }
+  d.querySelectorAll('[data-cms-price="'+id+'"]').forEach(el => el.innerHTML = '€ '+v);
+  markDirty();
+}
+
+function onImg(input) {
+  const file = input.files[0]; if (!file) return;
+  const id = input.dataset.id, type = input.dataset.type, prevId = input.dataset.prev;
+  const fid = input.id;
+  const warn = document.getElementById('swarn_'+fid);
+  const mb = (file.size/1024/1024).toFixed(1);
+  if (warn) {
+    warn.style.display = file.size > 1.5*1024*1024 ? 'block' : 'none';
+    if (file.size > 1.5*1024*1024) warn.textContent = '⚠ Groot bestand ('+mb+' MB). Comprimeer voor beter resultaat.';
+  }
+  const reader = new FileReader();
+  reader.onload = e => {
+    const dataURL = e.target.result;
+    const uk = curPage.replace('.html','') + '_' + type + '_' + id;
+    uploads[uk] = dataURL;
+    if (type==='img') { pending.images=pending.images||{}; pending.images[id]='warmelo_upload:'+uk; }
+    else               { pending.backgrounds=pending.backgrounds||{}; pending.backgrounds[id]='warmelo_upload:'+uk; }
+    updatePrevEl(prevId, type, dataURL);
+    const d = iDoc(); if (d) {
+      if (type==='img') d.querySelectorAll('[data-cms-img="'+id+'"]').forEach(el => { el.src=dataURL; let lb=el.parentElement; while(lb&&lb!==d.body){if(lb.hasAttribute('data-lightbox')){lb.setAttribute('data-lightbox',dataURL);break;}lb=lb.parentElement;} });
+      else               d.querySelectorAll('[data-cms-bg="'+id+'"]').forEach(el => el.style.backgroundImage="url('"+dataURL+"')");
+    }
+    updateStorage(); markDirty();
+  };
+  reader.readAsDataURL(file);
+}
+
+function onVid(input) {
+  const file = input.files[0]; if (!file) return;
+  const id = input.dataset.id;
+  const mb = (file.size/1024/1024).toFixed(1);
+
+  // Videos are too large for localStorage (5 MB limit).
+  // Preview via blob URL (session only), then instruct user to deploy the file.
+  const blobURL = URL.createObjectURL(file);
+  const d = iDoc(); if (d) {
+    d.querySelectorAll('[data-cms-vid="'+id+'"]').forEach(el => {
+      const s = el.querySelector('source');
+      if (s) { s.setAttribute('src', blobURL); el.load(); }
+    });
+  }
+
+  // Show inline notice instead of storing in localStorage
+  const notice = document.createElement('div');
+  notice.style.cssText = 'margin-top:10px;padding:12px 16px;background:rgba(191,140,42,.12);border:1px solid rgba(191,140,42,.35);font-size:12px;color:rgba(255,255,255,.8);line-height:1.6;border-radius:2px;';
+  notice.innerHTML = '✅ <strong style="color:var(--gold);">Video getoond in preview</strong> — '+mb+' MB<br>'
+    + '⚠ Videos zijn te groot voor browseropslag. Sla het bestand op in de projectmap en zet het online via de beheerder.';
+  const wrap = input.closest('.fr') || input.parentElement;
+  const old = wrap.querySelector('.vid-notice');
+  if (old) old.remove();
+  notice.className = 'vid-notice';
+  wrap.appendChild(notice);
+}
+
+function updatePrevEl(prevId, type, dataURL) {
+  const el = document.getElementById(prevId); if (!el) return;
+  if (type === 'img') {
+    if (el.tagName === 'IMG') { el.src = dataURL; }
+    else {
+      const img = document.createElement('img');
+      img.className = 'imgf-prev'; img.id = prevId; img.src = dataURL;
+      el.parentNode.replaceChild(img, el);
+    }
+  } else {
+    el.style.backgroundImage = "url('"+dataURL+"')";
+    el.className = 'imgf-prev-bg';
+  }
+}
+
+function resetImg(id, type, prevId) {
+  if (!confirm('Originele afbeelding herstellen?\nSla daarna op om dit permanent te maken.')) return;
+  // Remove from pending
+  if (type==='img') { if(pending.images) delete pending.images[id]; }
+  else               { if(pending.backgrounds) delete pending.backgrounds[id]; }
+  // Remove from localStorage cache
+  const c = getCms();
+  if (type==='img' && c.images) { delete c.images[id]; localStorage.setItem(CMS_KEY,JSON.stringify(c)); }
+  if (type==='bg' && c.backgrounds) { delete c.backgrounds[id]; localStorage.setItem(CMS_KEY,JSON.stringify(c)); }
+  // Mark unsaved so user knows to save to server
+  markDirty();
+  setSt('● Origineel hersteld — klik Opslaan om dit permanent te maken', 'unsaved');
+  reloadFrame();
+}
+
+/* ── APPLY PENDING TO FRAME ─────────────────────────────────────── */
+function applyPendingToFrame(d) {
+  if (pending.i18n) { const lo=getI18nForLang(pending.i18n, previewLang()); for (const [k,v] of Object.entries(lo)) d.querySelectorAll('[data-i18n="'+k+'"]').forEach(el=>el.textContent=v); }
+  if (pending.text)        for (const [k,v] of Object.entries(pending.text))        d.querySelectorAll('[data-cms="'+k+'"]').forEach(el=>{ el.innerHTML=v; if(el.hasAttribute('data-count')){ el.setAttribute('data-count',v); el.textContent=v+(el.getAttribute('data-suffix')||''); } });
+  if (pending.season)      for (const [k,v] of Object.entries(pending.season))      d.querySelectorAll('[data-cms="season-'+k+'"]').forEach(el=>el.innerHTML=v);
+  if (pending.prices)      for (const [k,v] of Object.entries(pending.prices))      { const disp=(k!=='gratis'&&v)?'€ '+v:v; d.querySelectorAll('[data-cms="price-'+k+'"]').forEach(el=>el.innerHTML=disp); }
+  if (pending.menu)        for (const [k,v] of Object.entries(pending.menu))        d.querySelectorAll('[data-cms-price="'+k+'"]').forEach(el=>el.innerHTML='€ '+v);
+  if (pending.links)       for (const [k,v] of Object.entries(pending.links))       { if(v) d.querySelectorAll('[data-cms-link="'+k+'"]').forEach(el=>el.href=v); }
+  if (pending.images)      for (const [k,v] of Object.entries(pending.images))      { const s=resolveAny(v); d.querySelectorAll('[data-cms-img="'+k+'"]').forEach(el=>{ el.src=s; let lb=el.parentElement; while(lb&&lb!==d.body){if(lb.hasAttribute('data-lightbox')){lb.setAttribute('data-lightbox',s);break;}lb=lb.parentElement;} }); }
+  if (pending.backgrounds) for (const [k,v] of Object.entries(pending.backgrounds)) { const s=resolveAny(v); d.querySelectorAll('[data-cms-bg="'+k+'"]').forEach(el=>el.style.backgroundImage="url('"+s+"')"); }
+  if (pending.events && Array.isArray(pending.events)) pending.events.forEach((ev,i) => {
+    const card = d.querySelector('[data-cms-event="'+(i+1)+'"]'); if (!card||!ev) return;
+    const s = (sel,val) => { const el=card.querySelector(sel); if(el&&val) el.textContent=val; };
+    s('.event-card__day',ev.day); s('.event-card__month',ev.month); s('.event-card__tag',ev.tag);
+    s('.event-card__title',ev.title); s('.event-card__desc',ev.desc);
+    if (ev.hidden !== undefined) card.style.display = ev.hidden ? 'none' : '';
+  });
+  /* ── imgfit: object-position + CSS custom props for scale ── */
+  const allFit = Object.assign({}, (getCms().imgfit||{}), (pending.imgfit||{}));
+  Object.entries(allFit).forEach(([id, fit]) => {
+    if (!fit) return;
+    d.querySelectorAll('[data-cms-img="'+id+'"]').forEach(img => {
+      img.style.objectPosition = fit.pos || '';
+      if (fit.pos) img.style.setProperty('--cms-origin', fit.pos);
+      else         img.style.removeProperty('--cms-origin');
+      if (fit.scale && fit.scale > 1.01) img.style.setProperty('--cms-scale', fit.scale);
+      else                               img.style.removeProperty('--cms-scale');
+      if (fit.height) {
+        const c2 = img.closest ? img.closest('.gallery__item, .zoom') : img.parentElement;
+        if (c2) c2.style.height = fit.height;
+      }
+    });
+    d.querySelectorAll('[data-cms-bg="'+id+'"]').forEach(el => { if (fit.pos) el.style.backgroundPosition = fit.pos; });
+  });
+}
+
+function applyFrame(sel, val, useText) {
+  const d = iDoc(); if (!d) return;
+  d.querySelectorAll(sel).forEach(el => useText ? (el.textContent=val) : (el.innerHTML=val));
+}
+
+function setIn(parent, sel, val) {
+  if (!val) return; const el = parent.querySelector(sel); if (el) el.textContent = val;
+}
+
+/* ── RESOLVE UPLOAD REFS → REAL DATA BEFORE SERVER SAVE ────────── */
+/* warmelo_upload:key strings are localStorage-only.                 */
+/* Replace them with actual base64 so the server stores real data.   */
+function resolveUploadsForServer(obj) {
+  if (!obj || typeof obj !== 'object') return obj;
+  if (Array.isArray(obj)) return obj.map(item => resolveUploadsForServer(item));
+  const out = {};
+  for (const [k, v] of Object.entries(obj)) {
+    if (typeof v === 'string' && v.startsWith('warmelo_upload:')) {
+      const key = v.replace('warmelo_upload:', '');
+      const resolved = uploads[key] || localStorage.getItem(UPL_PFX + key);
+      out[k] = resolved || v; // fallback to ref if somehow not found
+    } else if (v && typeof v === 'object') {
+      out[k] = resolveUploadsForServer(v);
+    } else {
+      out[k] = v;
+    }
+  }
+  return out;
+}
+
+/* ── SAVE ───────────────────────────────────────────────────────── */
+async function saveChanges() {
+  const btn = document.getElementById('saveBtn');
+  if (btn) btn.disabled = true;
+  setSt('Opslaan…', 'saving');
+
+  // Images are already on the server (uploaded immediately when picked).
+  // pending.images[id] = "/api/cms-img?id=..." (tiny URL, not base64).
+  // Any remaining warmelo_upload: refs (server offline fallback) are resolved here.
+  if (pending.videos) delete pending.videos;
+  const merged = deepMerge(getCms(), pending);
+
+  // Save text/prices/links/events + image URLs to server
+  // resolveUploadsForServer handles any fallback in-memory uploads
+  const dataForServer = resolveUploadsForServer(merged);
+  const payloadStr    = JSON.stringify({ password: PW, data: dataForServer });
+  const payloadMB     = payloadStr.length / 1024 / 1024;
+
+  const pwEl = document.getElementById('payloadWarn');
+  if (pwEl) pwEl.style.display = payloadMB > 4 ? 'block' : 'none';
+
+  if (payloadMB > 9) {
+    setSt('⚠ Payload te groot (' + payloadMB.toFixed(1) + ' MB). Verklein afbeeldingen.', 'warn');
+    if (btn) btn.disabled = false;
+    return;
+  }
+
+  const t = new Date().toLocaleTimeString('nl-NL',{hour:'2-digit',minute:'2-digit'});
+  try {
+    const r = await fetch(CMS_API, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: payloadStr
+    });
+    if (!r.ok) {
+      const err = await r.json().catch(() => ({}));
+      throw new Error(err.error || 'HTTP ' + r.status);
+    }
+    // Success: update localStorage cache (no images stored, just small metadata)
+    try { localStorage.setItem(CMS_KEY, JSON.stringify(merged)); } catch(e) {}
+    // Clean up any leftover upload keys to free space
+    try {
+      const keys = [];
+      for(let i=0;i<localStorage.length;i++) keys.push(localStorage.key(i));
+      keys.filter(k=>k.startsWith(UPL_PFX)).forEach(k=>localStorage.removeItem(k));
+    } catch(e) {}
+
+    pending = {}; uploads = {}; unsaved = false;
+    setSt('✓ Permanent opgeslagen op server om ' + t, 'ok');
+    setServerStatus('online', '✓ Server verbonden — laatste opslag om ' + t);
+  } catch (e) {
+    pending = {}; uploads = {}; unsaved = false;
+    setSt('⚠ Lokaal opgeslagen om ' + t + ' (server niet bereikbaar)', 'warn');
+    setServerStatus('offline', '⚠ Server niet bereikbaar — wijzigingen alleen lokaal opgeslagen');
+  }
+
+  if (btn) btn.disabled = false;
+  updateStorage();
+  setTimeout(() => { try { document.getElementById('siteFrame').contentWindow.location.reload(); } catch(e){} }, 300);
+  setTimeout(() => { loadGlobals(); buildEvCards(); buildMenu(); }, 900);
+}
+
+/* ── RESET ──────────────────────────────────────────────────────── */
+function confirmReset() {
+  if (!confirm('Alle CMS-aanpassingen en uploads wissen?\nDit kan niet ongedaan gemaakt worden.')) return;
+  localStorage.removeItem(CMS_KEY);
+  const keys=[];
+  for(let i=0;i<localStorage.length;i++) keys.push(localStorage.key(i));
+  keys.filter(k=>k.startsWith(UPL_PFX)).forEach(k=>localStorage.removeItem(k));
+  pending={}; uploads={}; unsaved=false;
+  setSt('Alle aanpassingen gewist.','');
+  updateStorage(); reloadFrame(); loadGlobals(); buildEvCards(); buildMenu();
+}
+
+/* ── EXPORT / IMPORT ────────────────────────────────────────────── */
+function doExport() {
+  const data = { cms:getCms(), exported:new Date().toISOString(), version:2 };
+  const blob = new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'warmelo-backup-'+new Date().toISOString().slice(0,10)+'.json';
+  a.click(); URL.revokeObjectURL(a.href);
+}
+
+function doImport(input) {
+  const file = input.files[0]; if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      const data = JSON.parse(e.target.result);
+      localStorage.setItem(CMS_KEY, JSON.stringify(data.cms||data));
+      setSt('✓ Back-up geïmporteerd','ok');
+      updateStorage(); reloadFrame(); loadGlobals(); buildEvCards(); buildMenu();
+    } catch(err) { alert('Ongeldig back-upbestand: '+err.message); }
+    input.value='';
+  };
+  reader.readAsText(file);
+}
+
+/* ── STORAGE BAR ────────────────────────────────────────────────── */
+function updateStorage() {
+  let tot=0;
+  for(let i=0;i<localStorage.length;i++){
+    const k=localStorage.key(i), v=localStorage.getItem(k)||'';
+    tot+=k.length+v.length;
+  }
+  const kb=Math.round(tot/1024), pct=Math.min(100,(tot/(5*1024*1024))*100);
+  document.getElementById('storUsed').textContent=kb+' KB / ~5 MB';
+  const fill=document.getElementById('storFill');
+  fill.style.width=pct+'%';
+  fill.className='sb-fill'+(pct>85?' danger':pct>65?' warn':'');
+}
+
+/* ── HELPERS ────────────────────────────────────────────────────── */
+function getCms(){ try{return JSON.parse(localStorage.getItem(CMS_KEY))||{};}catch(e){return{};} }
+function iDoc(){ try{return document.getElementById('siteFrame').contentDocument;}catch(e){return null;} }
+
+function resolveAny(val) {
+  if (!val) return val;
+  if (val.startsWith('warmelo_upload:')) {
+    const k = val.replace('warmelo_upload:','');
+    return uploads[k] || localStorage.getItem(UPL_PFX+k) || val;
+  }
+  return val;
+}
+
+function deepMerge(t, s) {
+  const out = Object.assign({},t);
+  for (const k of Object.keys(s)) {
+    if (Array.isArray(s[k])) out[k]=s[k];
+    else if (s[k]&&typeof s[k]==='object') out[k]=deepMerge(t[k]||{},s[k]);
+    else out[k]=s[k];
+  }
+  return out;
+}
+
+function markDirty() {
+  if (!unsaved) { unsaved=true; setSt('● Niet-opgeslagen wijzigingen','unsaved'); }
+}
+function setSt(msg,cls) {
+  const el=document.getElementById('saveStatus');
+  el.textContent=msg; el.className='savest'+(cls?' '+cls:'');
+}
+function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function escA(s){ return String(s||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;'); }
+
+/* ── BOOT ───────────────────────────────────────────────────────── */
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('pwInput').focus();
+  // Clean up any video blobs previously stored in localStorage (too large)
+  try {
+    for (const k of Object.keys(localStorage)) {
+      if (k.startsWith('warmelo_upload_') && k.includes('_vid_')) {
+        localStorage.removeItem(k);
+      }
+    }
+  } catch(e) {}
+});
+</script>
+</body>
+</html>
