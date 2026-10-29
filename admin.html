@@ -114,6 +114,15 @@ html,body{height:100%;overflow:hidden;font-family:var(--ff);background:var(--g1)
 .evc-hide{display:flex;align-items:center;gap:5px;font-size:10px;color:var(--m);cursor:pointer}
 .evc-hide input{accent-color:var(--gold)}
 
+/* ── BUTTON CARDS ────────────────────────────────────────────────── */
+select.fi,input[type=date].fi{color-scheme:dark;cursor:pointer}
+select.fi option{background:var(--g3);color:var(--w)}
+.btc-lbl{font-size:11px;color:var(--w);margin-bottom:9px}
+.btc-lbl a{color:var(--gold);font-size:10px;margin-left:6px;cursor:pointer;text-decoration:none}
+.btc-alt{margin-top:9px;padding-top:9px;border-top:1px dashed rgba(255,255,255,.08)}
+.btc-st{font-size:10px;color:var(--m2);margin-top:2px}
+.btc-st.on{color:var(--gold)}
+
 /* ── SAVE BAR ────────────────────────────────────────────────────── */
 .savebar{flex-shrink:0;padding:11px 20px;background:var(--g0);border-top:1px solid rgba(255,255,255,.08);display:flex;align-items:center;justify-content:space-between;gap:10px}
 .savest{font-size:11px;color:var(--m2);min-width:200px}
@@ -285,6 +294,7 @@ html,body{height:100%;overflow:hidden;font-family:var(--ff);background:var(--g1)
 
         <!-- Dynamic sections filled by JS after iframe loads -->
         <div id="dynTexts"></div>
+        <div id="dynButtons"></div>
         <div id="dynImages"></div>
         <div id="dynVideos"></div>
 
@@ -685,6 +695,7 @@ function switchPage(tab) {
   document.getElementById('edPage').textContent = PAGE_NAMES[page] || page;
   document.getElementById('siteFrame').src = page;
   document.getElementById('dynTexts').innerHTML  = '<div class="loading">Pagina laden…</div>';
+  document.getElementById('dynButtons').innerHTML = '';
   document.getElementById('dynImages').innerHTML = '';
   document.getElementById('dynVideos').innerHTML = '';
 }
@@ -714,6 +725,7 @@ function onFrameLoad() {
     } catch(e) {}
 
     scanTexts(d);
+    scanButtons(d);
     scanImages(d);
     scanVideos(d);
     applyPendingToFrame(d);
@@ -736,6 +748,14 @@ function injectEditHandlers(d) {
     '.__cm{cursor:pointer!important}' +
     '.__cb{opacity:0;transition:opacity .2s}';
   d.head.appendChild(st);
+
+  // ── internal buttons: data-cms-btn → Knoppen card. Capture on the <a> runs
+  //    before the label span's own text handler, so the whole button opens the card.
+  d.querySelectorAll('[data-cms-btn]').forEach(el => {
+    if (el.__ce) return; el.__ce = true;
+    el.classList.add('__ce');
+    el.addEventListener('click', e => { e.preventDefault(); e.stopPropagation(); focusBtnCard(el.getAttribute('data-cms-btn')); }, true);
+  });
 
   // ── text: data-i18n
   d.querySelectorAll('[data-i18n]').forEach(el => {
@@ -864,7 +884,8 @@ function addFixedBadge(d, el, label, cb) {
   target.addEventListener('mouseenter', () => { btn.style.opacity = '1'; });
   target.addEventListener('mouseleave', () => { btn.style.opacity = '0'; });
   btn.addEventListener('click', e => { e.preventDefault(); e.stopPropagation(); cb(); }, true);
-  target.addEventListener('click', e => { if (e.target !== btn) { e.preventDefault(); e.stopPropagation(); cb(); } }, true);
+  // Buttons inside the area (e.g. hero CTAs) keep their own click → Knoppen card
+  target.addEventListener('click', e => { if (e.target !== btn && !e.target.closest('[data-cms-btn]')) { e.preventDefault(); e.stopPropagation(); cb(); } }, true);
 }
 
 function mkBadge(d, label) {
@@ -1518,6 +1539,130 @@ function scanVideos(d) {
   document.getElementById('dynVideos').innerHTML = h;
 }
 
+/* ── SCAN: BUTTONS (data-cms-btn) ───────────────────────────────── */
+/* content.buttons[id] = { href, alt: { on, from, to, repeat, href, label:{nl,en,de} } }
+   href '' = keep the link from the HTML; alt is the seasonal version.            */
+function scanButtons(d) {
+  const btns = new Map();
+  d.querySelectorAll('[data-cms-btn]').forEach(el => {
+    const id = el.getAttribute('data-cms-btn');
+    if (!id || btns.has(id)) return;
+    const lbl = el.querySelector('[data-i18n]');
+    btns.set(id, {
+      // data-cms-href holds the original HTML link once the site script has overridden it
+      href:  el.getAttribute('data-cms-href') || el.getAttribute('href') || '',
+      label: (lbl || el).textContent.trim(),
+      key:   lbl ? lbl.getAttribute('data-i18n') : ''
+    });
+  });
+
+  if (!btns.size) { document.getElementById('dynButtons').innerHTML=''; return; }
+
+  const s = getCms();
+  let h = secWrap('secButtons', '🔘', 'Knoppen', btns.size + ' knoppen');
+  h += '<div class="fh" style="margin-bottom:10px">Kies waar elke knop naartoe gaat. Met een seizoensversie toont de knop binnen een periode automatisch een andere link en tekst.</div>';
+  for (const [id, info] of btns) {
+    h += mkBtnCard(id, info, (pending.buttons && pending.buttons[id]) || (s.buttons && s.buttons[id]) || {});
+  }
+  h += '</div></div>';
+  document.getElementById('dynButtons').innerHTML = h;
+}
+
+function mkBtnCard(id, info, b) {
+  const f = btnFid(id), alt = b.alt || {}, lb = alt.label || {};
+  const on = 'onBtn(\''+esc(id)+'\')';
+  const defName = PAGE_NAMES[info.href.replace(/^\.\//,'').split(/[?#]/)[0]] || info.href;
+  const [stCls, stMsg] = btnStatus(alt);
+
+  let h = '<div class="evc" id="'+f+'_card">';
+  h += '<div class="evc-hd"><span class="evc-num">'+esc(info.label || id)+'</span><span class="imgf-id">'+esc(id)+'</span></div>';
+  if (info.key) h += '<div class="btc-lbl"><a onclick="focusField(\'i18n\',\''+esc(info.key)+'\')">✏️ Knoptekst bewerken</a></div>';
+  h += '<div class="fr"><label class="fl">Gaat naar</label>' + mkHrefSel(f+'_href', b.href||'', 'Standaard — '+defName, on) + '</div>';
+
+  h += '<label class="evc-hide"><input type="checkbox" id="'+f+'_on" '+(alt.on?'checked':'')+' onchange="'+on+'" /> Seizoensversie</label>';
+  h += '<div class="btc-alt" id="'+f+'_alt"'+(alt.on?'':' style="display:none"')+'>';
+  h += '<div class="fr2">';
+  h += '<div class="fr"><label class="fl">Van</label><input type="date" class="fi" id="'+f+'_from" value="'+escA(alt.from)+'" onchange="'+on+'" /></div>';
+  h += '<div class="fr"><label class="fl">Tot en met</label><input type="date" class="fi" id="'+f+'_to" value="'+escA(alt.to)+'" onchange="'+on+'" /></div>';
+  h += '</div>';
+  h += '<label class="evc-hide"><input type="checkbox" id="'+f+'_rep" '+(alt.repeat!==false?'checked':'')+' onchange="'+on+'" /> Elk jaar herhalen (alleen dag en maand tellen)</label>';
+  h += '<div class="fh">Laat de datums leeg om de seizoensversie direct en doorlopend te tonen.</div>';
+  h += '<div class="fr" style="margin-top:9px"><label class="fl">Gaat naar (seizoen)</label>' + mkHrefSel(f+'_ahref', alt.href||'', 'Zelfde als hierboven', on) + '</div>';
+  h += '<div class="fr3">';
+  for (const l of ['nl','en','de']) {
+    h += '<div class="fr"><label class="fl">Tekst '+l.toUpperCase()+'</label><input type="text" class="fi" id="'+f+'_'+l+'" value="'+escA(lb[l])+'" oninput="'+on+'" /></div>';
+  }
+  h += '</div>';
+  h += '<div class="fh">Leeg = de gewone knoptekst blijft staan in die taal.</div>';
+  h += '<div class="btc-st '+stCls+'" id="'+f+'_st">'+esc(stMsg)+'</div>';
+  h += '</div></div>';
+  return h;
+}
+
+/* Page dropdown + free URL field (shown when "Eigen URL…" is picked) */
+function mkHrefSel(fid, cur, defLbl, on) {
+  const pages  = Object.keys(PAGE_NAMES).map(p => './'+p);
+  const custom = cur !== '' && !pages.includes(cur);
+  let h = '<select class="fi" id="'+fid+'" onchange="'+on+'"><option value="">'+esc(defLbl)+'</option>';
+  for (const p of pages) h += '<option value="'+p+'"'+(cur===p?' selected':'')+'>'+esc(PAGE_NAMES[p.slice(2)])+'</option>';
+  h += '<option value="__custom"'+(custom?' selected':'')+'>Eigen URL…</option></select>';
+  h += '<input type="text" class="fi" id="'+fid+'_url" value="'+escA(custom?cur:'')+'" placeholder="./evenementen.html#agenda of https://…" style="margin-top:6px'+(custom?'':';display:none')+'" oninput="'+on+'" />';
+  return h;
+}
+
+function btnFid(id) { return 'bt_' + id.replace(/[.\-]/g,'_'); }
+
+function btnStatus(alt) {
+  if (!alt.on) return ['', ''];
+  if (!alt.repeat && alt.from && alt.to && alt.from > alt.to) return ['', '⚠ De einddatum ligt vóór de startdatum.'];
+  let active = false;
+  try { active = iDoc().defaultView.warmeloCmsSeasonActive(alt); } catch(e) {}
+  return active ? ['on', '● Vandaag actief op de website'] : ['', '○ Vandaag niet actief'];
+}
+
+function onBtn(id) {
+  const f = btnFid(id), v = s => document.getElementById(f + s);
+  const hrefOf = s => {
+    const sel = v(s), url = v(s + '_url'), custom = sel.value === '__custom';
+    url.style.display = custom ? '' : 'none';
+    return custom ? url.value.trim() : sel.value;
+  };
+  const b = {
+    href: hrefOf('_href'),
+    alt: {
+      on: v('_on').checked, from: v('_from').value, to: v('_to').value, repeat: v('_rep').checked,
+      href: hrefOf('_ahref'),
+      label: { nl: v('_nl').value.trim(), en: v('_en').value.trim(), de: v('_de').value.trim() }
+    }
+  };
+  pending.buttons = pending.buttons||{}; pending.buttons[id] = b;
+
+  v('_alt').style.display = b.alt.on ? '' : 'none';
+  const [stCls, stMsg] = btnStatus(b.alt);
+  v('_st').className = 'btc-st ' + stCls; v('_st').textContent = stMsg;
+
+  applyButtonsToFrame(iDoc(), { [id]: b });
+  markDirty();
+}
+
+/* Preview through the page's own warmelo-cms script so admin and site behave identically */
+function applyButtonsToFrame(d, buttons) {
+  try { d.defaultView.warmeloCmsApply({ buttons }); } catch(e) {}
+}
+
+function focusBtnCard(id) {
+  openSec('secButtons');
+  const el = document.getElementById(btnFid(id) + '_card');
+  if (!el) return;
+  const scroll = document.getElementById('edScroll');
+  const top = el.getBoundingClientRect().top - scroll.getBoundingClientRect().top + scroll.scrollTop - 60;
+  scroll.scrollTo({ top, behavior: 'smooth' });
+  setTimeout(() => {
+    el.classList.add('field-flash');
+    setTimeout(() => el.classList.remove('field-flash'), 2200);
+  }, 200);
+}
+
 /* ── SECTION WRAPPER HELPER ─────────────────────────────────────── */
 function secWrap(id, ico, lbl, cnt, open) {
   const o = open ? ' open' : '';
@@ -1815,6 +1960,7 @@ function applyPendingToFrame(d) {
   if (pending.prices)      for (const [k,v] of Object.entries(pending.prices))      { const disp=(k!=='gratis'&&v)?'€ '+v:v; d.querySelectorAll('[data-cms="price-'+k+'"]').forEach(el=>el.innerHTML=disp); }
   if (pending.menu)        for (const [k,v] of Object.entries(pending.menu))        d.querySelectorAll('[data-cms-price="'+k+'"]').forEach(el=>el.innerHTML='€ '+v);
   if (pending.links)       for (const [k,v] of Object.entries(pending.links))       { if(v) d.querySelectorAll('[data-cms-link="'+k+'"]').forEach(el=>el.href=v); }
+  if (pending.buttons)     applyButtonsToFrame(d, pending.buttons);
   if (pending.images)      for (const [k,v] of Object.entries(pending.images))      { const s=resolveAny(v); d.querySelectorAll('[data-cms-img="'+k+'"]').forEach(el=>{ el.src=s; let lb=el.parentElement; while(lb&&lb!==d.body){if(lb.hasAttribute('data-lightbox')){lb.setAttribute('data-lightbox',s);break;}lb=lb.parentElement;} }); }
   if (pending.backgrounds) for (const [k,v] of Object.entries(pending.backgrounds)) { const s=resolveAny(v); d.querySelectorAll('[data-cms-bg="'+k+'"]').forEach(el=>el.style.backgroundImage="url('"+s+"')"); }
   if (pending.events && Array.isArray(pending.events)) pending.events.forEach((ev,i) => {
