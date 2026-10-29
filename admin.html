@@ -884,8 +884,9 @@ function addFixedBadge(d, el, label, cb) {
   target.addEventListener('mouseenter', () => { btn.style.opacity = '1'; });
   target.addEventListener('mouseleave', () => { btn.style.opacity = '0'; });
   btn.addEventListener('click', e => { e.preventDefault(); e.stopPropagation(); cb(); }, true);
-  // Buttons inside the area (e.g. hero CTAs) keep their own click → Knoppen card
-  target.addEventListener('click', e => { if (e.target !== btn && !e.target.closest('[data-cms-btn]')) { e.preventDefault(); e.stopPropagation(); cb(); } }, true);
+  // Only clicks on the bare area open the upload. Texts, buttons and images inside
+  // it (e.g. the hero over the video) keep their own editor (__ce / __cm).
+  target.addEventListener('click', e => { if (e.target !== btn && !e.target.closest('.__ce, .__cm')) { e.preventDefault(); e.stopPropagation(); cb(); } }, true);
 }
 
 function mkBadge(d, label) {
