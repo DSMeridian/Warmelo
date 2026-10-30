@@ -123,6 +123,13 @@ select.fi option{background:var(--g3);color:var(--w)}
 .btc-st{font-size:10px;color:var(--m2);margin-top:2px}
 .btc-st.on{color:var(--gold)}
 
+/* ── MENU ROWS ───────────────────────────────────────────────────── */
+.mn-row{display:grid;grid-template-columns:1fr 96px;gap:6px;margin-top:6px}
+.mn-price{display:flex;align-items:center;gap:5px}
+.mn-price span{color:var(--gold);font-size:12px}
+.mn-desc{margin:4px 0 0 14px}
+.mn-desc .fi{font-size:11px;padding:6px 10px;color:var(--m)}
+
 /* ── SAVE BAR ────────────────────────────────────────────────────── */
 .savebar{flex-shrink:0;padding:11px 20px;background:var(--g0);border-top:1px solid rgba(255,255,255,.08);display:flex;align-items:center;justify-content:space-between;gap:10px}
 .savest{font-size:11px;color:var(--m2);min-width:200px}
@@ -295,6 +302,7 @@ select.fi option{background:var(--g3);color:var(--w)}
         <!-- Dynamic sections filled by JS after iframe loads -->
         <div id="dynTexts"></div>
         <div id="dynButtons"></div>
+        <div id="dynFooter"></div>
         <div id="dynImages"></div>
         <div id="dynVideos"></div>
 
@@ -420,6 +428,18 @@ select.fi option{background:var(--g3);color:var(--w)}
                 <label class="fl">YouTube URL</label>
                 <input type="url" class="fi" id="f_lk_youtube" placeholder="https://www.youtube.com/…"
                   oninput="onLink('youtube',this.value)" />
+              </div>
+              <div class="fr">
+                <label class="fl">Airbnb — De Orangerie</label>
+                <input type="url" class="fi" id="f_lk_airbnb-orangerie" placeholder="https://www.airbnb.nl/rooms/…"
+                  oninput="onLink('airbnb-orangerie',this.value)" />
+                <div class="fh">📍 Verhuur-pagina</div>
+              </div>
+              <div class="fr">
+                <label class="fl">Airbnb — Rentmeesterwoning</label>
+                <input type="url" class="fi" id="f_lk_airbnb-rentmeester" placeholder="https://www.airbnb.nl/rooms/…"
+                  oninput="onLink('airbnb-rentmeester',this.value)" />
+                <div class="fh">📍 Verhuur-pagina</div>
               </div>
               <div class="fr">
                 <label class="fl">Tripadvisor URL</label>
@@ -696,6 +716,7 @@ function switchPage(tab) {
   document.getElementById('siteFrame').src = page;
   document.getElementById('dynTexts').innerHTML  = '<div class="loading">Pagina laden…</div>';
   document.getElementById('dynButtons').innerHTML = '';
+  document.getElementById('dynFooter').innerHTML = '';
   document.getElementById('dynImages').innerHTML = '';
   document.getElementById('dynVideos').innerHTML = '';
 }
@@ -726,6 +747,7 @@ function onFrameLoad() {
 
     scanTexts(d);
     scanButtons(d);
+    scanFooter(d);
     scanImages(d);
     scanVideos(d);
     applyPendingToFrame(d);
@@ -755,6 +777,20 @@ function injectEditHandlers(d) {
     if (el.__ce) return; el.__ce = true;
     el.classList.add('__ce');
     el.addEventListener('click', e => { e.preventDefault(); e.stopPropagation(); focusBtnCard(el.getAttribute('data-cms-btn')); }, true);
+  });
+
+  // ── contact details (address, phone, e-mail…) → Footer & Contact
+  d.querySelectorAll('[data-cms-contact]').forEach(el => {
+    if (el.__ce) return; el.__ce = true;
+    el.classList.add('__ce');
+    el.addEventListener('click', e => { e.preventDefault(); e.stopPropagation(); focusEditor(document.getElementById('f_ct_' + el.getAttribute('data-cms-contact'))); }, true);
+  });
+
+  // ── menu prices → Horeca Menukaart
+  d.querySelectorAll('[data-cms-price]').forEach(el => {
+    if (el.__ce) return; el.__ce = true;
+    el.classList.add('__ce');
+    el.addEventListener('click', e => { e.preventDefault(); e.stopPropagation(); focusEditor(document.getElementById('mn_' + el.getAttribute('data-cms-price'))); }, true);
   });
 
   // ── text: data-i18n
@@ -936,15 +972,19 @@ function highlightInFrame(selector) {
 
 /* ── FOCUS EDITOR FIELD (called from iframe click) ──────────────── */
 function focusField(type, key) {
-  openSec('secTexts');
-  const id = 'fi_' + type + '_' + key.replace(/[.\-]/g,'_');
-  const el = document.getElementById(id);
+  focusEditor(document.getElementById('fi_' + type + '_' + key.replace(/[.\-]/g,'_')));
+}
+
+/* Open whichever section holds the field, scroll to it and flash it */
+function focusEditor(el) {
   if (!el) return;
+  const sec = el.closest('.edsec');
+  if (sec) openSec(sec.id);
   const scroll = document.getElementById('edScroll');
   const top = el.getBoundingClientRect().top - scroll.getBoundingClientRect().top + scroll.scrollTop - 60;
   scroll.scrollTo({ top, behavior: 'smooth' });
   setTimeout(() => {
-    el.focus();
+    if (el.matches('input, textarea, select')) el.focus();
     el.classList.add('field-flash');
     setTimeout(() => el.classList.remove('field-flash'), 2200);
   }, 200);
@@ -1376,45 +1416,41 @@ function triggerVidUpload(id) {
 }
 
 /* ── SCAN: TEXTS ────────────────────────────────────────────────── */
+/* Texts are listed in page order, grouped per page section and labelled by
+   what they are (Titel, Tekst, Knoptekst…). Footer, menu card, season and
+   price texts live in their own sections.                                   */
 function scanTexts(d) {
-  const i18n = new Map(), cms = new Map();
-  d.querySelectorAll('[data-i18n]').forEach(el => {
-    const k = el.getAttribute('data-i18n');
-    if (k && !i18n.has(k)) i18n.set(k, el.textContent.trim());
-  });
-  d.querySelectorAll('[data-cms]').forEach(el => {
-    const k = el.getAttribute('data-cms');
-    if (!k || /^season-|^price-/.test(k)) return;
-    if (!cms.has(k)) {
-      const defVal = el.hasAttribute('data-count') ? el.getAttribute('data-count') : el.innerHTML.trim();
-      cms.set(k, defVal);
-    }
+  const groups = new Map(), seen = new Set();
+  let n = 0;
+  d.querySelectorAll('[data-i18n], [data-cms]').forEach(el => {
+    const type = el.hasAttribute('data-i18n') ? 'i18n' : 'cms';
+    const k = el.getAttribute(type === 'i18n' ? 'data-i18n' : 'data-cms');
+    if (!k || el.closest('footer')) return;
+    if (type === 'cms' && /^(season|price|menu)-/.test(k)) return;
+    if (seen.has(type + ':' + k)) return;
+    seen.add(type + ':' + k); n++;
+    const sec = el.closest('nav, .nav__overlay, section, header') || d.body;
+    if (!groups.has(sec)) groups.set(sec, []);
+    groups.get(sec).push({ el, type, k });
   });
 
-  if (!i18n.size && !cms.size) {
+  if (!n) {
     document.getElementById('dynTexts').innerHTML = '<div class="empty">Geen bewerkbare teksten op deze pagina.</div>';
     return;
   }
 
-  const s = getCms();
-  let h = secWrap('secTexts', '✏️', 'Teksten', i18n.size + cms.size + ' velden');
-
-  if (i18n.size) {
-    const lang = previewLang();
-    h += '<div class="fg"><div class="fg-t">Meertalige teksten <span style="opacity:.5;font-size:10px;">(taal: '+lang.toUpperCase()+')</span></div>';
-    for (const [k, def] of i18n) {
-      const saved   = getI18nForLang(s.i18n, lang)[k] || '';
-      const pended  = getI18nForLang(pending.i18n, lang)[k] || '';
-      const cur = saved || pended;
-      h += mkTextFld(k, 'i18n', cur || def);
-    }
-    h += '</div>';
-  }
-  if (cms.size) {
-    h += '<div class="fg" style="margin-top:14px"><div class="fg-t">Pagina-specifieke teksten</div>';
-    for (const [k, def] of cms) {
-      const cur = (s.text && s.text[k]) || (pending.text && pending.text[k]) || '';
-      h += mkTextFld(k, 'cms', cur || def);
+  const lang = previewLang();
+  let h = secWrap('secTexts', '✏️', 'Teksten', n + ' velden');
+  h += '<div class="fh" style="margin-bottom:10px">Taal: <strong>'+lang.toUpperCase()+'</strong> — wissel de taal in de preview om andere talen te bewerken. Klik op een tekst in de preview om er direct naartoe te gaan.</div>';
+  let i = 0;
+  for (const [sec, items] of groups) {
+    const isMenu = sec.matches('nav, .nav__overlay');
+    h += '<div class="fg"><div class="fg-t">'+esc(textGroupName(sec, isMenu ? 0 : ++i))+'</div>';
+    for (const { el, type, k } of items) {
+      const pended = type === 'i18n' ? getI18nForLang(pending.i18n, lang)[k] : (pending.text && pending.text[k]);
+      // the preview already shows saved content, so it is the current value
+      const html = el.hasAttribute('data-count') ? el.getAttribute('data-count') : el.innerHTML;
+      h += mkTextFld(k, type, pended != null ? pended : html, textLabel(el));
     }
     h += '</div>';
   }
@@ -1423,16 +1459,56 @@ function scanTexts(d) {
   openSec('secTexts');
 }
 
-function mkTextFld(key, type, val) {
-  const id = 'fi_' + type + '_' + key.replace(/[.\-]/g,'_');
-  const long = val && val.length > 90;
-  let h = '<div class="fr"><div class="fk">' + esc(key) + '</div>';
-  if (long) {
-    h += '<textarea id="'+id+'" class="fta" rows="3" data-fk="'+esc(key)+'" data-ft="'+type+'" oninput="onTxt(this)">'+esc(val)+'</textarea>';
+function textGroupName(sec, i) {
+  if (sec.matches('nav, .nav__overlay')) return 'Menu';
+  const hd = sec.querySelector('h1, h2');
+  const t  = hd ? toSimple(hd.innerHTML).replace(/\*/g, '').replace(/\n/g, ' ') : '';
+  return i + ' · ' + (t ? (t.length > 40 ? t.slice(0, 38) + '…' : t) : 'Sectie');
+}
+
+function textLabel(el) {
+  const tag = el.tagName;
+  if (el.closest('.btn')) return 'Knoptekst';
+  if (el.closest('nav, .nav__overlay')) return 'Menu-item';
+  if (tag === 'H1') return 'Hoofdtitel';
+  if (tag === 'H2') return 'Titel';
+  if (/^H[3-6]$/.test(tag)) return 'Subtitel';
+  if (el.hasAttribute('data-count')) return 'Getal';
+  if (el.closest('li')) return 'Opsommingspunt';
+  if (el.closest('a')) return 'Linktekst';
+  if (tag === 'P' || el.textContent.trim().length > 90) return 'Tekst';
+  return 'Label';
+}
+
+/* Text fields show a simple format instead of HTML:
+   Enter = line break (<br>), *woord* = accent text (<em>).
+   The original <em …> tag is kept so styled accents keep their colour.      */
+function mkTextFld(key, type, html, label) {
+  const id  = 'fi_' + type + '_' + key.replace(/[.\-]/g,'_');
+  const val = toSimple(html);
+  const em  = (String(html||'').match(/<em\b[^>]*>/i) || [''])[0];
+  const fmt = /\n|\*/.test(val);
+  const attrs = 'id="'+id+'" data-fk="'+escA(key)+'" data-ft="'+type+'" data-em="'+escA(em)+'" title="'+escA(key)+'" oninput="onTxt(this)"';
+  let h = '<div class="fr"><label class="fl" for="'+id+'">' + esc(label || key) + '</label>';
+  if (fmt || val.length > 90) {
+    const rows = Math.min(6, Math.max(2, val.split('\n').length, Math.ceil(val.length / 60)));
+    h += '<textarea class="fta" rows="'+rows+'" '+attrs+'>'+esc(val)+'</textarea>';
   } else {
-    h += '<input type="text" id="'+id+'" class="fi" data-fk="'+esc(key)+'" data-ft="'+type+'" value="'+escA(val)+'" oninput="onTxt(this)" />';
+    h += '<input type="text" class="fi" value="'+escA(val)+'" '+attrs+' />';
   }
+  if (fmt) h += '<div class="fh">Enter = nieuwe regel · *woord* = accentkleur</div>';
   return h + '</div>';
+}
+
+function toSimple(html) {
+  // DOMParser documents never run scripts or event handlers
+  const body = new DOMParser().parseFromString(String(html||'').replace(/<br\s*\/?>/gi, '\u0001'), 'text/html').body;
+  body.querySelectorAll('em').forEach(em => em.replaceWith('*' + em.textContent + '*'));
+  return body.textContent.replace(/\s+/g, ' ').replace(/ ?\u0001 ?/g, '\n').trim();
+}
+
+function toHtml(val, emTag) {
+  return esc(val).replace(/\*([^*\n]+)\*/g, (m, t) => (emTag || '<em>') + t + '</em>').replace(/\r?\n/g, '<br>');
 }
 
 /* ── SCAN: IMAGES ───────────────────────────────────────────────── */
@@ -1547,7 +1623,7 @@ function scanButtons(d) {
   const btns = new Map();
   d.querySelectorAll('[data-cms-btn]').forEach(el => {
     const id = el.getAttribute('data-cms-btn');
-    if (!id || btns.has(id)) return;
+    if (!id || btns.has(id) || el.closest('footer')) return; // footer links → Footer & Contact
     const lbl = el.querySelector('[data-i18n]');
     btns.set(id, {
       // data-cms-href holds the original HTML link once the site script has overridden it
@@ -1611,6 +1687,14 @@ function mkHrefSel(fid, cur, defLbl, on) {
   return h;
 }
 
+/* Read a mkHrefSel pair; also shows/hides its URL field */
+function hrefFromSel(fid) {
+  const sel = document.getElementById(fid), url = document.getElementById(fid + '_url');
+  const custom = sel.value === '__custom';
+  url.style.display = custom ? '' : 'none';
+  return custom ? url.value.trim() : sel.value;
+}
+
 function btnFid(id) { return 'bt_' + id.replace(/[.\-]/g,'_'); }
 
 function btnStatus(alt) {
@@ -1623,16 +1707,11 @@ function btnStatus(alt) {
 
 function onBtn(id) {
   const f = btnFid(id), v = s => document.getElementById(f + s);
-  const hrefOf = s => {
-    const sel = v(s), url = v(s + '_url'), custom = sel.value === '__custom';
-    url.style.display = custom ? '' : 'none';
-    return custom ? url.value.trim() : sel.value;
-  };
   const b = {
-    href: hrefOf('_href'),
+    href: hrefFromSel(f + '_href'),
     alt: {
       on: v('_on').checked, from: v('_from').value, to: v('_to').value, repeat: v('_rep').checked,
-      href: hrefOf('_ahref'),
+      href: hrefFromSel(f + '_ahref'),
       label: { nl: v('_nl').value.trim(), en: v('_en').value.trim(), de: v('_de').value.trim() }
     }
   };
@@ -1652,16 +1731,86 @@ function applyButtonsToFrame(d, buttons) {
 }
 
 function focusBtnCard(id) {
-  openSec('secButtons');
-  const el = document.getElementById(btnFid(id) + '_card');
-  if (!el) return;
-  const scroll = document.getElementById('edScroll');
-  const top = el.getBoundingClientRect().top - scroll.getBoundingClientRect().top + scroll.scrollTop - 60;
-  scroll.scrollTo({ top, behavior: 'smooth' });
-  setTimeout(() => {
-    el.classList.add('field-flash');
-    setTimeout(() => el.classList.remove('field-flash'), 2200);
-  }, 200);
+  focusEditor(document.getElementById(btnFid(id) + '_card'));
+}
+
+/* ── SCAN: FOOTER & CONTACT ─────────────────────────────────────── */
+/* One section for what every page shares: contact details (content.contact,
+   data-cms-contact), footer texts (i18n) and footer links (content.buttons). */
+const CONTACT_FIELDS = [
+  { k:'name',     lbl:'Naam',                 def:'Kasteel Warmelo',          where:'Menu · Footer' },
+  { k:'street',   lbl:'Straat en huisnummer', def:'Stedeke 11',               where:'Footer · Home · Bezoek · Contact' },
+  { k:'city',     lbl:'Postcode en plaats',   def:'7478 RV Diepenheim',       where:'Footer · Home · Bezoek · Contact' },
+  { k:'entrance', lbl:'Ingang & parkeren',    def:'Borculoseweg, Diepenheim', where:'Home · Bezoek · Contact' },
+  { k:'phone',    lbl:'Telefoon',             def:'0547 – 352547',            where:'Footer · Bezoek · Contact' },
+  { k:'email',    lbl:'E-mail',               def:'info@kasteelwarmelo.nl',   where:'Footer · Bezoek · Contact' }
+];
+const FOOTER_LABELS = {
+  'footer.desc':'Beschrijving', 'footer.open':'Kop kolom 2', 'footer.visit':'Kop kolom 3',
+  'footer.follow':'Kop kolom 4', 'footer.copy.full':'Copyright', 'footer.copy':'Regel onderaan'
+};
+
+function scanFooter(d) {
+  const foot = d.querySelector('footer');
+  const s = getCms(), lang = previewLang();
+  const contact = Object.assign({}, s.contact, pending.contact);
+
+  let h = secWrap('secFooter', '📇', 'Footer & Contact', 'alle pagina\'s');
+  h += '<div class="fh" style="margin-bottom:10px">Deze gegevens staan op elke pagina. Eén keer aanpassen is genoeg.</div>';
+
+  h += '<div class="fg"><div class="fg-t">Contactgegevens</div>';
+  for (const f of CONTACT_FIELDS) {
+    h += '<div class="fr"><label class="fl" for="f_ct_'+f.k+'">'+esc(f.lbl)+'</label>';
+    h += '<input type="text" class="fi" id="f_ct_'+f.k+'" value="'+escA(contact[f.k] || f.def)+'" oninput="onContact(\''+f.k+'\',this.value)" />';
+    h += '<div class="fh">📍 '+esc(f.where)+'</div></div>';
+  }
+  h += '</div>';
+
+  if (foot) {
+    const texts = [...foot.querySelectorAll('[data-i18n]')].filter(el => !el.closest('[data-cms-btn]'));
+    h += '<div class="fg"><div class="fg-t">Footerteksten <span style="opacity:.5;font-size:10px;">(taal: '+lang.toUpperCase()+')</span></div>';
+    for (const el of texts) {
+      const k = el.getAttribute('data-i18n'), pended = getI18nForLang(pending.i18n, lang)[k];
+      h += mkTextFld(k, 'i18n', pended != null ? pended : el.innerHTML, FOOTER_LABELS[k] || textLabel(el));
+    }
+    h += '</div>';
+
+    h += '<div class="fg"><div class="fg-t">Footerlinks</div>';
+    foot.querySelectorAll('[data-cms-btn]').forEach(el => {
+      const id = el.getAttribute('data-cms-btn'), k = el.getAttribute('data-i18n');
+      const b  = (pending.buttons && pending.buttons[id]) || (s.buttons && s.buttons[id]) || {};
+      const f  = btnFid(id), on = 'onFooterLink(\''+esc(id)+'\')';
+      const defHref = el.getAttribute('data-cms-href') || el.getAttribute('href') || '';
+      const defName = PAGE_NAMES[defHref.replace(/^\.\//,'').split(/[?#]/)[0]] || defHref;
+      const pended  = getI18nForLang(pending.i18n, lang)[k];
+      h += '<div class="evc" id="'+f+'_card">';
+      h += mkTextFld(k, 'i18n', pended != null ? pended : el.innerHTML, 'Linktekst');
+      h += '<div class="fr"><label class="fl">Gaat naar</label>' + mkHrefSel(f+'_href', b.href||'', 'Standaard — '+defName, on) + '</div>';
+      h += '<label class="evc-hide"><input type="checkbox" id="'+f+'_hid" '+(b.hidden?'checked':'')+' onchange="'+on+'" /> Verbergen</label>';
+      h += '</div>';
+    });
+    h += '</div>';
+  }
+  h += '</div></div>';
+  document.getElementById('dynFooter').innerHTML = h;
+}
+
+function onContact(k, v) {
+  pending.contact = pending.contact||{}; pending.contact[k] = v.trim();
+  applyContactToFrame(iDoc(), { [k]: v.trim() });
+  markDirty();
+}
+
+function applyContactToFrame(d, contact) {
+  try { d.defaultView.warmeloCmsApply({ contact }); } catch(e) {}
+}
+
+function onFooterLink(id) {
+  const f = btnFid(id);
+  const b = { href: hrefFromSel(f + '_href'), hidden: document.getElementById(f + '_hid').checked };
+  pending.buttons = pending.buttons||{}; pending.buttons[id] = b;
+  applyButtonsToFrame(iDoc(), { [id]: b });
+  markDirty();
 }
 
 /* ── SECTION WRAPPER HELPER ─────────────────────────────────────── */
@@ -1713,62 +1862,72 @@ function buildEvCards() {
 }
 
 /* ── BUILD: MENU ────────────────────────────────────────────────── */
+/* Defaults as on horeca.html. Names, descriptions and headings are texts
+   (content.text, data-cms="menu-…"); prices stay in content.menu.          */
+const MENU = [
+  { head:'head-1', lbl:'Warme dranken', items: [
+    {id:'koffie',        price:'3,10', name:'Koffie'},
+    {id:'espresso',      price:'3,10', name:'Espresso'},
+    {id:'cappuccino',    price:'3,30', name:'Cappuccino'},
+    {id:'thee',          price:'3,00', name:'Thee'},
+    {id:'muntthee',      price:'3,90', name:'Verse muntthee'},
+    {id:'kannetje',      price:'5,80', name:'Kannetje koffie'},
+  ]},
+  { head:'head-2', lbl:'Frisdranken', items: [
+    {id:'frisdrank',     price:'3,10', name:'Div. soorten frisdrank'},
+    {id:'vitaminewater', price:'3,90', name:'Vitaminewater'},
+  ]},
+  { head:'head-3', lbl:'Alcoholische dranken', items: [
+    {id:'wittewijn',     price:'6,50', name:'Witte wijn', desc:'Chardonnay, flesje 250 ml'},
+    {id:'rose',          price:'6,50', name:'Rosé',       desc:'Flesje 250 ml'},
+    {id:'rodewijn',      price:'6,50', name:'Rode wijn',  desc:'Merlot, flesje 250 ml'},
+    {id:'bier',          price:'3,50', name:'Bier'},
+    {id:'witbier',       price:'3,50', name:'Witbier'},
+    {id:'radler',        price:'3,50', name:'Radler (2.3%)'},
+    {id:'bier00',        price:'3,50', name:'Bier 0,0%'},
+  ]},
+  { head:'head-4', lbl:'Verse broodjes', items: [
+    {id:'gezond',        price:'7,80', name:'Broodje Gezond'},
+    {id:'brie',          price:'7,80', name:'Broodje Brie'},
+    {id:'eiersalade',    price:'7,80', name:'Broodje Eiersalade'},
+    {id:'kipkerrie',     price:'7,80', name:'Broodje Kipkerrie'},
+    {id:'ham',           price:'7,80', name:'Broodje Ham'},
+    {id:'kaas',          price:'7,80', name:'Broodje Kaas'},
+  ]},
+  { head:'head-5', lbl:'Warme snacks', items: [
+    {id:'appelflap',     price:'3,00', name:'Appelflap'},
+    {id:'saucijzen',     price:'3,00', name:'Saucijzenbroodje'},
+    {id:'kroket',        price:'3,50', name:'Broodje Kroket'},
+    {id:'tosti',         price:'3,20', name:"Tosti's diverse soorten"},
+    {id:'bitterballen',  price:'5,00', name:'Portie bitterballen (8 st)'},
+  ]},
+  { head:'head-6', lbl:'Zoet', items: [
+    {id:'appelgebak',    price:'3,00', name:'Appelgebak'},
+    {id:'luxegebak',     price:'3,40', name:'Luxe gebak', desc:'Diverse soorten'},
+    {id:'petitfour',     price:'1,20', name:'Petitfour'},
+    {id:'stroopwafel',   price:'1,50', name:'Stroopwafel'},
+  ]},
+];
+
 function buildMenu() {
-  const groups = [
-    { lbl: 'Warme dranken', items: [
-      {id:'koffie',      lbl:'Koffie'},
-      {id:'espresso',    lbl:'Espresso'},
-      {id:'cappuccino',  lbl:'Cappuccino'},
-      {id:'thee',        lbl:'Thee'},
-      {id:'muntthee',    lbl:'Verse muntthee'},
-      {id:'kannetje',    lbl:'Kannetje koffie'},
-    ]},
-    { lbl: 'Frisdranken', items: [
-      {id:'frisdrank',     lbl:'Div. soorten frisdrank'},
-      {id:'vitaminewater', lbl:'Vitaminewater'},
-    ]},
-    { lbl: 'Alcoholische dranken', items: [
-      {id:'wittewijn', lbl:'Witte wijn (250 ml)'},
-      {id:'rose',      lbl:'Rosé (250 ml)'},
-      {id:'rodewijn',  lbl:'Rode wijn (250 ml)'},
-      {id:'bier',      lbl:'Bier'},
-      {id:'witbier',   lbl:'Witbier'},
-      {id:'radler',    lbl:'Radler (2.3%)'},
-      {id:'bier00',    lbl:'Bier 0,0%'},
-    ]},
-    { lbl: 'Verse broodjes', items: [
-      {id:'gezond',    lbl:'Broodje Gezond'},
-      {id:'brie',      lbl:'Broodje Brie'},
-      {id:'eiersalade',lbl:'Broodje Eiersalade'},
-      {id:'kipkerrie', lbl:'Broodje Kipkerrie'},
-      {id:'ham',       lbl:'Broodje Ham'},
-      {id:'kaas',      lbl:'Broodje Kaas'},
-    ]},
-    { lbl: 'Warme snacks', items: [
-      {id:'appelflap',  lbl:'Appelflap'},
-      {id:'saucijzen',  lbl:'Saucijzenbroodje'},
-      {id:'kroket',     lbl:'Broodje Kroket'},
-      {id:'tosti',      lbl:"Tosti's diverse soorten"},
-      {id:'bitterballen',lbl:'Portie bitterballen (8 st)'},
-    ]},
-    { lbl: 'Zoet', items: [
-      {id:'appelgebak', lbl:'Appelgebak'},
-      {id:'luxegebak',  lbl:'Luxe gebak'},
-      {id:'petitfour',  lbl:'Petitfour'},
-      {id:'stroopwafel',lbl:'Stroopwafel'},
-    ]},
-  ];
   const s = getCms();
-  let h = '';
-  groups.forEach(g => {
-    h += '<div class="fg"><div class="fg-t">'+esc(g.lbl)+'</div><div class="fr2">';
+  const txt = (k, def) => {
+    const p = pending.text && pending.text[k];
+    return p != null ? p : ((s.text && s.text[k]) || def);
+  };
+  const fld = (k, val, ph) => '<input type="text" class="fi" id="fi_cms_'+k.replace(/[.\-]/g,'_')+'" data-fk="'+escA(k)+'" data-ft="cms" data-em=""'
+    + ' value="'+escA(toSimple(val))+'" placeholder="'+escA(ph||'')+'" oninput="onTxt(this)" />';
+  let h = '<div class="fh" style="margin-bottom:10px">Naam, omschrijving en prijs per gerecht. Klik op de Horeca-pagina in de preview op een gerecht om er direct naartoe te gaan.</div>';
+  MENU.forEach(g => {
+    h += '<div class="fg"><div class="fg-t">'+esc(g.lbl)+'</div>';
+    h += '<div class="fr"><label class="fl">Kop</label>' + fld('menu-'+g.head, txt('menu-'+g.head, g.lbl)) + '</div>';
     g.items.forEach(it => {
-      const cur = (s.menu && s.menu[it.id]) || (pending.menu && pending.menu[it.id]) || '';
-      h += '<div class="fr"><label class="fl">'+esc(it.lbl)+'</label>';
-      h += '<div style="display:flex;align-items:center;gap:5px"><span style="color:var(--gold);font-size:12px">€</span>';
-      h += '<input type="text" class="fi" id="mn_'+it.id+'" value="'+escA(cur)+'" placeholder="0,00" oninput="onMenu(\''+it.id+'\',this.value)" /></div></div>';
+      const price = (pending.menu && pending.menu[it.id]) || (s.menu && s.menu[it.id]) || it.price;
+      h += '<div class="mn-row">' + fld('menu-'+it.id, txt('menu-'+it.id, it.name));
+      h += '<div class="mn-price"><span>€</span><input type="text" class="fi" id="mn_'+it.id+'" value="'+escA(price)+'" placeholder="0,00" oninput="onMenu(\''+it.id+'\',this.value)" /></div></div>';
+      if (it.desc) h += '<div class="mn-desc">' + fld('menu-'+it.id+'-desc', txt('menu-'+it.id+'-desc', it.desc), 'Omschrijving') + '</div>';
     });
-    h += '</div></div>';
+    h += '</div>';
   });
   document.getElementById('menuItems').innerHTML = h;
 }
@@ -1783,6 +1942,7 @@ function loadGlobals() {
   setFld('f_lk_facebook', l.facebook); setFld('f_lk_instagram', l.instagram);
   setFld('f_lk_youtube', l.youtube);   setFld('f_lk_tripadvisor', l.tripadvisor);
   setFld('f_lk_maps', l.maps);
+  setFld('f_lk_airbnb-orangerie', l['airbnb-orangerie']); setFld('f_lk_airbnb-rentmeester', l['airbnb-rentmeester']);
 }
 function setFld(id, v) { const el = document.getElementById(id); if (el && v) el.value = v; }
 
@@ -1803,13 +1963,13 @@ function getI18nForLang(src, lang) {
 }
 
 function onTxt(el) {
-  const k = el.dataset.fk, t = el.dataset.ft, v = el.value;
+  const k = el.dataset.fk, t = el.dataset.ft, v = toHtml(el.value, el.dataset.em);
   if (t === 'i18n') {
     const lang = previewLang();
     pending.i18n = pending.i18n||{};
     pending.i18n[lang] = pending.i18n[lang]||{};
     pending.i18n[lang][k] = v;
-    applyFrame('[data-i18n="'+k+'"]', v, true);
+    applyFrame('[data-i18n="'+k+'"]', v, false);
   } else {
     pending.text = pending.text||{}; pending.text[k] = v;
     applyFrame('[data-cms="'+k+'"]', v, false);
@@ -1955,7 +2115,8 @@ function resetImg(id, type, prevId) {
 
 /* ── APPLY PENDING TO FRAME ─────────────────────────────────────── */
 function applyPendingToFrame(d) {
-  if (pending.i18n) { const lo=getI18nForLang(pending.i18n, previewLang()); for (const [k,v] of Object.entries(lo)) d.querySelectorAll('[data-i18n="'+k+'"]').forEach(el=>el.textContent=v); }
+  if (pending.i18n) { const lo=getI18nForLang(pending.i18n, previewLang()); for (const [k,v] of Object.entries(lo)) d.querySelectorAll('[data-i18n="'+k+'"]').forEach(el=>el.innerHTML=v); }
+  if (pending.contact)     applyContactToFrame(d, pending.contact);
   if (pending.text)        for (const [k,v] of Object.entries(pending.text))        d.querySelectorAll('[data-cms="'+k+'"]').forEach(el=>{ el.innerHTML=v; if(el.hasAttribute('data-count')){ el.setAttribute('data-count',v); el.textContent=v+(el.getAttribute('data-suffix')||''); } });
   if (pending.season)      for (const [k,v] of Object.entries(pending.season))      d.querySelectorAll('[data-cms="season-'+k+'"]').forEach(el=>el.innerHTML=v);
   if (pending.prices)      for (const [k,v] of Object.entries(pending.prices))      { const disp=(k!=='gratis'&&v)?'€ '+v:v; d.querySelectorAll('[data-cms="price-'+k+'"]').forEach(el=>el.innerHTML=disp); }
